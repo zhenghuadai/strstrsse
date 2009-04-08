@@ -1,0 +1,6 @@
+#!/bin/bash
+for i in ./*.c 
+do
+sed "s///" $i >tmp.c
+mv tmp.c $i
+done
