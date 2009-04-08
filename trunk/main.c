@@ -28,7 +28,9 @@ char *strstrToy (const char* phaystack, const char* pneedle);
 char *lstrstr (const char* , const char* );
 char *lstrstrsse (const char* , const char* );
 char *lstrstr5 (const char* , const char* );
+char *qsearch(const char* , const char* );
 char* strstra(const char *str,char c);
+char *qsearch2(const char *str, int slen, const char *patt, int plen);
 void printstr(char* s)
 {
 	int i =0;
@@ -116,6 +118,7 @@ int test2( int argc, char** argv)
 	double t3;
 	int i;
 	int len = 1024*1024;//strlen(text0);
+	int slen, plen;
 	//int len = strlen(text0);
 	textm = (char*) malloc(len+ 64);
 	text = (char*)(((unsigned long long) textm ) & ~63)  ;
@@ -177,6 +180,27 @@ int test2( int argc, char** argv)
 	printf("strstrToy time:%15f :%d", t3,findp - text);
 	printstr(findp);
 
+	findp = qsearch(text,pattern);
+	mdtime(0);
+	for(i=0;i<LOOPS;i++)
+		findp = qsearch(text,pattern);
+	t3=	mdtime(1);
+	printf("strstrBm  time:%15f :%d", t3,findp - text);
+	printstr(findp);
+
+	findp = qsearch2(text,strlen(text),pattern,strlen(pattern));
+	slen = strlen(text);
+	plen = strlen(pattern);
+	mdtime(0);
+	for(i=0;i<LOOPS;i++)
+		findp = qsearch2(text,slen,pattern,plen);
+	t3=	mdtime(1);
+	printf("strstrBm2 time:%15f :%d", t3,findp - text);
+	printstr(findp);
+
+	/**********************************************
+	 * *******************************************/
+	printf("test strlen\n");
 
 	mdtime(0);
 	for(i=0;i<LOOPS;i++)
@@ -205,7 +229,8 @@ int test2( int argc, char** argv)
 int main( int argc, char** argv)
 {
 	test2(argc,argv);
-	test1(argc,argv);
+	printf("test 2\n");
+	//test1(argc,argv);
 	return 1;
 }
 #endif
