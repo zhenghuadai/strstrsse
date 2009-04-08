@@ -1,0 +1,6 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdio.h>
+void Msbom(char *T,char *Patts[],int s)
+{
+}
