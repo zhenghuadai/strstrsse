@@ -1,8 +1,11 @@
 #ifndef rdtsc
 //#define rdtscfreq 2.1280493e9
 #define rdtscfreq 1 
-#define rdtsc(low,high) \
+//#define rdtsc(low,high) \
 __asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high))
+#define rdtsc(low,high) \
+__asm__ __volatile__("xorl %%eax, %%eax; cpuid; rdtsc" : "=a" (low), "=d" (high)::"%ecx","%ebx");\
+__asm__ __volatile__("xorl %%eax, %%eax; cpuid;" :::"%eax","%edx","%ecx","%ebx");
 static inline  double rdtscdiff(unsigned int low1,unsigned int high1,unsigned int low2,unsigned int high2)
 {
 	const  double MAXintplus1 = 4294967296.0;
