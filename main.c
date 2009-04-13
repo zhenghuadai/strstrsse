@@ -35,8 +35,15 @@ void printstr(char* s)
 {
 	int i =0;
 	printf(":");
-	for(i=0;i<10;i++){
-		if(s[i] ==0) goto ret;
+	for(i=0;(s[i]) &&(i<10);i++){
+		printf("%c",s[i]);
+	}
+}
+void printstrn(char* s)
+{
+	int i =0;
+	printf(":");
+	for(i=0;(s[i]) &&(i<10);i++){
 		printf("%c",s[i]);
 	}
 	ret:
@@ -88,64 +95,32 @@ void test1(int argc,char** argv)
 				findp = lstrstrsse(text,pattern);
 			t3=	mdtime(1);
 			printf("lstrsse   time:%15f :%d", t3,findp - text);
-			printstr(findp);
+			printstrn(findp);
 
 			mdtime(0);
 			for(i=0;i<LOOPS;i++)
 				findp = strstr(text,pattern);
 			t3=	mdtime(1);
 			printf("strstr    time:%15f :%d", t3,findp - text);
-			printstr(findp);
+			printstrn(findp);
 			printf("\n");
 		}
 	}
 
 }
-/**************************************************
- * test performance
- * ************************************************/
-int test2( int argc, char** argv)
+
+static void cmpPerf(const char* text, const char* pattern)
 {
-#include "defaultText.h"
-	char text0[] = TEXT; 
-	char* patterns[] = {"vulture","emente", "MArs","dog","Z","ABG","do","AGB"};				 
-	char* pattern=patterns[0];
-	//char* pattern="dog";
-	//char* pattern="Z";
-	//char* pattern = "emente";
-	//char* pattern = "MArs";
 	char* findp;
-	char* textm;
-	char* text;
 	double t3;
 	int i;
-	int len = 1024*1024;//strlen(text0);
 	int slen, plen;
-	textm = (char*) malloc(len+ 64);
-	text = (char*)(((unsigned long long) textm ) & ~63)  ;
-	strcpy(text,text0);
-	
 	findp = strstr(text,pattern);
 	findp = lstrstrsse(text,pattern);
 	findp = lstrstr(text,pattern);
 	findp = strstr(text,pattern);
 	findp = strstrBerg(text,pattern);
 	findp = strstrToy(text,pattern);
-
-if(0)
-	for(i=0;i<34;i++) 
-	{
-		int j=0;
-		for(j=0;j<i;j++) text[i] = 'a';
-		strcpy(text+i,text0);
-		mdtime(0);
-		findp = lstrstrsse(text,pattern);
-		t3=	mdtime(1);
-		printf("lstrsse   time:%15f :%d", t3,findp - text);
-		printstr(findp);
-
-	}
-	strcpy(text,text0);
 
 	printf("\n");
 	findp = lstrstr(text,pattern);
@@ -154,7 +129,7 @@ if(0)
 		findp = lstrstr(text,pattern);
 	t3=	mdtime(1);
 	printf("lstrstr   time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	printstrn(findp);
 
 	findp = lstrstrsse(text,pattern);
 	mdtime(0);
@@ -162,7 +137,7 @@ if(0)
 		findp = lstrstrsse(text,pattern);
 	t3=	mdtime(1);
 	printf("lstrsse   time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	printstrn(findp);
 
 	findp = strstr(text,pattern);
 	mdtime(0);
@@ -170,7 +145,7 @@ if(0)
 		findp = strstr(text,pattern);
 	t3=	mdtime(1);
 	printf("strstr    time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	printstrn(findp);
 
 	findp = strstrBerg(text,pattern);
 	mdtime(0);
@@ -178,7 +153,7 @@ if(0)
 		findp = strstrBerg(text,pattern);
 	t3=	mdtime(1);
 	printf("Bstrstr   time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	printstrn(findp);
 
 	findp = strstrToy(text,pattern);
 	mdtime(0);
@@ -186,7 +161,7 @@ if(0)
 		findp = strstrToy(text,pattern);
 	t3=	mdtime(1);
 	printf("strstrToy time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	printstrn(findp);
 
 	findp = qsearch(text,pattern);
 	mdtime(0);
@@ -194,7 +169,8 @@ if(0)
 		findp = qsearch(text,pattern);
 	t3=	mdtime(1);
 	printf("strstrBm  time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	//printstrn(findp);
+	printf("\n");
 
 	findp = qsearch2(text,strlen(text),pattern,strlen(pattern));
 	slen = strlen(text);
@@ -204,60 +180,107 @@ if(0)
 		findp = qsearch2(text,slen,pattern,plen);
 	t3=	mdtime(1);
 	printf("strstrBm2 time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	//printstrn(findp);
+	printf("\n");
 
-	/**********************************************
-	 * *******************************************/
+
+}
+
+/**************************************************
+ * test performance
+ * ************************************************/
+void cmpStrlen(const char* text)
+{
+	int i,len;
+	double t3;
 	printf("test strlen\n");
 
 	mdtime(0);
 	for(i=0;i<LOOPS;i++)
 		len = strlen_d(text);
 	t3=	mdtime(1);
-	printf("strlend time:%f :%d\n", t3,len);
+	printf("strlen(int)  time:%f :%d\n", t3,len);
 
 	mdtime(0);
 	for(i=0;i<LOOPS;i++)
 		len = strlen(text);
 	t3=	mdtime(1);
-	printf("strlen  time:%f :%d\n", t3,len);
+	printf("strlen       time:%f :%d\n", t3,len);
 
 	mdtime(0);
 	for(i=0;i<LOOPS;i++)
 		len = strlen_l(text);
 	t3=	mdtime(1);
-	printf("strlenl time:%f :%d\n", t3,len);
+	printf("strlen(long) time:%f :%d\n", t3,len);
 
 	mdtime(0);
 	for(i=0;i<LOOPS;i++)
 		len = rb_strlen(text);
 	t3=	mdtime(1);
-	printf("strlenx time:%f :%d\n", t3,len);
+	printf("strlen(SSE)  time:%f :%d\n", t3,len);
+
+}
+int test2( int argc, char** argv)
+{
+#include "defaultText.h"
+	char text0[] = TEXT; 
+	char* patterns[] = {"vulture","emente", "MArs","dog","Z","ABG","do","AGB"};				 
+	char* pattern=patterns[0];
+	char* findp;
+	char* textm;
+	char* text;
+	double t3;
+	int len = 1024*1024;//strlen(text0);
+	int i;
+	int slen, plen;
+	textm = (char*) malloc(len+ 64);
+	text = (char*)(((unsigned long long) textm ) & ~63)  ;
+	strcpy(text,text0);
+	cmpPerf(text, pattern);
+	cmpStrlen(text);
 }
 
-void testBounder()
+int testWorse()
+{
+	char* text;
+	char* pattern[]={"AB", "AAB","AAAB", "AAAAB"};
+	int len = 1024 * 64;
+	text = (char*)malloc(len+16);
+	memset(text,'A', len);
+	text[len-1] = 0;
+	text[len-2] = 'B';
+	printf("test AB\n");
+	cmpPerf(text,pattern[0]);
+	printf("test AAB\n");
+	cmpPerf(text,pattern[1]);
+	printf("test AAAB\n");
+	cmpPerf(text,pattern[2]);
+	printf("test AAAAB\n");
+	cmpPerf(text,pattern[3]);
+}
+
+void testBoundary()
 {
 	//char* text = (char*)malloc(13);
 	//unsigned int len = *(((unsigned int*) text) -2);
 	char* text = "1234567812345678mytest";
 	char* pat= "est";
 	char* findp;
-	printf("test Bounder\n");
+	printf("test boundary.............................\n");
 	findp= lstrstrsse(text,pat);
-	printstr(findp);
-		
+	printstrn(findp);
+
 
 }
+/*******************************************
+ *
+ * ******************************************/
 int test3(int argc, char** argv)
 {
 #include "defaultText.h"
 	char text0[] = TEXT; 
 	char* patterns[] = {"vulture","emente", "MArs","dog","Z","ABG","do","AGB"};				 
 	char* pattern=patterns[0];
-	//char* pattern="dog";
-	//char* pattern="Z";
-	//char* pattern = "emente";
-	//char* pattern = "MArs";
 	char* findp;
 	char* textm;
 	char* text;
@@ -268,10 +291,10 @@ int test3(int argc, char** argv)
 	textm = (char*) malloc(len+ 64);
 	text = (char*)(((unsigned long long) textm ) & ~63)  ;
 	strcpy(text,text0);
-	
+
 	findp = strstr(text,pattern);
 	printf("strstr    %d", findp - text);
-	printstr(findp);
+	printstrn(findp);
 	for(i=0;i<34;i++) 
 	{
 		int j=0;
@@ -280,20 +303,26 @@ int test3(int argc, char** argv)
 		mdtime(0);
 		findp = lstrstrsse(text,pattern);
 		t3=	mdtime(1);
-		printf("lstrsse   time:%15f :%d", t3,findp - text);
+		printf("(%15f :%d:", t3,findp - text);
 		printstr(findp);
+		printf(")");
+		if(i%4 == 0) printf("\n");
+
 
 	}
-	strcpy(text,text0);
 
-	testBounder();
+	printf("\n");
+	testBoundary();
 }
 
 int main( int argc, char** argv)
 {
+	printf("Performance test ................\n");
 	test2(argc,argv);
+	printf("worse test ................\n");
+	testWorse();
+	printf("functional test ................\n");
 	test3(argc,argv);
-	printf("test 2\n");
 	//test1(argc,argv);
 	return 1;
 }

@@ -1,5 +1,5 @@
 CC=gcc
-CXXFLAG=   -O3 
+CXXFLAG=   -O3  
 
 ifeq  "${CC}"  "gcc"  
 CXXFLAG+=-msse2 
