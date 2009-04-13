@@ -126,14 +126,13 @@ int test2( int argc, char** argv)
 	strcpy(text,text0);
 	
 	findp = strstr(text,pattern);
-	mdtime(0);
-	for(i=0;i<LOOPS;i++)
-		findp = strstr(text,pattern);
-	t3=	mdtime(1);
-	printf("strstr    time:%15f :%d", t3,findp - text);
-	printstr(findp);
+	findp = lstrstrsse(text,pattern);
+	findp = lstrstr(text,pattern);
+	findp = strstr(text,pattern);
+	findp = strstrBerg(text,pattern);
+	findp = strstrToy(text,pattern);
 
-//if(0)
+if(0)
 	for(i=0;i<34;i++) 
 	{
 		int j=0;
@@ -273,16 +272,20 @@ int test3(int argc, char** argv)
 	findp = strstr(text,pattern);
 	printf("strstr    %d", findp - text);
 	printstr(findp);
-
 	for(i=0;i<34;i++) 
 	{
 		int j=0;
 		for(j=0;j<i;j++) text[i] = 'a';
 		strcpy(text+i,text0);
+		mdtime(0);
 		findp = lstrstrsse(text,pattern);
-		printf("lstrsse   %d", findp - text);
+		t3=	mdtime(1);
+		printf("lstrsse   time:%15f :%d", t3,findp - text);
 		printstr(findp);
+
 	}
+	strcpy(text,text0);
+
 	testBounder();
 }
 
