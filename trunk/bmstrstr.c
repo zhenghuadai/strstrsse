@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+
+
+#if 1
 char *qsearch2(const char *str, int slen, const char *patt, int plen)
 {
 	const char *s, *p, *tx = str;
@@ -29,3 +34,71 @@ char *qsearch(const char *str, const char *patt)
 	int plen = strlen(patt);
 return 	qsearch2(str,slen,patt,plen);
 }
+#endif
+
+#if 0
+#define ASIZE 256
+void preBmBc(char *pat, int m, int bmBc[]) {
+	int i;
+
+	for (i = 0; i < ASIZE; ++i)
+		bmBc[i] = m;
+	for (i = 0; i < m - 1; ++i)
+		bmBc[pat[i]] = m - i - 1;
+}
+
+char* Sbmh(char * textt,char *patt) // HorspoolËã·¨ 
+{
+	int m,n;
+	int j,bmBc[ASIZE];
+	unsigned char c;
+	unsigned char * text,*pat;
+	text=textt;
+	pat=patt;
+	m=strlen(pat);
+	n=strlen(text);
+
+	/* preprocessing */
+	preBmBc(pat,m,bmBc);
+	/* searching */
+	j=0;
+	while (j<=n-m)
+	{
+		c=text[j+m-1];
+		if (pat[m-1]==c && memcmp(pat,text+j,m-1)==0)
+			return text +j;
+		j+=bmBc[c];
+	}
+}
+
+char *qsearch2(const char *textt, int slen, const char *patt, int plen)
+{
+		int m,n;
+	int j,bmBc[ASIZE];
+	unsigned char c;
+	unsigned char * text,*pat;
+	text=textt;
+	pat=patt;
+	n = slen;
+	m = plen;
+	/* preprocessing */
+	preBmBc(pat,m,bmBc);
+	/* searching */
+	j=0;
+	while (j<=n-m)
+	{
+		c=text[j+m-1];
+		if (pat[m-1]==c && memcmp(pat,text+j,m-1)==0)
+			return text +j;
+		j+=bmBc[c];
+	}
+
+}
+
+char *qsearch(const char *str, const char *patt)
+{
+	int slen = strlen(str);
+	int plen = strlen(patt);
+	return 	qsearch2(str,slen,patt,plen);
+}
+#endif

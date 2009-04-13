@@ -101,7 +101,9 @@ void test1(int argc,char** argv)
 	}
 
 }
-
+/**************************************************
+ * test performance
+ * ************************************************/
 int test2( int argc, char** argv)
 {
 #include "defaultText.h"
@@ -119,9 +121,19 @@ int test2( int argc, char** argv)
 	int i;
 	int len = 1024*1024;//strlen(text0);
 	int slen, plen;
-	//int len = strlen(text0);
 	textm = (char*) malloc(len+ 64);
 	text = (char*)(((unsigned long long) textm ) & ~63)  ;
+	strcpy(text,text0);
+	
+	findp = strstr(text,pattern);
+	mdtime(0);
+	for(i=0;i<LOOPS;i++)
+		findp = strstr(text,pattern);
+	t3=	mdtime(1);
+	printf("strstr    time:%15f :%d", t3,findp - text);
+	printstr(findp);
+
+//if(0)
 	for(i=0;i<34;i++) 
 	{
 		int j=0;
@@ -135,9 +147,6 @@ int test2( int argc, char** argv)
 
 	}
 	strcpy(text,text0);
-	//text = text0 ;
-	//for(i=0;i<len;i++){text[i] ='a';}
-	//text[i] =0;
 
 	printf("\n");
 	findp = lstrstr(text,pattern);
@@ -226,6 +235,47 @@ int test2( int argc, char** argv)
 	t3=	mdtime(1);
 	printf("strlenx time:%f :%d\n", t3,len);
 }
+
+
+int test3(int argc, char** argv)
+{
+#include "defaultText.h"
+	char text0[] = TEXT; 
+	char* patterns[] = {"vulture","emente", "MArs","dog","Z","ABG","do","AGB"};				 
+	char* pattern=patterns[0];
+	//char* pattern="dog";
+	//char* pattern="Z";
+	//char* pattern = "emente";
+	//char* pattern = "MArs";
+	char* findp;
+	char* textm;
+	char* text;
+	double t3;
+	int i;
+	int len = 1024*1024;//strlen(text0);
+	int slen, plen;
+	textm = (char*) malloc(len+ 64);
+	text = (char*)(((unsigned long long) textm ) & ~63)  ;
+	strcpy(text,text0);
+	
+	findp = strstr(text,pattern);
+		findp = strstr(text,pattern);
+	printf("strstr    %d", findp - text);
+	printstr(findp);
+
+	for(i=0;i<34;i++) 
+	{
+		int j=0;
+		for(j=0;j<i;j++) text[i] = 'a';
+		strcpy(text+i,text0);
+		findp = lstrstrsse(text,pattern);
+		printf("lstrsse   %d", findp - text);
+		printstr(findp);
+
+	}
+
+}
+
 int main( int argc, char** argv)
 {
 	test2(argc,argv);
