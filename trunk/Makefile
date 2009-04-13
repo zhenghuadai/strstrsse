@@ -1,5 +1,10 @@
-CC = gcc
-CXXFLAG=  -msse2 -O3 
+CC=gcc
+CXXFLAG=   -O3 
+
+ifeq  "${CC}"  "gcc"  
+CXXFLAG+=-msse2 
+endif
+
 test: strstr.o main.o lstrstr.o lstrlen.o lstrstrsse.o bmstrstr.o
 	${CC}  ${CXXFLAG}   -o teststrstr $^ 
 run:
