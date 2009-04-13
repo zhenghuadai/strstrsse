@@ -77,8 +77,12 @@ char* lstrstrsse(char* text, char* pattern)
 	register __m128i byte16b;
 	register __m128i byte16c;
 	char* bytePtr =text;
+	if(text==NULL) return NULL;
+	if(text[0] == 0) {
+		return pattern[0]?NULL:text;
+	}
 	if(pattern ==NULL) return NULL;
-	if(pattern[0] == 0) return NULL;
+	if(pattern[0] == 0) return text;
 	if(pattern[1] == 0) return lstrchr(text,pattern[0]); 
 	if(pattern[2] == 0) return lstrstrabsse(text,pattern); 
 	byte16a = _mm_set1_epi8(chara);

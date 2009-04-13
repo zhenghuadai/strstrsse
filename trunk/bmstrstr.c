@@ -4,7 +4,7 @@
 
 
 
-#if 1
+#if 0
 char *qsearch2(const char *str, int slen, const char *patt, int plen)
 {
 	const char *s, *p, *tx = str;
@@ -36,7 +36,7 @@ return 	qsearch2(str,slen,patt,plen);
 }
 #endif
 
-#if 0
+#if 1
 #define ASIZE 256
 void preBmBc(char *pat, int m, int bmBc[]) {
 	int i;

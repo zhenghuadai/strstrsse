@@ -31,6 +31,44 @@ char *lstrstr5 (const char* , const char* );
 char *qsearch(const char* , const char* );
 char* strstra(const char *str,char c);
 char *qsearch2(const char *str, int slen, const char *patt, int plen);
+typedef char* (*strstr_t)(char* , char*); 
+	static void
+check (int thing, int number)
+{
+	if (!thing)
+	{
+		printf("strstr flunked test %d\n",  number);
+	}
+}
+
+
+	static void
+test_strstr (strstr_t strstr_alg)
+{
+	char one[7];
+	printf("short test ................................\n");
+	check(strstr_alg("abcd", "z") == NULL, 1);    /* Not found. */
+	check(strstr_alg("abcd", "abx") == NULL, 2);  /* Dead end. */
+	(void) strcpy(one, "abcd");
+	check(strstr_alg(one, "c") == one+2, 3);  /* Basic test. */
+	check(strstr_alg(one, "bc") == one+1, 4); /* Multichar. */
+	check(strstr_alg(one, "d") == one+3, 5);  /* End of string. */
+	check(strstr_alg(one, "cd") == one+2, 6); /* Tail of string. */
+	check(strstr_alg(one, "abc") == one, 7);  /* Beginning. */
+	check(strstr_alg(one, "abcd") == one, 8); /* Exact match. */
+	check(strstr_alg(one, "abcde") == NULL, 9);   /* Too long. */
+	check(strstr_alg(one, "de") == NULL, 10); /* Past end. */
+	check(strstr_alg(one, "") == one, 11);    /* Finding empty. */
+	(void) strcpy(one, "ababa");
+	check(strstr_alg(one, "ba") == one+1, 12);    /* Finding first. */
+	(void) strcpy(one, "");
+	check(strstr_alg(one, "b") == NULL, 13);  /* Empty string. */
+	check(strstr_alg(one, "") == one, 14);    /* Empty in empty string. */
+	check(strstr_alg(one, "bca") == one+2, 15);   /* False start. */
+	(void) strcpy(one, "bbbcabbca");
+	check(strstr_alg(one, "bbca") == one+1, 16);  /* With overlap. */
+}
+
 void printstr(char* s)
 {
 	int i =0;
@@ -46,7 +84,7 @@ void printstrn(char* s)
 	for(i=0;(s[i]) &&(i<10);i++){
 		printf("%c",s[i]);
 	}
-	ret:
+ret:
 	printf("\n");
 
 }
@@ -83,8 +121,8 @@ void test1(int argc,char** argv)
 			int tmpstart = rand()% textlen;	
 			while((tmpstart < textlen )&&(text[tmpstart] != ' ') )
 				tmpstart ++;
-				tmpstart ++;
-				if(tmpstart >= textlen) continue;
+			tmpstart ++;
+			if(tmpstart >= textlen) continue;
 			for(i=0; i< patlen; i++)
 				pattern[i] = text[tmpstart + i];
 			pattern[i] =0;
@@ -240,12 +278,12 @@ int test2( int argc, char** argv)
 	cmpStrlen(text);
 }
 
-int testWorse()
+int testWorse(int len)
 {
 	char* text;
 	char* pattern[]={"AB", "AAB","AAAB", "AAAAB"};
-	int len = 1024 * 64;
-	text = (char*)malloc(len+16);
+	printf("text len = %d\n",len);
+	text = (char*)malloc(len);
 	memset(text,'A', len);
 	text[len-1] = 0;
 	text[len-2] = 'B';
@@ -313,14 +351,20 @@ int test3(int argc, char** argv)
 
 	printf("\n");
 	testBoundary();
+	test_strstr(lstrstrsse);
 }
 
 int main( int argc, char** argv)
 {
+	int len;
 	printf("Performance test ................\n");
 	test2(argc,argv);
 	printf("worse test ................\n");
-	testWorse();
+	testWorse(1024*64);
+	testWorse(8);
+	testWorse(16);
+	testWorse(32);
+	testWorse(48);
 	printf("functional test ................\n");
 	test3(argc,argv);
 	//test1(argc,argv);
