@@ -143,7 +143,7 @@ for(i=0;i<18;i++)
 	matchalg[i](Text,Pat);
 	Mtime(&endrdt);
 	elapsed_time =Mdifftime(startrdt,endrdt);
-	printf("algorithm %10s takes %20.15f seconds.\n",matchalgstr[i], elapsed_time );
+	printf("algorithm %10s takes %20.15f clocks.\n",matchalgstr[i], elapsed_time );
 	fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, matchalgstr[i]);
 	
 	}

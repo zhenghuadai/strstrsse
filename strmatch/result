@@ -378,4 +378,64 @@ length of pattern:10
  580188.000000000000000 seconds:algorithm Skmpskip takes 
  874720.000000000000000 seconds:algorithm Sshiftor takes 
  822760.000000000000000 seconds:algorithm Sshiftand takes 
+ ***********************************************
+length of Text:102693
+length of pattern:10
+ 623985.000000000000000 seconds:algorithm bfstr takes 
+ 798524.000000000000000 seconds:algorithm Sbm takes 
+ 628762.000000000000000 seconds:algorithm Sbmh takes 
+ 1994992.000000000000000 seconds:algorithm Sbmhs takes 
+ 1982897.000000000000000 seconds:algorithm Ssmith takes 
+ 1378980.000000000000000 seconds:algorithm Smp takes 
+ 1340705.000000000000000 seconds:algorithm Skmp takes 
+ 11878673.000000000000000 seconds:algorithm Sdfa takes 
+ 1216494.000000000000000 seconds:algorithm Sbom takes 
+ 26394701.000000000000000 seconds:algorithm Sbdm takes 
+ 685108.000000000000000 seconds:algorithm Sbndm takes 
+ 1565402.000000000000000 seconds:algorithm Skr takes 
+ 16211285.000000000000000 seconds:algorithm Sbyh takes 
+ 1541900.000000000000000 seconds:algorithm Sskip takes 
+ 744677.000000000000000 seconds:algorithm Skmpskip takes 
+ 931787.000000000000000 seconds:algorithm Sshiftor takes 
+ 1027726.000000000000000 seconds:algorithm Sshiftand takes 
+ ***********************************************
+length of Text:102693
+length of pattern:10
+ 623509.000000000000000 seconds:algorithm bfstr takes 
+ 802391.000000000000000 seconds:algorithm Sbm takes 
+ 636284.000000000000000 seconds:algorithm Sbmh takes 
+ 1994406.000000000000000 seconds:algorithm Sbmhs takes 
+ 1990105.000000000000000 seconds:algorithm Ssmith takes 
+ 1387846.000000000000000 seconds:algorithm Smp takes 
+ 1353617.000000000000000 seconds:algorithm Skmp takes 
+ 11882932.000000000000000 seconds:algorithm Sdfa takes 
+ 1233342.000000000000000 seconds:algorithm Sbom takes 
+ 26155010.000000000000000 seconds:algorithm Sbdm takes 
+ 679779.000000000000000 seconds:algorithm Sbndm takes 
+ 1556631.000000000000000 seconds:algorithm Skr takes 
+ 16253436.000000000000000 seconds:algorithm Sbyh takes 
+ 1240609.000000000000000 seconds:algorithm Sskip takes 
+ 613088.000000000000000 seconds:algorithm Skmpskip takes 
+ 764252.000000000000000 seconds:algorithm Sshiftor takes 
+ 827228.000000000000000 seconds:algorithm Sshiftand takes 
+ ***********************************************
+length of Text:102693
+length of pattern:10
+ 623458.000000000000000 seconds:algorithm bfstr takes 
+ 798507.000000000000000 seconds:algorithm Sbm takes 
+ 625898.000000000000000 seconds:algorithm Sbmh takes 
+ 1987088.000000000000000 seconds:algorithm Sbmhs takes 
+ 1980865.000000000000000 seconds:algorithm Ssmith takes 
+ 1378411.000000000000000 seconds:algorithm Smp takes 
+ 1339608.000000000000000 seconds:algorithm Skmp takes 
+ 11878044.000000000000000 seconds:algorithm Sdfa takes 
+ 1215559.000000000000000 seconds:algorithm Sbom takes 
+ 26370562.000000000000000 seconds:algorithm Sbdm takes 
+ 686817.000000000000000 seconds:algorithm Sbndm takes 
+ 1563142.000000000000000 seconds:algorithm Skr takes 
+ 16416254.000000000000000 seconds:algorithm Sbyh takes 
+ 1501007.000000000000000 seconds:algorithm Sskip takes 
+ 745340.000000000000000 seconds:algorithm Skmpskip takes 
+ 934175.000000000000000 seconds:algorithm Sshiftor takes 
+ 1001360.000000000000000 seconds:algorithm Sshiftand takes 
  
