@@ -438,4 +438,44 @@ length of pattern:10
  745340.000000000000000 seconds:algorithm Skmpskip takes 
  934175.000000000000000 seconds:algorithm Sshiftor takes 
  1001360.000000000000000 seconds:algorithm Sshiftand takes 
+ ***********************************************
+length of Text:102693
+length of pattern:10
+ 401960.000000000000000 seconds:algorithm bfstr takes 
+ 367080.000000000000000 seconds:algorithm Sbm takes 
+ 338944.000000000000000 seconds:algorithm Sbmh takes 
+ 1223440.000000000000000 seconds:algorithm Sbmhs takes 
+ 1113792.000000000000000 seconds:algorithm Ssmith takes 
+ 1389296.000000000000000 seconds:algorithm Smp takes 
+ 1366808.000000000000000 seconds:algorithm Skmp takes 
+ 3514928.000000000000000 seconds:algorithm Sdfa takes 
+ 825536.000000000000000 seconds:algorithm Sbom takes 
+ 10224440.000000000000000 seconds:algorithm Sbdm takes 
+ 408016.000000000000000 seconds:algorithm Sbndm takes 
+ 792552.000000000000000 seconds:algorithm Skr takes 
+ 6143712.000000000000000 seconds:algorithm Sbyh takes 
+ 905296.000000000000000 seconds:algorithm Sskip takes 
+ 429184.000000000000000 seconds:algorithm Skmpskip takes 
+ 602632.000000000000000 seconds:algorithm Sshiftor takes 
+ 691144.000000000000000 seconds:algorithm Sshiftand takes 
+ ***********************************************
+length of Text:102693
+length of pattern:10
+ 364808.000000000000000 seconds:algorithm bfstr takes 
+ 442584.000000000000000 seconds:algorithm Sbm takes 
+ 313760.000000000000000 seconds:algorithm Sbmh takes 
+ 657368.000000000000000 seconds:algorithm Sbmhs takes 
+ 663368.000000000000000 seconds:algorithm Ssmith takes 
+ 1094624.000000000000000 seconds:algorithm Smp takes 
+ 1084152.000000000000000 seconds:algorithm Skmp takes 
+ 3093136.000000000000000 seconds:algorithm Sdfa takes 
+ 938544.000000000000000 seconds:algorithm Sbom takes 
+ 11821424.000000000000000 seconds:algorithm Sbdm takes 
+ 549736.000000000000000 seconds:algorithm Sbndm takes 
+ 833624.000000000000000 seconds:algorithm Skr takes 
+ 6503312.000000000000000 seconds:algorithm Sbyh takes 
+ 619696.000000000000000 seconds:algorithm Sskip takes 
+ 536784.000000000000000 seconds:algorithm Skmpskip takes 
+ 487728.000000000000000 seconds:algorithm Sshiftor takes 
+ 562192.000000000000000 seconds:algorithm Sshiftand takes 
  
