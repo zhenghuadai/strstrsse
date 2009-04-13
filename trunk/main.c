@@ -236,7 +236,19 @@ int test2( int argc, char** argv)
 	printf("strlenx time:%f :%d\n", t3,len);
 }
 
+void testBounder()
+{
+	//char* text = (char*)malloc(13);
+	//unsigned int len = *(((unsigned int*) text) -2);
+	char* text = "1234567812345678mytest";
+	char* pat= "est";
+	char* findp;
+	printf("test Bounder\n");
+	findp= lstrstrsse(text,pat);
+	printstr(findp);
+		
 
+}
 int test3(int argc, char** argv)
 {
 #include "defaultText.h"
@@ -259,7 +271,6 @@ int test3(int argc, char** argv)
 	strcpy(text,text0);
 	
 	findp = strstr(text,pattern);
-		findp = strstr(text,pattern);
 	printf("strstr    %d", findp - text);
 	printstr(findp);
 
@@ -271,14 +282,14 @@ int test3(int argc, char** argv)
 		findp = lstrstrsse(text,pattern);
 		printf("lstrsse   %d", findp - text);
 		printstr(findp);
-
 	}
-
+	testBounder();
 }
 
 int main( int argc, char** argv)
 {
 	test2(argc,argv);
+	test3(argc,argv);
 	printf("test 2\n");
 	//test1(argc,argv);
 	return 1;
