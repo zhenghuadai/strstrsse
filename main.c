@@ -357,8 +357,6 @@ int test3(int argc, char** argv)
 int main( int argc, char** argv)
 {
 	int len;
-	printf("Performance test ................\n");
-	test2(argc,argv);
 	printf("worse test ................\n");
 	testWorse(1024*64);
 	testWorse(8);
@@ -367,6 +365,8 @@ int main( int argc, char** argv)
 	testWorse(48);
 	printf("functional test ................\n");
 	test3(argc,argv);
+	printf("Performance test ................\n");
+	test2(argc,argv);
 	//test1(argc,argv);
 	return 1;
 }
