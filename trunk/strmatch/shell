@@ -1,10 +1,11 @@
 #!/bin/bash
-for i in ./*.c 
+for i in ./M*.c 
 do
 #sed "s///" $i >tmp.c
 #sed "s/extern void output(int num);//" $i >tmp.c
 #echo "#include \"global.h\"" > tmp.c
 #sed "s/output/OUTPUT/" $i >>tmp.c
-sed  "s/global.h/util.h/" $i > tmp.c
-mv tmp.c $i
+#sed  "s/global.h/util.h/" $i > tmp.c
+#mv tmp.c $i
+svn mv $i lib/
 done
