@@ -3,7 +3,8 @@ for i in ./*.c
 do
 #sed "s///" $i >tmp.c
 #sed "s/extern void output(int num);//" $i >tmp.c
-echo "#inlcude \"global.h\"" >tmp.c
-cat $i >> tmp.c
+#echo "#include \"global.h\"" > tmp.c
+#sed "s/output/OUTPUT/" $i >>tmp.c
+sed  "s/global.h/util.h/" $i > tmp.c
 mv tmp.c $i
 done

@@ -1,10 +1,11 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
 #define SHIFTSIZE 32768
 #define MAXLENGTH 100 
 #define Bchar 2
-#include "global.h"
+#include "util.h"
 
 void Mwm(char *Tt,char *Patts[],int s)
 {

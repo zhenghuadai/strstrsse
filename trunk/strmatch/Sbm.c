@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -67,7 +68,7 @@ void Sbm2(char *textt, char *patt,int n, int m) {
 	while (j <= n - m) {
 		for (i = m - 1; (i >= 0) && (pat[i] == text[i + j]); --i);
 		if (i < 0) {
-			output(j);
+			OUTPUT(j);
 			j += bmGs[0];
 		}
 		else

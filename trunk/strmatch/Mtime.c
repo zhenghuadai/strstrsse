@@ -1,7 +1,8 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-#include"global.h"
+#include"util.h"
 #include "../rdtsc.h"
 void Mtime(_U64* u)
 {

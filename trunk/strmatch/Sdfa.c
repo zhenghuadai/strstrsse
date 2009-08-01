@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -151,7 +152,7 @@ void  Sdfa2(char *text,char *pat,int n, int m) //基本的自动机算法
 	{
 		state=getTarget(aut,state,text[j]);
 		if (isTerminal(aut,state))
-			output(j-m+1);
+			OUTPUT(j-m+1);
 	}
 }
 void  Sdfa(char *text,char *pat) //基本的自动机算法 

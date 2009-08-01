@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -28,7 +29,7 @@ void Sbmhs2(char * textt,char *patt,int n, int m)//SUNDAYÀ„∑®£¨”÷≥∆ quich search
 	while (j<=n-m)
 	{
 		if (memcmp(pat,text+j,m)==0)
-			output(j);
+			OUTPUT(j);
 		j+=qsBc[text[j+m]]; //shift
 	}
 }

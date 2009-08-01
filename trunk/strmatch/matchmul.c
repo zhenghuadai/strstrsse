@@ -1,8 +1,9 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
 #include "match.h"
-#include "global.h"
+#include "util.h"
 #include<stdio.h>
 int main(int argc,char *argv[])
 {

@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -5,7 +6,7 @@
 #define MAXSTATE 100 
 #define MAXLENGTH 10
 #define MFail -1
-extern void outputs(int whichp,int addr);
+extern void OUTPUTs(int whichp,int addr);
 
 int prestate(char **pat,int rows,int preG[][ASIZE],int preO[])
 /* preprocessing of GOTO FUNCTION */
@@ -128,14 +129,14 @@ void Mac(char *text,char  **pat,int rows)
          j++;
          oS=preO[matchS];
          if(oS!=0)
-           outputs(oS-1,(j-strlen(temPat[oS])));		 
+           OUTPUTs(oS-1,(j-strlen(temPat[oS])));		 
       }
       else
       {
         matchS=preF[matchS];
         oS=preO[matchS];
         if(oS!=0)
-          outputs(oS-1,(j-strlen(temPat[oS])));
+          OUTPUTs(oS-1,(j-strlen(temPat[oS])));
       }
    }
 }

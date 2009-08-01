@@ -1,11 +1,12 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
 #define SHIFTSIZE 32768
 #define MAXLENGTH 100 
 #define Bchar 2
-#include "global.h"
-extern void outputs(int whichp,int addr);
+#include "util.h"
+extern void OUTPUTs(int whichp,int addr);
 
 long calHash(unsigned char p,unsigned char q)
 /* calculate the HASH VALUE of two chars */
@@ -208,7 +209,7 @@ void Mwm(char *Tt,char *Patts[],int s)
                  qx++;
               }
               if(px==lengthP)
-		      outputs(preFIND[pstart],(qx-lengthP));
+		      OUTPUTs(preFIND[pstart],(qx-lengthP));
            }
            pstart++;
          }

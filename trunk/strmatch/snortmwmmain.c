@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -1481,7 +1482,7 @@ BINARY  * converthexbytes( unsigned char * s)
       printf("hex length mismatch\n");
    }
 
-   printf("--output hex[%d]: ",p->blen); for(m=0;m<p->blen;m++) printf("%2.2x", p->b[m]);
+   printf("--OUTPUT hex[%d]: ",p->blen); for(m=0;m<p->blen;m++) printf("%2.2x", p->b[m]);
 
    printf(" \n");
 

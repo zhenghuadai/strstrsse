@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -224,7 +225,7 @@ void  Sbdm2(char * text,char *pat, int n, int m) //Forward Dawg Matching algorit
           }
         }
         if (ell==m)
-           output(j-m+1);
+           OUTPUT(j-m+1);
    }
 }
 

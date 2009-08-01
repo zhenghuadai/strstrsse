@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -20,7 +21,7 @@ void  Sbmh2(char * textt,char *patt,int n, int m) // HorspoolÀ„∑®
 	{
 		c=text[j+m-1];
 		if (pat[m-1]==c && memcmp(pat,text+j,m-1)==0)
-			output(j);
+			OUTPUT(j);
 		j+=bmBc[c];
 	}
 }

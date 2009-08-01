@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -31,7 +32,7 @@ void  Sbndm2(char * text,char *pat,int n, int m) //Backward Nondeterministic Daw
     if (i >= 0)
       last = i+1;
     else
-      output(j);
+      OUTPUT(j);
        }
        d <<= 1;
      }

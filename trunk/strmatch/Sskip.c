@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <string.h>
 #include "automaton.h"
@@ -35,7 +36,7 @@ void Sskip2(char *textt,char *patt, int n, int m)//ÌøÔ¾Ëã·¨
 			if (memcmp(pat, text + j - ptr->element, m) == 0)
 			{
 				if (j-ptr->element <= n - m)
-					output(j - ptr->element);
+					OUTPUT(j - ptr->element);
 			}
 			else
 				continue;

@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -38,7 +39,7 @@ void Skmp2(char *text,char *pat, int n, int m) //KMPËã·¨
      i++; j++;
      if (i>=m)
      {
-        output(j-i);
+        OUTPUT(j-i);
         i=kmpNext[i];
      }
    }

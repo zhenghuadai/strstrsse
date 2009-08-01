@@ -1,7 +1,7 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-extern int output(int num);
 
 void Sbf2(char *text,char *pat,int n, int m)
 {

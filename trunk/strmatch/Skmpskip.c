@@ -1,7 +1,8 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-#include"global.h"
+#include"match.h"
 /* //改函数为前面MP算法中函数，为调试复制到次
 void preMp(char *x, int m, int mpNext[]) {
    int i, j;
@@ -79,7 +80,7 @@ void Skmpskip2(char *textt,char *patt,int n, int m) {
 		k = attempt(text, pat, m, start, wall);
 		wall = start + k;
 		if (k == m) {
-			output(start);
+			OUTPUT(start);
 			i -= per;
 		}
 		else
