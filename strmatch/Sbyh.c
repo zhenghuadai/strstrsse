@@ -1,8 +1,9 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
 //¼ÆÊýËã·¨
-#include"global.h"
+#include"match.h"
 void SbyhSearch(unsigned char *text,int m,int n,int  ch[]); 
 void Sbyh2(char *textt,char *patt,int n ,int m)
 {
@@ -44,7 +45,7 @@ void SbyhSearch(unsigned char *text,int m,int n,int ch[]){
 		
 	if(count[(j-m)%yu]==(m))
 	    {
-	    	  output(j-m);
+	    	  OUTPUT(j-m);
 	    }
 	    	  count[(j-m)%yu]=0;
 	}	

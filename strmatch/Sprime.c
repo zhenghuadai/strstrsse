@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -13,7 +14,7 @@ void Sprime(char *text,char *pat,int n, int m)
   {
      for (i=0;i<m&&pat[i]==text[i+j];++i);
      if (i>=m)
-      output(j);
+      OUTPUT(j);
   }  
   
 }

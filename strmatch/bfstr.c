@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -40,7 +41,7 @@
 typedef unsigned chartype;
 
 #undef strstr
-extern output(int num);
+extern OUTPUT(int num);
 void
 bfstr (text, pattern)
      const char *text;
@@ -123,7 +124,7 @@ foundneedle:
   {
 	  int pos;
 	  pos=pj-pstart;
-  output(pos);
+  OUTPUT(pos);
   }
   pj++;
   goto again;

@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -22,7 +23,7 @@ void  Ssmith2(char * textt,char *patt,int n, int m)//smith Ëã·¨
 	while (j<=n-m)
 	{
 		if (memcmp(pat,text+j,m)==0)
-			output(j);
+			OUTPUT(j);
 		j+=MAX(bmBc[text[j+m-1]],qsBc[text[j+m]]);
 	}
 }

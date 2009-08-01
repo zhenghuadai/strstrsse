@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -20,7 +21,7 @@ void Skr2(char *text, char *pat,int n, int m) {
    j = 0;
    while (j <= n-m) {
       if (hx == hy && memcmp(pat, text + j, m) == 0)
-         output(j);
+         OUTPUT(j);
       hy = REHASH(text[j], text[j + m], hy);
       ++j;
    }

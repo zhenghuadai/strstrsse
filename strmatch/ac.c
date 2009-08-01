@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -294,7 +295,7 @@ int ac_del_string(AC_STRUCT *node, char *P, int M, int id)
 /*
  * ac_prep
  *
- * Compute the failure and output links for the keyword tree.
+ * Compute the failure and OUTPUT links for the keyword tree.
  *
  * Parameters:  node  -  an AC_STRUCT structure
  *
@@ -309,7 +310,7 @@ int ac_prep(AC_STRUCT *node)
     return 0;
 
   /*
-   * The failure link and output link computation requires a breadth-first
+   * The failure link and OUTPUT link computation requires a breadth-first
    * traversal of the keyword tree.  And, to do that, we need a queue of
    * the nodes yet to be processed.
    *
@@ -318,7 +319,7 @@ int ac_prep(AC_STRUCT *node)
    * the node is removed from the queue).
    * 
    * The `outlink' fields will be used as the pointers to a node's parent
-   * for nodes in the queue (since the output link is also only set after
+   * for nodes in the queue (since the OUTPUT link is also only set after
    * the node is removed from the queue).
    */
   root = node->tree;
@@ -346,7 +347,7 @@ int ac_prep(AC_STRUCT *node)
     v->faillink = v->outlink = NULL;
     
     /*
-     * Set the failure and output links.
+     * Set the failure and OUTPUT links.
      */
     if (v == root)
       ;
@@ -425,7 +426,7 @@ void ac_search_init(AC_STRUCT *node, char *T, int N)
   node->N = N;
   node->c = 1;
   node->w = node->tree;
-  node->output = NULL;
+  node->OUTPUT = NULL;
   node->initflag = 1;
   node->endflag = 0;
 }
@@ -487,16 +488,16 @@ char *ac_search(AC_STRUCT *node, int *length_out, int *id_out)
   /*
    * If the last call to ac_search returned a match, check for another
    * match ending at the same right endpoint (denoted by a non-NULL
-   * output link).
+   * OUTPUT link).
    */
-  if (node->output != NULL) {
-    node->output = node->output->outlink;
+  if (node->OUTPUT != NULL) {
+    node->OUTPUT = node->output->outlink;
 #ifdef STATS
     node->outlinks_traversed++;
 #endif
 
-    if (node->output != NULL) {
-      id = node->output->matchid;
+    if (node->OUTPUT != NULL) {
+      id = node->OUTPUT->matchid;
       if (id_out)
         *id_out = id;
       if (length_out)
@@ -552,17 +553,17 @@ char *ac_search(AC_STRUCT *node, int *length_out, int *id_out)
 #endif
 
       if (w->matchid != 0)
-        node->output = w;
+        node->OUTPUT = w;
       else if (w->outlink != NULL) {
-        node->output = w->outlink;
+        node->OUTPUT = w->outlink;
 
 #ifdef STATS
         node->outlinks_traversed++;
 #endif
       }
 
-      if (node->output != NULL) {
-        id = node->output->matchid;
+      if (node->OUTPUT != NULL) {
+        id = node->OUTPUT->matchid;
         if (id_out)
           *id_out = id;
         if (length_out)
@@ -685,7 +686,7 @@ int strmat_ac_match(char  **pattern_ary, int num_patterns, char *text,
       matchtail->next = newmatch;
       matchtail = newmatch;
     }*/
-    outputs(matchid,pos);
+    OUTPUTs(matchid,pos);
     matchcount++;
   }
 

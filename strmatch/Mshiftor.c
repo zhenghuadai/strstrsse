@@ -1,8 +1,9 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
 /*多模式串shiftor算法*/
-#include"global.h" 
+#include"util.h" 
 #include <string.h>
 #define WORD_SIZE 32
 #define ASIZE 256
@@ -63,7 +64,7 @@ void Mshiftor(char *T,char *Ps[],int ss)
     	state = (state<<maxsingle) | S[T[j]];
     		t=~state;
     		if(t>=limmin && t<=limmax)    	   
-        output(j -maxsingle + 1);
+        OUTPUT(j -maxsingle + 1);
     } 
     
   }

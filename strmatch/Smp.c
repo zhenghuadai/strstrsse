@@ -1,3 +1,4 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
@@ -34,7 +35,7 @@ void  Smp2(char * text,char *pat, int n, int m)//MPËã·¨
        i++;  j++;
        if (i>=m)
        {
-          output(j-i);
+          OUTPUT(j-i);
           i=mpNext[i];
        }
    }

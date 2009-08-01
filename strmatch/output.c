@@ -1,7 +1,7 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-#include "global.h"
 #include "match.h"
 int  output(int addr)
 {

@@ -1,7 +1,8 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-#include "global.h"
+#include "util.h"
 #include "automaton.h"
 
 #define FALSE      0
@@ -89,7 +90,7 @@ void Sbom2(char *text,char *pat,int n, int m)
 			--i;
 		}
 		if (i < 0) {
-			output(j);
+			OUTPUT(j);
 			shift = period;
 		}
 		j += shift;

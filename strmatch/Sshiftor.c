@@ -1,8 +1,9 @@
+#include "util.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
 //Shift or algorithm
-#include"global.h"
+#include"match.h"
 int preSo(char *x, int m, unsigned int S[]) { 
     unsigned int j, lim; 
     int i; 
@@ -31,7 +32,7 @@ void Sshiftor2(char *text,char *pat,int n, int m) {
 	for (state = ~0, j = 0; j < n; ++j) { 
 		state = (state<<1) | S[text[j]]; 
 		if (state < lim) 
-			output(j - m + 1); 
+			OUTPUT(j - m + 1); 
 	} 
 } 
 
