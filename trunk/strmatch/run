@@ -1,3 +1,0 @@
-rm result
-./match
-cat result | sort
