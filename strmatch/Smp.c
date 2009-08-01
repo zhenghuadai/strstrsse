@@ -17,14 +17,10 @@ void  preMp(char *pat,int m,int mpNext[])
   }
 }
 
-
-void  Smp(char * text,char *pat)//MP算法
+void  Smp2(char * text,char *pat, int n, int m)//MP算法
 {
-   int m,n;
    int i,j,mpNext[XSIZE];
 
-   m=strlen(pat);
-   n=strlen(text);
   
    /* preprocessing */
    preMp(pat,m,mpNext);
@@ -43,3 +39,10 @@ void  Smp(char * text,char *pat)//MP算法
        }
    }
 } 
+void  Smp(char * text,char *pat)//MP算法
+{
+   int m,n;
+   m=strlen(pat);
+   n=strlen(text);
+   Smp2(text, pat, n, m);
+}

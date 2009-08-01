@@ -13,6 +13,7 @@ int main(int argc,char *argv[])
 time_t   start, finish;
 double elapsed_time;
 void (* matchalg[20])(char * text,char * pat);
+void (* matchalg2[20])(char * text,char * pat,int n, int m);
 char * matchalgstr[20];
 int boolmatch[20];
 FILE *fp;
@@ -21,38 +22,55 @@ _U64 startrdt,endrdt;
 for(i=0;i<20;i++)
 	matchalg[i]=NULL;
 matchalg[0]=bfstr;
+matchalg2[0]=bfstr2;
 matchalgstr[0]="bfstr";
 matchalg[1]=Sbm;
+matchalg2[1]=Sbm2;
 matchalgstr[1]="Sbm";
 matchalg[2]=Sbmh;
+matchalg2[2]=Sbmh2;
 matchalgstr[2]="Sbmh";
 matchalg[3]=Sbmhs;
+matchalg2[3]=Sbmhs2;
 matchalgstr[3]="Sbmhs";
 matchalg[4]=Ssmith;
+matchalg2[4]=Ssmith2;
 matchalgstr[4]="Ssmith";
 matchalg[5]=Smp;
+matchalg2[5]=Smp2;
 matchalgstr[5]="Smp";
 matchalg[6]=Skmp;
+matchalg2[6]=Skmp2;
 matchalgstr[6]="Skmp";
 matchalg[7]=Sdfa;
+matchalg2[7]=Sdfa2;
 matchalgstr[7]="Sdfa";
 matchalg[8]=Sbom;
+matchalg2[8]=Sbom2;
 matchalgstr[8]="Sbom";
 matchalg[9]=Sbdm;
+matchalg2[9]=Sbdm2;
 matchalgstr[9]="Sbdm";
 matchalg[10]=Sbndm;
+matchalg2[10]=Sbndm2;
 matchalgstr[10]="Sbndm";
 matchalg[11]=Skr;
+matchalg2[11]=Skr2;
 matchalgstr[11]="Skr";
 matchalg[12]=Sbyh;
+matchalg2[12]=Sbyh2;
 matchalgstr[12]="Sbyh";
 matchalg[13]=Sskip;
+matchalg2[13]=Sskip2;
 matchalgstr[13]="Sskip";
 matchalg[14]=Skmpskip;
+matchalg2[14]=Skmpskip2;
 matchalgstr[14]="Skmpskip";
 matchalg[15]=Sshiftor;
+matchalg2[15]=Sshiftor2;
 matchalgstr[15]="Sshiftor";
 matchalg[16]=Sshiftand;
+matchalg2[16]=Sshiftand2;
 matchalgstr[16]="Sshiftand";
 for(i=0;i<18;i++)
 {
@@ -139,8 +157,13 @@ for(i=0;i<18;i++)
 {   
 	if(matchalg[i]&&boolmatch[i])
 	{
+	int n, m;
+	n = strlen(Text);
+	m = strlen(Pat);
 	Mtime(&startrdt);
-	matchalg[i](Text,Pat);
+	//matchalg[i](Text,Pat);
+	matchalg2[i](Text,Pat, n, m);
+	
 	Mtime(&endrdt);
 	elapsed_time =Mdifftime(startrdt,endrdt);
 	printf("algorithm %10s takes %20.15f clocks.\n",matchalgstr[i], elapsed_time );

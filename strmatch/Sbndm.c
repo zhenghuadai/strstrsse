@@ -4,12 +4,10 @@
 #include "mem.h"
 #define ASIZE 256
 #define WORD_SIZE 16
-void  Sbndm(char * text,char *pat) //Backward Nondeterministic Dawg Matching algorithm
+void  Sbndm2(char * text,char *pat,int n, int m) //Backward Nondeterministic Dawg Matching algorithm
 {
   int B[ASIZE];
-  int i, j, s, d, last,m,n;
-  m=strlen(pat);
-  n=strlen(text);
+  int i, j, s, d, last;
   if (m > WORD_SIZE)
     error("BNDM");
 
@@ -40,3 +38,10 @@ void  Sbndm(char * text,char *pat) //Backward Nondeterministic Dawg Matching alg
      j += last;
    }
   }
+void  Sbndm(char * text,char *pat) //Backward Nondeterministic Dawg Matching algorithm
+{
+int m, n;
+  m=strlen(pat);
+  n=strlen(text);
+  Sbndm2(text, pat, n, m);
+}

@@ -4,14 +4,12 @@
 //¼ÆÊıËã·¨
 #include"global.h"
 void SbyhSearch(unsigned char *text,int m,int n,int  ch[]); 
-void Sbyh(char *textt,char *patt)
+void Sbyh2(char *textt,char *patt,int n ,int m)
 {
-int i,j,m,n;
+int i,j;
 unsigned char *text,*pat;
 text=textt;
 pat=patt;
-m=strlen(pat);
-n=strlen(text);
 int ch[ASIZE];
 for(i=0;i<ASIZE;i++)
 ch[i]=-1;
@@ -21,6 +19,13 @@ for(i=0;i<m;i++)
 }
 /*search*/
  SbyhSearch(text,m,n,ch);
+}
+void Sbyh(char *textt,char *patt)
+{
+int m, n;
+m=strlen(patt);
+n=strlen(textt);
+Sbyh2(textt, patt, n, m);
 }
 void SbyhSearch(unsigned char *text,int m,int n,int ch[]){
 	int j,pos;

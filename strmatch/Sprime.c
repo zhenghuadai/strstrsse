@@ -3,13 +3,10 @@
 #include <stdio.h>
 extern void output(int num);
 
-void Sprime(char *text,char *pat)
+void Sprime(char *text,char *pat,int n, int m)
 {
-  int m,n;
   int i,j;
   int prime[100]={2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59};
-  m=strlen(pat);
-  n=strlen(text);
 
   /* searching */
   for(j=0;j<=n-m;++j)
@@ -19,4 +16,11 @@ void Sprime(char *text,char *pat)
       output(j);
   }  
   
+}
+void Sprime(char *text,char *pat)
+{
+  int m,n;
+  m=strlen(pat);
+  n=strlen(text);
+  Sprime2(text ,pat, n ,m);
 }
