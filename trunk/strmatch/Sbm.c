@@ -52,29 +52,32 @@ void preBmGs(char *pat, int m, int bmGs[]) {
 }
  
  
-void Sbm(char *textt, char *patt) {
-   int i, j, bmGs[XSIZE], bmBc[ASIZE];
-   int m,n;
-   unsigned char *text,*pat;
-   text=textt;
-   pat=patt;
-   m=strlen(pat);
-   n=strlen(text);
-//   printf("n lenth of bm:%d,m:%d,",n,m);
-   
-   /* Preprocessing */
-   preBmGs(pat, m, bmGs);
-   preBmBc(pat, m, bmBc);
-   /* Searching */
-   j = 0;
-   while (j <= n - m) {
-      for (i = m - 1; (i >= 0) && (pat[i] == text[i + j]); --i);
-      if (i < 0) {
-         output(j);
-         j += bmGs[0];
-      }
-      else
-         j += MAX(bmGs[i], bmBc[text[i + j]] - m + 1 + i);
-   }
+void Sbm2(char *textt, char *patt,int n, int m) {
+	int i, j, bmGs[XSIZE], bmBc[ASIZE];
+	unsigned char *text,*pat;
+	text=textt;
+	pat=patt;
+	//   printf("n lenth of bm:%d,m:%d,",n,m);
+
+	/* Preprocessing */
+	preBmGs(pat, m, bmGs);
+	preBmBc(pat, m, bmBc);
+	/* Searching */
+	j = 0;
+	while (j <= n - m) {
+		for (i = m - 1; (i >= 0) && (pat[i] == text[i + j]); --i);
+		if (i < 0) {
+			output(j);
+			j += bmGs[0];
+		}
+		else
+			j += MAX(bmGs[i], bmBc[text[i + j]] - m + 1 + i);
+	}
 }
-  
+
+void Sbm(char *text, char *pat) {
+	int m,n;
+	m=strlen(pat);
+	n=strlen(text);
+	Sbm2(text,pat,n,m);
+}

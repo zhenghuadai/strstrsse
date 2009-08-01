@@ -152,3 +152,12 @@ foundneedle:
 ret0:
 	return ;
 }
+void
+bfstr2(text, pattern, n, m)
+	const char *text;
+	const char *pattern;
+	int n;
+	int m;
+{
+	bfstr(text, pattern);
+}
