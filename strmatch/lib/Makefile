@@ -7,13 +7,11 @@ else
 endif
 Gflag= -O3 -fPIC 
 #Gflag= -O0 -g
-algobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o 
-matchobj:=match.o Mtime.o output.o  extract.o  ${algobj} 
-matchgeneobj:=match.o ${algobj} 
-matchmulobj:=matchmul.o Msbom.o Mwm.o Mshiftor.o Mac.o output.o extract.o Mtime.o acsmx.o snortmwm.o
+sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o 
+mobj:= Msbom.o Mwm.o Mshiftor.o Mac.o
+algobj:= ${sobj} ${mobj} 
+matchmulobj:=matchmul.o  output.o extract.o Mtime.o acsmx.o snortmwm.o
 matchasmobj:=matchasm.o Ady.o extract.o output.o Mtime.o
-match: ${matchobj}
-	${CC} ${Gflag} -o match ${matchobj}
 lib:${algobj}
 	ar cur  libstrmatch.a $^
 	gcc -shared -fPIC -o libstrmatch.so $^
