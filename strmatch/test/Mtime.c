@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include"util.h"
-#include "../rdtsc.h"
+#include "../../rdtsc.h"
 void Mtime(_U64* u)
 {
     int res[2];
