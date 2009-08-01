@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #define ASIZE 256
-extern void output(int num);
+
 
 void preQsBc(char *pat,int m,int qsBc[])
 {

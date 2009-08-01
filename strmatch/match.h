@@ -9,7 +9,8 @@
 #define MAXPATS 100
 #include "stdio.h"
 #include "stdlib.h"
-
+#define STOP 1
+#define CONTINUE 0
 void Sbf		(char * text,char *pat);//brute force À„∑® 
 void bfstr		(char * text,char *pat);
 void Smp		(char * text,char *pat);//MPÀ„∑® 

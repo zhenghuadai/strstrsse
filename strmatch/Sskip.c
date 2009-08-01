@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "match.h"
-extern void output(int num);
+
 /* struct _cell{
     int element; 
     struct _cell *next;

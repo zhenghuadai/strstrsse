@@ -20,5 +20,7 @@ char * Getsubjectfromfile(char *pfname);
 int  Getpatternfromfile(char *pfname,char **patts);
 void Mtime(_U64 * readr);
 double Mdifftime(_U64 start,_U64 end);
-
+int output(int);
+int  outputs(int whichp,int addr);
+#define OUTPUT(x) if( output(x) == STOP ) return ;
 #endif

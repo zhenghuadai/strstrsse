@@ -4,7 +4,7 @@
 #define ASIZE 256
 #define UNDEFINED -1
 
-extern void output(int num);
+
 //extern void *calloc(int num_elems,int elem_size);
 /* data structure of Graph */
 struct _graph{

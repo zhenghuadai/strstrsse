@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-extern void output(int num);
+extern int output(int num);
 
 void Sbf2(char *text,char *pat,int n, int m)
 {
@@ -12,17 +12,18 @@ void Sbf2(char *text,char *pat,int n, int m)
   /* searching */
   for(j=0;text[j+m]!=0;/*j<=n-m;*/++j)
   {
-     for (i=0;i<m&&pat[i]==text[i+j];++i);
-     if (i>=m)
-      output(j);
+	  for (i=0;i<m&&pat[i]==text[i+j];++i);
+	  if (i>=m){
+		 OUTPUT(j);
+	  }
   }  
-  
+
 }
 void Sbf(char *text,char *pat)
 {
 	int n,m;
-		m=strlen(pat);
-		Sbf2(text,pat,n,m);
+	m=strlen(pat);
+	Sbf2(text,pat,n,m);
 }
 /* Return the offset of one string within another.
    Copyright (C) 1994, 1996, 1997, 2000, 2001 Free Software Foundation, Inc.
@@ -145,14 +146,14 @@ foundneedle:
 	{
 		int pos;
 		pos=pj-pstart;
-		output(pos);
+		OUTPUT(pos);
 	}
 	pj++;
 	goto again;
 ret0:
 	return ;
 }
-void
+	void
 bfstr2(text, pattern, n, m)
 	const char *text;
 	const char *pattern;
