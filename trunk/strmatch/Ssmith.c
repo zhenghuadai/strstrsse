@@ -3,7 +3,7 @@
 #include <stdio.h>
 #define ASIZE 256
 #define MAX(a,b) (a>b)?a:b
-extern void output(int num);
+
 
 void  Ssmith2(char * textt,char *patt,int n, int m)//smith Ëã·¨ 
 {

@@ -4,7 +4,7 @@
 #define XSIZE 100
 #define ASIZE 256
 #define MAX(a,b) (a>b)?a:b
-extern void output(int num);
+
 void preBmBc(char *pat, int m, int bmBc[]) {
    int i;
  

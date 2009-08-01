@@ -1,6 +1,9 @@
 #!/bin/bash
 for i in ./*.c 
 do
-sed "s///" $i >tmp.c
+#sed "s///" $i >tmp.c
+#sed "s/extern void output(int num);//" $i >tmp.c
+echo "#inlcude \"global.h\"" >tmp.c
+cat $i >> tmp.c
 mv tmp.c $i
 done

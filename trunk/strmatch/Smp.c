@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #define XSIZE 100
-extern void output(int num);
+
 
 void  preMp(char *pat,int m,int mpNext[])
 {

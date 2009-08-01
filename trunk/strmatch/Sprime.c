@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-extern void output(int num);
+
 
 void Sprime(char *text,char *pat,int n, int m)
 {
