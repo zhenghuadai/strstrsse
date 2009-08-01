@@ -3,10 +3,8 @@
 #include <stdio.h>
 #define REHASH(a, b, h) ((((h) - (a)*d) << 1) + (b)) 
 //Karp-Rabin algorithm
-void Skr(char *text, char *pat) {
-   int d, hx, hy, i, j,m,n;
-   m=strlen(pat);
-   n=strlen(text);
+void Skr2(char *text, char *pat,int n, int m) {
+   int d, hx, hy, i, j;
    /* Preprocessing */
    /* computes d = 2^(m-1) with
       the left-shift operator */
@@ -27,4 +25,10 @@ void Skr(char *text, char *pat) {
       ++j;
    }
 
+}
+void Skr(char *text, char *pat) {
+int n, m;
+   m=strlen(pat);
+   n=strlen(text);
+   Skr2(text, pat , n, m);
 }

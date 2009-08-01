@@ -43,78 +43,82 @@ int attempt(char *y, char *x, int m, int start, int wall) {
 }
 
 
+void Skmpskip2(char *textt,char *patt,int n, int m) {
+	int i, j, k, kmpStart, per, start, wall;
+	unsigned char * text,*pat;
+	text=textt;
+	pat=patt;
+	int kmpNext[m], list[m], mpNext[m],
+		z[ASIZE];
+
+	/* Preprocessing */
+	preMp(pat, m, mpNext);
+	preKmp(pat, m, kmpNext);
+	memset(z, -1, ASIZE*sizeof(int));
+	memset(list, -1, m*sizeof(int));
+	z[pat[0]] = 0;
+	for (i = 1; i < m; ++i) {
+		list[i] = z[pat[i]];
+		z[pat[i]] = i;
+	}
+
+	/* Searching */
+	wall = 0;
+	per = m - kmpNext[m];
+	i = j = -1;
+	do {
+		j += m;
+	} while (j < n && z[text[j]] < 0);
+	if (j >= n)
+		return;
+	i = z[text[j]];
+	start = j - i;
+	while (start <= n - m) {
+		if (start > wall)
+			wall = start;
+		k = attempt(text, pat, m, start, wall);
+		wall = start + k;
+		if (k == m) {
+			output(start);
+			i -= per;
+		}
+		else
+			i = list[i];
+		if (i < 0) {
+			do {
+				j += m;
+			} while (j < n && z[text[j]] < 0);
+			if (j >= n)
+				return;
+			i = z[text[j]];
+		}
+		kmpStart = start + k - kmpNext[k];
+		k = kmpNext[k];
+		start = j - i;
+		while (start < kmpStart ||
+				(kmpStart < start && start < wall)) {
+			if (start < kmpStart) {
+				i = list[i];
+				if (i < 0) {
+					do {
+						j += m;
+					} while (j < n && z[text[j]] < 0);
+					if (j >= n)
+						return;
+					i = z[text[j]];
+				}
+				start = j - i;
+			}
+			else {
+				kmpStart += (k - mpNext[k]);
+				k = mpNext[k];
+			}
+		}
+	}
+}
 void Skmpskip(char *textt,char *patt) {
-   int i, j, k, kmpStart, per, start, wall,m,n;
-   unsigned char * text,*pat;
-   text=textt;
-   pat=patt;
-   m=strlen(pat);
-   n=strlen(text);
-   int kmpNext[m], list[m], mpNext[m],
-       z[ASIZE];
-
-   /* Preprocessing */
-   preMp(pat, m, mpNext);
-   preKmp(pat, m, kmpNext);
-   memset(z, -1, ASIZE*sizeof(int));
-   memset(list, -1, m*sizeof(int));
-   z[pat[0]] = 0;
-   for (i = 1; i < m; ++i) {
-      list[i] = z[pat[i]];
-      z[pat[i]] = i;
-   }
-
-   /* Searching */
-   wall = 0;
-   per = m - kmpNext[m];
-   i = j = -1;
-   do {
-      j += m;
-   } while (j < n && z[text[j]] < 0);
-   if (j >= n)
-     return;
-   i = z[text[j]];
-   start = j - i;
-   while (start <= n - m) {
-      if (start > wall)
-         wall = start;
-      k = attempt(text, pat, m, start, wall);
-      wall = start + k;
-      if (k == m) {
-         output(start);
-         i -= per;
-      }
-      else
-         i = list[i];
-      if (i < 0) {
-         do {
-            j += m;
-         } while (j < n && z[text[j]] < 0);
-         if (j >= n)
-            return;
-         i = z[text[j]];
-      }
-      kmpStart = start + k - kmpNext[k];
-      k = kmpNext[k];
-      start = j - i;
-      while (start < kmpStart ||
-             (kmpStart < start && start < wall)) {
-         if (start < kmpStart) {
-            i = list[i];
-            if (i < 0) {
-               do {
-                  j += m;
-               } while (j < n && z[text[j]] < 0);
-               if (j >= n)
-                  return;
-               i = z[text[j]];
-            }
-            start = j - i;
-         }
-         else {
-            kmpStart += (k - mpNext[k]);
-            k = mpNext[k];
-         }
-      }
-   }
+	int m, n;
+	m=strlen(patt);
+	n=strlen(textt);
+	Skmpskip2(textt, patt, n, m);
 }

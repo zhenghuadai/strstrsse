@@ -3,12 +3,10 @@
 #include <stdio.h>
 extern void output(int num);
 
-void Sbf(char *text,char *pat)
+void Sbf2(char *text,char *pat,int n, int m)
 {
-  int m,n;
   int i,j;
 
-  m=strlen(pat);
 //  n=strlen(text);
 
   /* searching */
@@ -19,6 +17,12 @@ void Sbf(char *text,char *pat)
       output(j);
   }  
   
+}
+void Sbf(char *text,char *pat)
+{
+	int n,m;
+		m=strlen(pat);
+		Sbf2(text,pat,n,m);
 }
 /* Return the offset of one string within another.
    Copyright (C) 1994, 1996, 1997, 2000, 2001 Free Software Foundation, Inc.
@@ -59,92 +63,92 @@ void Sbf(char *text,char *pat)
 typedef unsigned chartype;
 
 #undef strstr
-void
+	void
 bfstr(text, pattern)
-     const char *text;
-     const char *pattern;
+	const char *text;
+	const char *pattern;
 {
-  const unsigned char *pj,*pstart, *needle;
-  chartype b;
-  const unsigned char *rneedle;
+	const unsigned char *pj,*pstart, *needle;
+	chartype b;
+	const unsigned char *rneedle;
 
-  pj = (const unsigned char *) text;
-  pstart=pj;
+	pj = (const unsigned char *) text;
+	pstart=pj;
 again:
-  if ((b = *(needle = (const unsigned char *) pattern)))
-    {
-      chartype c;
-      pj--;		/* possible ANSI violation */
-
-      {
-	chartype a;
-	do
-	  if (!(a = *++pj))
-	    goto ret0;
-	while (a != b);
-      }
-
-      if (!(c = *++needle))
-	goto foundneedle;
-      ++needle;
-      goto jin;
-
-      for (;;)
+	if ((b = *(needle = (const unsigned char *) pattern)))
 	{
-	  {
-	    chartype a;
-	    if (0)
-	    jin:{
-		if ((a = *++pj) == c)
-		  goto crest;
-	      }
-	    else
-	      a = *++pj;
-	    do
-	      {
-		for (; a != b; a = *++pj)
-		  {
-		    if (!a)
-		      goto ret0;
-		    if ((a = *++pj) == b)
-		      break;
-		    if (!a)
-		      goto ret0;
-		  }
-	      }
-	    while ((a = *++pj) != c);
-	  }
-	crest:
-	  {
-	    chartype a;
-	    {
-	      const unsigned char *rpj;
-	      if (*(rpj = pj-- + 1) == (a = *(rneedle = needle)))
-		do
-		  {
-		    if (!a)
-		      goto foundneedle;
-		    if (*++rpj != (a = *++needle))
-		      break;
-		    if (!a)
-		      goto foundneedle;
-		  }
-		while (*++rpj == (a = *++needle));
-	      needle = rneedle;	/* took the register-poor aproach */
-	    }
-	    if (!a)
-	      break;
-	  }
-	}//endfor
-    }
+		chartype c;
+		pj--;		/* possible ANSI violation */
+
+		{
+			chartype a;
+			do
+				if (!(a = *++pj))
+					goto ret0;
+			while (a != b);
+		}
+
+		if (!(c = *++needle))
+			goto foundneedle;
+		++needle;
+		goto jin;
+
+		for (;;)
+		{
+			{
+				chartype a;
+				if (0)
+					jin:{
+						if ((a = *++pj) == c)
+							goto crest;
+					}
+				else
+					a = *++pj;
+				do
+				{
+					for (; a != b; a = *++pj)
+					{
+						if (!a)
+							goto ret0;
+						if ((a = *++pj) == b)
+							break;
+						if (!a)
+							goto ret0;
+					}
+				}
+				while ((a = *++pj) != c);
+			}
+crest:
+			{
+				chartype a;
+				{
+					const unsigned char *rpj;
+					if (*(rpj = pj-- + 1) == (a = *(rneedle = needle)))
+						do
+						{
+							if (!a)
+								goto foundneedle;
+							if (*++rpj != (a = *++needle))
+								break;
+							if (!a)
+								goto foundneedle;
+						}
+						while (*++rpj == (a = *++needle));
+					needle = rneedle;	/* took the register-poor aproach */
+				}
+				if (!a)
+					break;
+			}
+		}//endfor
+	}
 foundneedle:
-  {
-	  int pos;
-	  pos=pj-pstart;
-  output(pos);
-  }
-  pj++;
-  goto again;
+	{
+		int pos;
+		pos=pj-pstart;
+		output(pos);
+	}
+	pj++;
+	goto again;
 ret0:
-  return ;
+	return ;
 }

@@ -13,25 +13,29 @@ void preQsBc(char *pat,int m,int qsBc[])
       qsBc[pat[i]]=m-i;
 }
 
+void Sbmhs2(char * textt,char *patt,int n, int m)//SUNDAY算法，又称 quich search 
+{
+	int j,qsBc[ASIZE];
+	unsigned char *text,*pat;
+	text=textt;
+	pat=patt;
+
+	/* preprocessing */
+	preQsBc(pat,m,qsBc);
+
+	/* Searching */
+	j=0;
+	while (j<=n-m)
+	{
+		if (memcmp(pat,text+j,m)==0)
+			output(j);
+		j+=qsBc[text[j+m]]; //shift
+	}
+}
 void Sbmhs(char * textt,char *patt)//SUNDAY算法，又称 quich search 
 {
-  int m,n;
-  int j,qsBc[ASIZE];
-  unsigned char *text,*pat;
-  text=textt;
-  pat=patt;
-  m=strlen(pat);
-  n=strlen(text);
-
-  /* preprocessing */
-  preQsBc(pat,m,qsBc);
-
-  /* Searching */
-  j=0;
-  while (j<=n-m)
-  {
-    if (memcmp(pat,text+j,m)==0)
-      output(j);
-    j+=qsBc[text[j+m]]; //shift
-  }
+	int m,n;
+	m=strlen(patt);
+	n=strlen(textt);
+	Sbmhs2(textt,patt,n,m);
 }

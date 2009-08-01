@@ -62,40 +62,44 @@ void oracle(char *x, int m, char T[], List L[]) {
 }
 
 
-void Sbom(char *text,char *pat) 
+void Sbom2(char *text,char *pat,int n, int m) 
 {
-   int m,n;
-   char T[strlen(pat) + 1];
-   List L[strlen(pat) + 1];
-   int i, j, p, period, q, shift;
-   m=strlen(pat);
-   n=strlen(text);
-   /* Preprocessing */
-   memset(L, 0, (m + 1)*sizeof(List));
-   memset(T, FALSE, (m + 1)*sizeof(char));
-   oracle(pat, m, T, L);
+	char T[strlen(pat) + 1];
+	List L[strlen(pat) + 1];
+	int i, j, p, period, q, shift;
+	/* Preprocessing */
+	memset(L, 0, (m + 1)*sizeof(List));
+	memset(T, FALSE, (m + 1)*sizeof(char));
+	oracle(pat, m, T, L);
 
-   /* Searching */
-   j = 0;
-   while (j <= n - m) {
-      i = m - 1;
-      p = m;
-      shift = m;
-      while (i + j >= 0 &&
-             (q = getTransition(pat, p, L, text[i + j])) !=
-             UNDEFINED) {
-         p = q;
-         if (T[p] == TRUE) {
-            period = shift;
-            shift = i;
-         }
-         --i;
-      }
-      if (i < 0) {
-         output(j);
-         shift = period;
-      }
-      j += shift;
-   }
+	/* Searching */
+	j = 0;
+	while (j <= n - m) {
+		i = m - 1;
+		p = m;
+		shift = m;
+		while (i + j >= 0 &&
+				(q = getTransition(pat, p, L, text[i + j])) !=
+				UNDEFINED) {
+			p = q;
+			if (T[p] == TRUE) {
+				period = shift;
+				shift = i;
+			}
+			--i;
+		}
+		if (i < 0) {
+			output(j);
+			shift = period;
+		}
+		j += shift;
+	}
 }
 
+void Sbom(char *text,char *pat) 
+{
+	int m,n;
+	m=strlen(pat);
+	n=strlen(text);
+	Sbom2(text, pat, n, m);
+}

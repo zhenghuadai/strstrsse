@@ -136,24 +136,29 @@ void  preAut(char *pat,int m,Graph aut)
     setTerminal(aut,state);
 }
 
+void  Sdfa2(char *text,char *pat,int n, int m) //基本的自动机算法 
+{
+	int j,state;
+	Graph aut;
+
+
+	/* preprocessing */
+	aut=newAutomaton(m+1,(m+1)*ASIZE);
+	preAut(pat,m,aut);
+
+	/* searching */
+	for(state=getInitial(aut),j=0;j<n;++j)
+	{
+		state=getTarget(aut,state,text[j]);
+		if (isTerminal(aut,state))
+			output(j-m+1);
+	}
+}
 void  Sdfa(char *text,char *pat) //基本的自动机算法 
 {
-     int m,n;
-     int j,state;
-     Graph aut;
-
-     m=strlen(pat);
-     n=strlen(text);
-
-     /* preprocessing */
-     aut=newAutomaton(m+1,(m+1)*ASIZE);
-     preAut(pat,m,aut);
-
-     /* searching */
-     for(state=getInitial(aut),j=0;j<n;++j)
-     {
-        state=getTarget(aut,state,text[j]);
-        if (isTerminal(aut,state))
-           output(j-m+1);
-     }
+	int m,n;
+	m=strlen(pat);
+	n=strlen(text);
+	Sdfa2(text, pat, n ,m);
 }
+
