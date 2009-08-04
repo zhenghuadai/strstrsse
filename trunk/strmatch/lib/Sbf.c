@@ -146,7 +146,7 @@ foundneedle:
 	{
 		int pos;
 		pos=pj-pstart;
-		OUTPUT(pos);
+		OUTPUT3(text, pos, pattern);
 	}
 	pj++;
 	goto again;

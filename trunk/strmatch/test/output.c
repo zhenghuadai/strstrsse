@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include "match.h"
-int  output(int addr)
+int  output(char* text, int addr, char* pat)
 {
 //  printf("%d,",addr);
   //occurrenceint[occurnum]=addr;
