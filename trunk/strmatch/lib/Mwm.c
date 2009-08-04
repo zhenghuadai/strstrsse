@@ -6,7 +6,6 @@
 #define MAXLENGTH 100 
 #define Bchar 2
 #include "util.h"
-extern void OUTPUTs(int whichp,int addr);
 
 long calHash(unsigned char p,unsigned char q)
 /* calculate the HASH VALUE of two chars */

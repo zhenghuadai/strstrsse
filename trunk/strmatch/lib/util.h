@@ -19,4 +19,5 @@ int  outputs(int whichp,int addr);
 #define CONTINUE 0
 #define OUTPUT(x) if( output(text, x, pat) == STOP ) return ;
 #define OUTPUT3(text, x , pat) if( output(text, x, pat) == STOP ) return ;
+#define OUTPUTs(which, i) if( outputs(which, i) == STOP ) return ;
 #endif
