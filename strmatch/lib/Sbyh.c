@@ -45,7 +45,8 @@ void SbyhSearch(unsigned char *text,int m,int n,int ch[]){
 		
 	if(count[(j-m)%yu]==(m))
 	    {
-	    	  OUTPUT(j-m);
+	    	  //OUTPUT(j-m);
+			  OUTPUT3(text, j-m, ch);
 	    }
 	    	  count[(j-m)%yu]=0;
 	}	
