@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "util.h"
 #include "ac.h"
 
 
@@ -686,7 +687,7 @@ int strmat_ac_match(char  **pattern_ary, int num_patterns, char *text,
       matchtail->next = newmatch;
       matchtail = newmatch;
     }*/
-    OUTPUTs(matchid,pos);
+    outputs(matchid,pos);
     matchcount++;
   }
 

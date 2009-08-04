@@ -6,7 +6,6 @@
 #define MAXSTATE 100 
 #define MAXLENGTH 10
 #define MFail -1
-extern void OUTPUTs(int whichp,int addr);
 
 int prestate(char **pat,int rows,int preG[][ASIZE],int preO[])
 /* preprocessing of GOTO FUNCTION */
