@@ -44,7 +44,7 @@ int attempt(char *y, char *x, int m, int start, int wall) {
 }
 
 
-void Skmpskip2(char *textt,char *patt,int n, int m) {
+char* Skmpskip2(char *textt,char *patt,int n, int m) {
 	int i, j, k, kmpStart, per, start, wall;
 	unsigned char * text,*pat;
 	text=textt;
@@ -116,10 +116,11 @@ void Skmpskip2(char *textt,char *patt,int n, int m) {
 			}
 		}
 	}
+	SRET(start);
 }
-void Skmpskip(char *textt,char *patt) {
+char* Skmpskip(char *textt,char *patt) {
 	int m, n;
 	m=strlen(patt);
 	n=strlen(textt);
-	Skmpskip2(textt, patt, n, m);
+	return Skmpskip2(textt, patt, n, m);
 }

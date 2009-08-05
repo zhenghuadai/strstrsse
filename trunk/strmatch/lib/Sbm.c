@@ -53,11 +53,8 @@ void preBmGs(char *pat, int m, int bmGs[]) {
 }
  
  
-void Sbm2(char *textt, char *patt,int n, int m) {
+char* Sbm2(char *text, char *pat,int n, int m) {
 	int i, j, bmGs[XSIZE], bmBc[ASIZE];
-	unsigned char *text,*pat;
-	text=textt;
-	pat=patt;
 	//   printf("n lenth of bm:%d,m:%d,",n,m);
 
 	/* Preprocessing */
@@ -74,11 +71,12 @@ void Sbm2(char *textt, char *patt,int n, int m) {
 		else
 			j += MAX(bmGs[i], bmBc[text[i + j]] - m + 1 + i);
 	}
+	SRET(j);
 }
 
-void Sbm(char *text, char *pat) {
+char* Sbm(char *text, char *pat) {
 	int m,n;
 	m=strlen(pat);
 	n=strlen(text);
-	Sbm2(text,pat,n,m);
+	return Sbm2(text,pat,n,m);
 }

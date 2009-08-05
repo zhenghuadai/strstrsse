@@ -18,7 +18,7 @@ int preSo(char *x, int m, unsigned int S[]) {
 	return(lim); 
 } 
 
-void Sshiftor2(char *text,char *pat,int n, int m) { 
+char* Sshiftor2(char *text,char *pat,int n, int m) { 
 	unsigned int lim, state; 
 	unsigned int S[ASIZE];
 	int j; 
@@ -34,11 +34,12 @@ void Sshiftor2(char *text,char *pat,int n, int m) {
 		if (state < lim) 
 			OUTPUT(j - m + 1); 
 	} 
+	SRET(j-m+1);
 } 
 
-void Sshiftor(char *text,char *pat) { 
+char* Sshiftor(char *text,char *pat) { 
 	int m,n;
 	m=strlen(pat);
 	n=strlen(text); 
-	Sshiftor2(text , pat ,n ,m);
+	return Sshiftor2(text , pat ,n ,m);
 }

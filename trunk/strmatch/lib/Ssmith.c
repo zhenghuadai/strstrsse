@@ -6,7 +6,7 @@
 #define MAX(a,b) (a>b)?a:b
 
 
-void  Ssmith2(char * textt,char *patt,int n, int m)//smith 算法 
+char*  Ssmith2(char * textt,char *patt,int n, int m)//smith 算法 
 {
 	int j,bmBc[ASIZE],qsBc[ASIZE];
 	unsigned char * text,*pat;
@@ -26,11 +26,12 @@ void  Ssmith2(char * textt,char *patt,int n, int m)//smith 算法
 			OUTPUT(j);
 		j+=MAX(bmBc[text[j+m-1]],qsBc[text[j+m]]);
 	}
+	SRET(j);
 }
-void  Ssmith(char * textt,char *patt)//smith 算法 
+char*  Ssmith(char * textt,char *patt)//smith 算法 
 {
 	int m,n;
 	m=strlen(patt);
 	n=strlen(textt);
-	Ssmith2(textt, patt, n ,m);
+	return 	Ssmith2(textt, patt, n ,m);
 }

@@ -14,7 +14,7 @@ void preQsBc(char *pat,int m,int qsBc[])
       qsBc[pat[i]]=m-i;
 }
 
-void Sbmhs2(char * textt,char *patt,int n, int m)//SUNDAY算法，又称 quich search 
+char* Sbmhs2(char * textt,char *patt,int n, int m)//SUNDAY算法，又称 quich search 
 {
 	int j,qsBc[ASIZE];
 	unsigned char *text,*pat;
@@ -32,11 +32,12 @@ void Sbmhs2(char * textt,char *patt,int n, int m)//SUNDAY算法，又称 quich search
 			OUTPUT(j);
 		j+=qsBc[text[j+m]]; //shift
 	}
+	SRET(j);
 }
-void Sbmhs(char * textt,char *patt)//SUNDAY算法，又称 quich search 
+char* Sbmhs(char * textt,char *patt)//SUNDAY算法，又称 quich search 
 {
 	int m,n;
 	m=strlen(patt);
 	n=strlen(textt);
-	Sbmhs2(textt,patt,n,m);
+	return Sbmhs2(textt,patt,n,m);
 }

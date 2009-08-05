@@ -5,7 +5,7 @@
 #define ASIZE 256
 
 
-void  Sbmh2(char * textt,char *patt,int n, int m) // Horspool算法 
+char*  Sbmh2(char * textt,char *patt,int n, int m) // Horspool算法 
 {
 	int j,bmBc[ASIZE];
 	unsigned char c;
@@ -24,11 +24,12 @@ void  Sbmh2(char * textt,char *patt,int n, int m) // Horspool算法
 			OUTPUT(j);
 		j+=bmBc[c];
 	}
+	SRET(j);
 }
-void  Sbmh(char * textt,char *patt) // Horspool算法 
+char*  Sbmh(char * textt,char *patt) // Horspool算法 
 {
 	int m,n;
 	m=strlen(patt);
 	n=strlen(textt);
-	Sbmh2(textt, patt, n, m);
+	return	Sbmh2(textt, patt, n, m);
 }

@@ -63,7 +63,7 @@ void oracle(char *x, int m, char T[], List L[]) {
 }
 
 
-void Sbom2(char *text,char *pat,int n, int m) 
+char* Sbom2(char *text,char *pat,int n, int m) 
 {
 	char T[strlen(pat) + 1];
 	List L[strlen(pat) + 1];
@@ -95,12 +95,13 @@ void Sbom2(char *text,char *pat,int n, int m)
 		}
 		j += shift;
 	}
+	SRET(j);
 }
 
-void Sbom(char *text,char *pat) 
+char* Sbom(char *text,char *pat) 
 {
 	int m,n;
 	m=strlen(pat);
 	n=strlen(text);
-	Sbom2(text, pat, n, m);
+	return Sbom2(text, pat, n, m);
 }
