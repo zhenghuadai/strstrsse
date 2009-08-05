@@ -18,7 +18,7 @@ void  preMp(char *pat,int m,int mpNext[])
   }
 }
 
-void  Smp2(char * text,char *pat, int n, int m)//MP算法
+char* Smp2(char * text,char *pat, int n, int m)//MP算法
 {
    int i,j,mpNext[XSIZE];
 
@@ -39,11 +39,12 @@ void  Smp2(char * text,char *pat, int n, int m)//MP算法
           i=mpNext[i];
        }
    }
+   SRET(j-i);
 } 
-void  Smp(char * text,char *pat)//MP算法
+char* Smp(char * text,char *pat)//MP算法
 {
    int m,n;
    m=strlen(pat);
    n=strlen(text);
-   Smp2(text, pat, n, m);
+   return Smp2(text, pat, n, m);
 }

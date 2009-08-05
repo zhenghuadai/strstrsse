@@ -11,7 +11,7 @@
     struct _cell *next;
   };
 typedef struct _cell *List;*/
-void Sskip2(char *textt,char *patt, int n, int m)//ÌøÔ¾Ëã·¨ 
+char* Sskip2(char *textt,char *patt, int n, int m)//ÌøÔ¾Ëã·¨ 
 {
 	int i, j;
 	unsigned char * text,*pat;
@@ -42,11 +42,12 @@ void Sskip2(char *textt,char *patt, int n, int m)//ÌøÔ¾Ëã·¨
 				continue;
 		}
 	}
+	SRET(j - ptr->element);
 }
-void Sskip(char *textt,char *patt)//ÌøÔ¾Ëã·¨ 
+char* Sskip(char *textt,char *patt)//ÌøÔ¾Ëã·¨ 
 {
 	int m, n;
 	m=strlen(patt);
 	n=strlen(textt);
-	Sskip2(textt, patt, n, m);
+	return Sskip2(textt, patt, n, m);
 }

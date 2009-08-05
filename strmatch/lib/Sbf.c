@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdio.h>
 
-void Sbf2(char *text,char *pat,int n, int m)
+char* Sbf2(char *text,char *pat,int n, int m)
 {
   int i,j;
 
@@ -17,13 +17,16 @@ void Sbf2(char *text,char *pat,int n, int m)
 		 OUTPUT(j);
 	  }
   }  
+  if(j<n) 
+	  return (text + j);
+  else return NULL;
 
 }
-void Sbf(char *text,char *pat)
+char* Sbf(char *text,char *pat)
 {
 	int n,m;
 	m=strlen(pat);
-	Sbf2(text,pat,n,m);
+	return Sbf2(text,pat,n,m);
 }
 /* Return the offset of one string within another.
    Copyright (C) 1994, 1996, 1997, 2000, 2001 Free Software Foundation, Inc.
@@ -64,7 +67,7 @@ void Sbf(char *text,char *pat)
 typedef unsigned chartype;
 
 #undef strstr
-	void
+	char*
 bfstr(text, pattern)
 	const char *text;
 	const char *pattern;
@@ -151,14 +154,14 @@ foundneedle:
 	pj++;
 	goto again;
 ret0:
-	return ;
+	return NULL;
 }
-	void
+	char*
 bfstr2(text, pattern, n, m)
 	const char *text;
 	const char *pattern;
 	int n;
 	int m;
 {
-	bfstr(text, pattern);
+	return bfstr(text, pattern);
 }

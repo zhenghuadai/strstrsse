@@ -17,7 +17,7 @@ int preSa(char *x, int m, unsigned int S[]) {
 	return(lim); 
 } 
 
-void Sshiftand2(char *text,char *pat,int n, int m) { 
+char* Sshiftand2(char *text,char *pat,int n, int m) { 
 	unsigned int lim, state; 
 	unsigned int S[ASIZE];
 	int j; 
@@ -33,12 +33,13 @@ void Sshiftand2(char *text,char *pat,int n, int m) {
 		if (state < lim) 
 			OUTPUT(j - m + 1); 
 	} 
+	SRET(j-m+1);
 } 
 
-void Sshiftand(char *text,char *pat) 
+char* Sshiftand(char *text,char *pat) 
 {
 	int m,n;
 	m=strlen(pat);
 	n=strlen(text); 
-	Sshiftand2(text, pat, n, m);
+	return Sshiftand2(text, pat, n, m);
 }

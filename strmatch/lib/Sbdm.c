@@ -188,7 +188,7 @@ void buildSuffixAutomaton(char *pat, int m, Graph aut) {
 }
 
 
-void  Sbdm2(char * text,char *pat, int n, int m) //Forward Dawg Matching algorithm 
+char* Sbdm2(char * text,char *pat, int n, int m) //Forward Dawg Matching algorithm 
 {
    int j,init,ell,state;
    Graph aut;
@@ -227,12 +227,13 @@ void  Sbdm2(char * text,char *pat, int n, int m) //Forward Dawg Matching algorit
         if (ell==m)
            OUTPUT(j-m+1);
    }
+   SRET(j-m+1);
 }
 
-void  Sbdm(char * text,char *pat) //Forward Dawg Matching algorithm 
+char* Sbdm(char * text,char *pat) //Forward Dawg Matching algorithm 
 {
 	int m,n;
 	m=strlen(pat);
 	n=strlen(text);
-	Sbdm2(text, pat, n, m);
+	return Sbdm2(text, pat, n, m);
 }

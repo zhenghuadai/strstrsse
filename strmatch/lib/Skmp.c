@@ -22,7 +22,7 @@ void preKmp(char *pat,int m,int kmpNext[])
    }
 }
 
-void Skmp2(char *text,char *pat, int n, int m) //KMP算法
+char* Skmp2(char *text,char *pat, int n, int m) //KMP算法
 {
    int i,j,kmpNext[XSIZE];
    
@@ -45,12 +45,12 @@ void Skmp2(char *text,char *pat, int n, int m) //KMP算法
    }
 }
 
-void Skmp(char *text,char *pat) //KMP算法
+char* Skmp(char *text,char *pat) //KMP算法
 {
 
    int m,n;
    m=strlen(pat);
    n=strlen(text);
-   Skmp2(text, pat, n, m);
+   return Skmp2(text, pat, n, m);
 }
 
