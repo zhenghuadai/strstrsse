@@ -5,7 +5,11 @@ ifeq ($(CMPCOUNT),y)
 else
 	DFLAGS:=-c 
 endif
-Gflag= -O3 -fPIC 
+ifeq ($(debug), yes)
+Gflag= -g -O0 #-fPIC 
+else 
+Gflag= -O3 #-fPIC 
+endif
 INC_PATH= -I../lib -I../others
 LIB= -lstrmatch
 LIBPATH= -L../lib
@@ -15,6 +19,8 @@ matchobj:=match.o Mtime.o output.o  extract.o # ${algobj}
 matchgeneobj:=match.o ${algobj} 
 matchmulobj:=matchmul.o  output.o extract.o Mtime.o ../others/acsmx.o ../others/snortmwm.o
 matchasmobj:=matchasm.o Ady.o extract.o output.o Mtime.o
+all: match matchmul 
+
 match: ${matchobj}
 	${CC} ${Gflag} ${INC_PATH} -static  -o match ${matchobj} ${LIB} ${LIBPATH}
 matchgene: ${matchgeneobj}
