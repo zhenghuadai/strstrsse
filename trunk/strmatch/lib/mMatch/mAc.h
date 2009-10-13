@@ -31,6 +31,7 @@ class acNode
 		acNode* failure;
 	public:
 		acNode(){memset(this, 0, sizeof(acNode));}
+		int isMatched(){ return patID != -1;}
 };
 typedef acNode* acNodeP;
 
@@ -50,7 +51,9 @@ class mAc:public mMatch
 		list<acNodeP> nodeList;
 	public:
 		mAc();
-		void init();
+		virtual int search(char* txt, int n);
+		virtual int search(char* txt);
+		virtual void init();
 	private:	
 		acNodeP makeNode() { acNodeP newNode= new acNode(); nodeList.push_back(newNode); return newNode;};
 };

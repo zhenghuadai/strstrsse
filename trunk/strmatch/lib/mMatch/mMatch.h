@@ -24,18 +24,22 @@ typedef enum{
 mAC,mWM
 } mAlgtype;
 
+typedef int (* reportFunc)(int patID, int idx);
 class mMatch{
 	protected:
 		int type;
 		char** mPatterns;
 		int* mPatLen;
 		int mPatNum;
+		reportFunc report;
 	public:
 		mMatch();
 	public:
+		void setReportFunc(reportFunc f){report = f;}
 		void reset(char** ,int n);
-		virtual int search(char* txt, int n);
-		virtual int search(char* txt);
+		virtual int search(char* txt, int n){};
+		virtual int search(char* txt){};
+		virtual void init(){};
 	private:
 		void clean();
 };
