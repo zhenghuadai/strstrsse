@@ -22,6 +22,11 @@
 #include "mAc.h"
 namespace dmMatch{
 
+mAc::mAc(char** pat, int n) : mMatch(pat, n)
+{
+	init();
+}
+
 void mAc::init()
 {
 	pRoot= makeNode();	

@@ -33,14 +33,16 @@ class mMatch{
 		int mPatNum;
 		reportFunc report;
 	public:
-		mMatch();
+		mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch)); init(pat, patNum); };
 	public:
-		void setReportFunc(reportFunc f){report = f;}
-		void reset(char** ,int n);
 		virtual int search(char* txt, int n){};
 		virtual int search(char* txt){};
+		void setReportFunc(reportFunc f){report = f;}
+		void init(char** ,int n);
+	protected:
 		virtual void init(){};
 	private:
 		void clean();
+		static int reportDefault(int patid, int idx){ printf("(%d,%d) ", idx, patid);}
 };
 }

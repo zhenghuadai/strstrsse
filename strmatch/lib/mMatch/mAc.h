@@ -51,6 +51,7 @@ class mAc:public mMatch
 		list<acNodeP> nodeList;
 	public:
 		mAc();
+		mAc(char** pat, int n);
 		virtual int search(char* txt, int n);
 		virtual int search(char* txt);
 		virtual void init();
