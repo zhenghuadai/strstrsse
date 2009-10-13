@@ -30,7 +30,7 @@ class acNode
 		acNode* go[256];
 		acNode* failure;
 	public:
-		acNode(){memset(this, 0, sizeof(acNode));}
+		acNode(){memset(this, 0, sizeof(acNode)); patID=-1;}
 		int isMatched(){ return patID != -1;}
 };
 typedef acNode* acNodeP;
