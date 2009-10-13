@@ -74,5 +74,17 @@ void mAc::init()
 	}
 }
 
+int mAc::search(char* txt)
+{
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot;
+	for(;*p; p++){
+		state = state->go[*p];
+		if(state-> isMatched()) {
+			int ret = report(state->patID, p-(unsigned char*)txt);
+		}
+	}
+	return 0;
+}
 
 }
