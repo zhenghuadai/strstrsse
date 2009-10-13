@@ -17,9 +17,10 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <list>
 #include "mMatch.h"
-
+#define CHAR_SET 256
+using namespace std;
 namespace dmMatch{
 
 class acNode
@@ -27,7 +28,7 @@ class acNode
 	public:
 		int patID;
 		acNode* go[256];
-		acNode* failue;
+		acNode* failure;
 	public:
 		acNode(){memset(this, 0, sizeof(acNode));}
 };
@@ -46,14 +47,12 @@ class mAc:public mMatch
 	private:
 		acNodeP pRoot;
 		AcNodeStore acNodeStore;
-		List<acNode> nodeList;
+		list<acNodeP> nodeList;
 	public:
 		mAc();
 		void init();
 	private:	
-		acNodeP makeNode() { acNodeP newNode= new acNode(); nodeList.push(newNode); return newNode;};
+		acNodeP makeNode() { acNodeP newNode= new acNode(); nodeList.push_back(newNode); return newNode;};
 };
-
-
 
 };

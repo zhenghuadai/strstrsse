@@ -17,9 +17,9 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <queue>
 
 #include "mAc.h"
-
 namespace dmMatch{
 
 void mAc::init()
@@ -47,7 +47,8 @@ void mAc::init()
 	Queue.push(pRoot);
 	while(!Queue.empty())
 	{
-		acNodeP parent= Queue.pop();
+		acNodeP parent= Queue.front();
+		Queue.pop();
 		for(int i=0;i<CHAR_SET; i++){
 			acNodeP curNode = parent-> go[i];
 			if( curNode==NULL) continue;
@@ -61,7 +62,8 @@ void mAc::init()
 
 	Queue.push(pRoot);
 	while(!Queue.empty()){
-		acNodeP curNode= Queue.pop();
+		acNodeP curNode= Queue.front();
+		Queue.pop();
 		for(int i=0;i<CHAR_SET;i++){
 			if(curNode->go[i] != NULL){
 				Queue.push(curNode->go[i]);
