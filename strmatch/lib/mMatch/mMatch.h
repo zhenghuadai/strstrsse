@@ -17,7 +17,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-
+namespace dmMatch{
+typedef unsigned char Uchar;
 enum{
 mAC,mWM
 } mAlgtype;
@@ -26,6 +27,7 @@ class mMatch{
 	protected:
 		int type;
 		char** mPatterns;
+		int* mPatLen;
 		int mPatNum;
 	public:
 		mMatch();
@@ -36,3 +38,4 @@ class mMatch{
 	private:
 		void clean();
 };
+}
