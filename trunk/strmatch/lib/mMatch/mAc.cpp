@@ -24,7 +24,7 @@ namespace dmMatch{
 
 mAc::mAc(char** pat, int n) : mMatch(pat, n)
 {
-	init();
+	this->init();
 }
 
 void mAc::init()

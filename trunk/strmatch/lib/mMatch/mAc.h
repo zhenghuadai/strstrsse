@@ -52,8 +52,9 @@ class mAc:public mMatch
 	public:
 		mAc();
 		mAc(char** pat, int n);
-		virtual int search(char* txt, int n);
+		virtual int search(char* txt, int n){};
 		virtual int search(char* txt);
+	protected:
 		virtual void init();
 	private:	
 		acNodeP makeNode() { acNodeP newNode= new acNode(); nodeList.push_back(newNode); return newNode;};
