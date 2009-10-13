@@ -39,20 +39,12 @@ void mAc::init()
 
 	queue<acNodeP> Queue;
 	//! the first level
-	acNodeP preRoot = new acNode();
 	for(int i=0;i< CHAR_SET; i++){
-		preRoot-> go[i] = pRoot;
+		if(pRoot->go[i] == NULL)
+			pRoot-> go[i] = pRoot;
 	}
-	pRoot->failure = preRoot;
+	pRoot->failure = pRoot;
 	Queue.push(pRoot);
-//
-//	for(int i=0;i< CHAR_SET; i++){
-//		if( pRoot -> go[i] == NULL) continue;
-//		acNodeP curNode= pRoot-> go[i];
-//		pRoot-> failure = pRoot;
-//		Queue.push(curNode);
-//	}
-//
 	while(!Queue.empty())
 	{
 		acNodeP parent= Queue.pop();
@@ -67,8 +59,17 @@ void mAc::init()
 
 	}
 
-	delete preRoot;
-	pRoot->failure = pRoot;
+	Queue.push(pRoot);
+	while(!Queue.empty()){
+		acNodeP curNode= Queue.pop();
+		for(int i=0;i<CHAR_SET;i++){
+			if(curNode->go[i] != NULL){
+				Queue.push(curNode->go[i]);
+			}else{
+				curNode->go[i] = curNode->failure->go[i];
+			}
+		}
+	}
 }
 
 
