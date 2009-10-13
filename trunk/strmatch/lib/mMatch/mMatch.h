@@ -17,9 +17,10 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 namespace dmMatch{
 typedef unsigned char Uchar;
-enum{
+typedef enum{
 mAC,mWM
 } mAlgtype;
 
