@@ -16,10 +16,16 @@ char * Text;// the subjiect string
 char * occurrence[MAXPATS];//the matching address
 int occurrenceint[MAXPATS];//the relative matching address
 int occurnum;//the whole matching number
+#ifdef __cplusplus 
+extern "C"{
+#endif
 char * Getsubjectfromfile(char *pfname);
 int  Getpatternfromfile(char *pfname,char **patts);
 void Mtime(_U64 * readr);
 double Mdifftime(_U64 start,_U64 end);
+#ifdef __cplusplus 
+}
+#endif
 int output(int);
 int  outputs(int whichp,int addr);
 #define OUTPUT(x) if( output(x) == STOP ) return ;
