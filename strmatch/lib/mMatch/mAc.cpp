@@ -21,13 +21,14 @@
 
 #include "mAc.h"
 namespace dmMatch{
-
-mAc::mAc(char** pat, int n) : mMatch(pat, n)
+template<int CHAR_SET>
+mAc<CHAR_SET>::mAc(char** pat, int n) : mMatch(pat, n)
 {
 	this->init();
 }
 
-void mAc::init()
+template<int CHAR_SET>
+void mAc<CHAR_SET>::init()
 {
 	pRoot= makeNode();	
 	for(int i=0;i<mPatNum; i++){
@@ -86,7 +87,8 @@ void mAc::init()
     }
 }
 
-int mAc::search(char* txt)
+template<int CHAR_SET>
+int mAc<CHAR_SET>::search(char* txt)
 {
     unsigned char* p = (Uchar*) txt;	
     acNodeP state=pRoot;
@@ -97,6 +99,12 @@ int mAc::search(char* txt)
         }
     }
     return 0;
+}
+
+void test_XXXXXXXXXXXXXXX()
+{
+    mAc<256> ac1((char**)0, 0);
+    mAc<128> ac2((char**)0,0);
 }
 
 }

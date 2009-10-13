@@ -20,6 +20,8 @@
 #include <string.h>
 namespace dmMatch{
 typedef unsigned char Uchar;
+typedef unsigned short U16;
+typedef short I16;
 typedef enum{
 mAC,mWM
 } mAlgtype;
