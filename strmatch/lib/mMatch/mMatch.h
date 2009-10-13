@@ -33,7 +33,7 @@ class mMatch{
 		int mPatNum;
 		reportFunc report;
 	public:
-		mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch)); init(pat, patNum); };
+		mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch)); init(pat, patNum); report=reportDefault;};
 	public:
 		virtual int search(char* txt, int n){};
 		virtual int search(char* txt){};
