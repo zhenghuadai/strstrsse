@@ -28,23 +28,26 @@ mAC,mWM
 
 typedef int (* reportFunc)(int patID, int idx);
 class mMatch{
-	protected:
-		int type;
-		char** mPatterns;
-		int* mPatLen;
-		int mPatNum;
-		reportFunc report;
 	public:
-		mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch)); init(pat, patNum); report=reportDefault;};
+		mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch)); init(pat, patNum); report=reportSilent;};
 	public:
 		virtual int search(char* txt, int n){};
 		virtual int search(char* txt){};
 		void setReportFunc(reportFunc f){report = f;}
 		void init(char** ,int n);
 	protected:
-		virtual void init(){};
+		virtual void compile(){};
 	private:
 		void clean();
+	public:
 		static int reportDefault(int patid, int idx){ printf("(%d,%d) ", idx, patid);}
+		static int reportSilent(int patid, int idx){}
+	protected:
+		int type;
+		char** mPatterns;
+		int* mPatLen;
+		int mPatNum;
+		reportFunc report;
+
 };
 }

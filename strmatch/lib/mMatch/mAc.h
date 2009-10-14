@@ -15,6 +15,8 @@
  *
  * =====================================================================================
  */
+#ifndef __MAC_HEADER__
+#define __MAC_HEADER__
 #include <stdio.h>
 #include <stdlib.h>
 #include <list>
@@ -36,19 +38,6 @@ class acNode
 };
 
 template<int CHAR_SET>
-class acNodeShort
-{
-	public:
-		I16 patID;
-		U16 failure;
-		U16 go[CHAR_SET];
-	public:
-		acNodeShort(){memset(this, 0, sizeof(acNodeShort)); patID=-1;}
-		int isMatched(){ return patID != -1;}
-};
-
-
-template<int CHAR_SET>
 class AcNodeStore
 {
     public:
@@ -59,24 +48,53 @@ class AcNodeStore
 		int type;
 };
 
+//AcNodeStore<CHAR_SET> acNodeStore;
 template<int CHAR_SET=256>
-class mAc:public mMatch
+class mAcBase:public mMatch
 {
     public:
         typedef acNode<CHAR_SET>* acNodeP;
     private:
         acNodeP pRoot;
-        AcNodeStore<CHAR_SET> acNodeStore;
         list<acNodeP> nodeList;
+        int stateNum;
     public:
-        mAc();
-        mAc(char** pat, int n);
-        virtual int search(char* txt, int n){};
+        mAcBase();
+        ~mAcBase(){this->clean(); }
+        mAcBase(char** pat, int n);
+        virtual int search(char* txt, int n);
         virtual int search(char* txt);
     protected:
-        virtual void init();
+        virtual void compile();
     private:	
-        acNodeP makeNode() { acNodeP newNode= new acNode<CHAR_SET>(); nodeList.push_back(newNode); return newNode;};
+        acNodeP makeNode() {stateNum++; acNodeP newNode= new acNode<CHAR_SET>(); nodeList.push_back(newNode); return newNode;};
+        acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
+        void clean();
 };
 
+template<int CHAR_SET=256>
+class acNodeShort
+{
+	public:
+		//I16 patID;
+		U16 go[CHAR_SET];
+	public:
+		acNodeShort(){memset(this, 0, sizeof(acNodeShort)); }
+		//int isMatched(){ return patID != -1;}
 };
+
+
+//! Depth-Storage 
+class mAcL:public mMatch
+{
+};
+
+//! Broad-Storage
+
+
+
+
+}
+
+#include "mAc.hxx"
+#endif
