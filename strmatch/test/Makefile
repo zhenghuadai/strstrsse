@@ -1,6 +1,6 @@
 #CMPCOUNT:=
 CC=gcc
-CXX=g++
+CXX=g++ -g 
 ifeq ($(CMPCOUNT),y)
 	DFLAGS:=-c -DCMPCOUNT
 else
@@ -40,7 +40,6 @@ mmatch:mmatch.o ${utilobj}
 	${CC} ${Gflag} ${INC_PATH} -c $< -o $@ 
 %.o:%.cpp
 	${CXX} ${Gflag} ${INC_PATH} -c $< -o $@ 
-	
 clean:
 	rm -f *.o
 	rm -f match
@@ -48,3 +47,5 @@ clean:
 	rm -f matcho3
 	rm -f matchgene
 	rm -f ${matchmulobj}
+
+mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h
