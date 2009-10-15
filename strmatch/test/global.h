@@ -10,6 +10,9 @@ typedef struct
     };
 } _U64;
 char * Pat;//the patten string
+#ifndef MAXPATS
+#define MAXPATS 16384
+#endif
 char * Patts[MAXPATS];
 int ps;
 char * Text;// the subjiect string
@@ -21,6 +24,8 @@ extern "C"{
 #endif
 char * Getsubjectfromfile(char *pfname);
 int  Getpatternfromfile(char *pfname,char **patts);
+char * GetGenesubjectfromfile(char *pfname);
+int  GetGenepatternfromfile(char *pfname,char **patts);
 void Mtime(_U64 * readr);
 double Mdifftime(_U64 start,_U64 end);
 #ifdef __cplusplus 

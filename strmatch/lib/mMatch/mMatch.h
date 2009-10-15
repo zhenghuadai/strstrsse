@@ -32,7 +32,7 @@ typedef enum{
 typedef int (* reportFunc)(int patID, int idx);
 class mMatch{
     public:
-        mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) - sizeof(list<Pattern_t>)); init(pat, patNum); report=reportSilent;};
+        mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) - sizeof(list<Pattern_t>)); init(pat, patNum); report=reportSilent; report=reportDefault;};
     public:
         virtual int search(char* txt, int n){};
         virtual int search(char* txt){};

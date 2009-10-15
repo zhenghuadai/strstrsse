@@ -35,68 +35,79 @@ mAcBase<CHAR_SET>::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
 {
     type = t;
     stateNum=0;
-    buildGeneTrie();
-    buildFailure();
-    convertDFA();
+    if(type==geneAC){
+        printf("build Trie...\n");
+        buildGeneTrie();
+        printf("build Trie complete");
+        printf("build Failure...\n");
+        buildFailure();
+        printf("build Failure complete\n");
+        printf("build DFA...\n");
+        convertDFA();
+        printf("build DFA complete\n");
+    }else {
+        compile();
+    }
+    printf("build complete\n");
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 void mAcBase<CHAR_SET>::compile()
 {
     buildNFA();
     convertDFA();
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 void mAcBase<CHAR_SET>::buildNFA()
 {
     buildTrie();
     buildFailure();
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 void mAcBase<CHAR_SET>::buildTrie()
 {
-	pRoot= makeNode();	
-	for(int i=0;i<mPatNum; i++){
-		acNodeP curNode = pRoot;
-		char* p = mPatterns[i];
-		while( *p && (curNode->go[*p]!=NULL)){ curNode=curNode->go[*p]; p++; }
-		for(; *p; p++){
-			Uchar c=*p;
-			curNode-> go[c] = makeNode();
-			curNode = curNode->go[c];
-		}
+    pRoot= makeNode();	
+    for(int i=0;i<mPatNum; i++){
+        acNodeP curNode = pRoot;
+        char* p = mPatterns[i];
+        while( *p && (curNode->go[*p]!=NULL)){ curNode=curNode->go[*p]; p++; }
+        for(; *p; p++){
+            Uchar c=*p;
+            curNode-> go[c] = makeNode();
+            curNode = curNode->go[c];
+        }
         curNode->addPattern(i);
-	}
+    }
 
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 void mAcBase<CHAR_SET>::buildGeneTrie()
 {
-	pRoot= makeNode();	
-	for(int i=0;i<mPatNum; i++){
-		acNodeP curNode = pRoot;
-		unsigned char* p =(unsigned char*) mPatterns[i];
-        int n = strlen(p);
-		while( *p && (curNode->go[agct2num(*p)]!=NULL)){ curNode=curNode->go[agct2num(*p)]; p++; }
-		for(; *p; p++){
-			Uchar c=agct2num(*p);
-			curNode-> go[c] = makeNode();
-			curNode = curNode->go[c];
-		}
+    pRoot= makeNode();	
+    for(int i=0;i<mPatNum; i++){
+        acNodeP curNode = pRoot;
+        unsigned char* p =(unsigned char*) mPatterns[i];
+        int n = strlen((const char *)p);
+        while( *p && (curNode->go[agct2num(*p)]!=NULL)){ curNode=curNode->go[agct2num(*p)]; p++; }
+        for(; *p; p++){
+            Uchar c=agct2num(*p);
+            curNode-> go[c] = makeNode();
+            curNode = curNode->go[c];
+        }
         curNode->addPattern(i);
-	}
+    }
 
 }
 
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 void mAcBase<CHAR_SET>::buildFailure()
 {
-	queue<acNodeP> Queue;
-	//! the first level
+    queue<acNodeP> Queue;
+    //! the first level
     for(int i=0;i< CHAR_SET; i++){
         if(pRoot->go[i] == NULL){
             pRoot-> go[i] = pRoot;
@@ -179,6 +190,7 @@ int mAcBase<CHAR_SET>::searchGene(char* txt, int n)
     template<int CHAR_SET>
 int mAcBase<CHAR_SET>::search(char* txt)
 {
+    printf("search...\n");
     unsigned char* p = (Uchar*) txt;	
     acNodeP state=pRoot;
     for(;*p; p++){

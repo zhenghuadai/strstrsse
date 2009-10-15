@@ -40,6 +40,7 @@ char * Getsubjectfromfile(char *pfname)
     return psub;
 
 }
+
 int   Getpatternfromfile(char *pfname,char **patts)
 {
     int psubstep=0,buffcounts;
@@ -57,8 +58,6 @@ int   Getpatternfromfile(char *pfname,char **patts)
 
     while((temp2=fgetc(pf))!=EOF)
     {
-        //		temp=(unsigned int )temp2;
-        //                     if(((temp>=97)&&(temp<=122))||((temp>=65)&&(temp<=90)))
         if(temp2=='\n')
         {
             buff[psubstep]='\0';
@@ -69,13 +68,11 @@ int   Getpatternfromfile(char *pfname,char **patts)
             }
             patts[patno++]=psub;
             psubstep=0;
-            //				  printf("%c\n",fgetc(pf));
-            //    printf("%s\n",patts[patno]); 
             continue;
         }
         else
-        {buff[psubstep]=temp2;
-            //	printf("%c",temp2);
+        {
+            buff[psubstep]=temp2;
             psubstep++;
         }
     }
@@ -84,7 +81,7 @@ int   Getpatternfromfile(char *pfname,char **patts)
 }
 
 
-char * Getgeneseqfromfile(char *pfname)
+char* GetGenesubjectfromfile(char *pfname)
 {
     int psubstep=0,buffcounts;
     unsigned int temp;
@@ -112,7 +109,8 @@ char * Getgeneseqfromfile(char *pfname)
     while((temp2=fgetc(pf))!=EOF)
     {
         if((temp2=='A')||(temp2=='G')||(temp2=='C')||(temp2=='T')||(temp2=='a')||(temp2=='g')||(temp2=='c')||(temp2=='t'))
-        {psub[psubstep]=temp2;
+        {
+            psub[psubstep]=temp2;
             psubstep++;
         }
     }
@@ -120,3 +118,44 @@ char * Getgeneseqfromfile(char *pfname)
     return psub;
 
 }
+
+int   GetGenepatternfromfile(char *pfname,char **patts)
+{
+    int psubstep=0,buffcounts;
+    //      unsigned int temp;
+    char buff[256];
+    char * psub;
+    char temp2;
+    int patno=0,i;
+    FILE *pf;	
+    if((pf=fopen(pfname,"r"))==NULL)
+    {
+        printf("cannot open input string");	
+        exit(0);
+    }
+
+    while((temp2=fgetc(pf))!=EOF)
+    {
+        if(temp2=='\n')
+        {
+            buff[psubstep]='\0';
+            psub=(char *)malloc(psubstep*sizeof(char));
+            for(i=0;i<=psubstep;i++)
+            {
+                psub[i]=buff[i];
+            }
+            patts[patno++]=psub;
+            psubstep=0;
+            continue;
+        }
+        else
+        {
+            if((temp2=='A')||(temp2=='G')||(temp2=='C')||(temp2=='T')||(temp2=='a')||(temp2=='g')||(temp2=='c')||(temp2=='t'))
+                buff[psubstep++]=temp2;
+        }
+    }
+    return patno;
+
+}
+
+

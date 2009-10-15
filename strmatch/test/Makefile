@@ -35,6 +35,8 @@ matchasm:${matchasmobj}
 	${CC} ${Gflag} -o matchasm ${matchasmobj}
 mmatch:mmatch.o ${utilobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
+genematch:genematch.o ${utilobj}
+	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
 %.o:%.c
 	${CC} ${Gflag} ${INC_PATH} -c $< -o $@ 
@@ -48,4 +50,5 @@ clean:
 	rm -f matchgene
 	rm -f ${matchmulobj}
 
-mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h
+mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx
+genematch.o: genematch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx
