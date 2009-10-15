@@ -31,6 +31,16 @@ mAcBase<CHAR_SET>::mAcBase(char** pat, int n) : mMatch(pat, n)
 }
 
 template<int CHAR_SET>
+mAcBase<CHAR_SET>::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
+{
+    type = t;
+    stateNum=0;
+    buildGeneTrie();
+    buildFailure();
+    convertDFA();
+}
+
+template<int CHAR_SET>
 void mAcBase<CHAR_SET>::compile()
 {
     buildNFA();
@@ -39,6 +49,13 @@ void mAcBase<CHAR_SET>::compile()
 
 template<int CHAR_SET>
 void mAcBase<CHAR_SET>::buildNFA()
+{
+    buildTrie();
+    buildFailure();
+}
+
+template<int CHAR_SET>
+void mAcBase<CHAR_SET>::buildTrie()
 {
 	pRoot= makeNode();	
 	for(int i=0;i<mPatNum; i++){
@@ -53,6 +70,31 @@ void mAcBase<CHAR_SET>::buildNFA()
         curNode->addPattern(i);
 	}
 
+}
+
+template<int CHAR_SET>
+void mAcBase<CHAR_SET>::buildGeneTrie()
+{
+	pRoot= makeNode();	
+	for(int i=0;i<mPatNum; i++){
+		acNodeP curNode = pRoot;
+		unsigned char* p =(unsigned char*) mPatterns[i];
+        int n = strlen(p);
+		while( *p && (curNode->go[agct2num(*p)]!=NULL)){ curNode=curNode->go[agct2num(*p)]; p++; }
+		for(; *p; p++){
+			Uchar c=agct2num(*p);
+			curNode-> go[c] = makeNode();
+			curNode = curNode->go[c];
+		}
+        curNode->addPattern(i);
+	}
+
+}
+
+
+template<int CHAR_SET>
+void mAcBase<CHAR_SET>::buildFailure()
+{
 	queue<acNodeP> Queue;
 	//! the first level
     for(int i=0;i< CHAR_SET; i++){
@@ -103,6 +145,34 @@ void mAcBase<CHAR_SET>::convertDFA()
             }
         }
     }
+}
+
+    template<int CHAR_SET>
+int mAcBase<CHAR_SET>::searchGene(char* txt)
+{
+    unsigned char* p = (Uchar*) txt;	
+    acNodeP state=pRoot;
+    for(;*p; p++){
+        state = nextState(state, agct2num(*p)); // state= state->go[*p]; 
+        if(state-> isMatched()) {
+            int ret = state->report(report, (char*)p - txt);
+        }
+    }
+    return 0;
+}
+
+    template<int CHAR_SET>
+int mAcBase<CHAR_SET>::searchGene(char* txt, int n)
+{
+    unsigned char* p = (Uchar*) txt;	
+    acNodeP state=pRoot;
+    for(int i=0; i<n; p++,i++){
+        state = nextState(state, agct2num(*p));// state= state->go[*p]; 
+        if(state-> isMatched()) {
+            int ret = state->report(report, (char*)p - txt);
+        }
+    }
+    return 0;
 }
 
 

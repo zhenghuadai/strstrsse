@@ -24,6 +24,8 @@
 //#define CHAR_SET 256
 namespace dmMatch{
 
+
+
 template<int CHAR_SET>
 class acNode
 {
@@ -88,8 +90,11 @@ class mAcBase:public mMatch
         mAcBase();
         ~mAcBase(){this->clean(); }
         mAcBase(char** pat, int n);
+        mAcBase(char** pat, int n, mAlgtype t);
         virtual int search(char* txt, int n);
         virtual int search(char* txt);
+        virtual int searchGene(char* txt, int n);
+        virtual int searchGene(char* txt);
     protected:
         virtual void compile();
     private:	
@@ -97,6 +102,9 @@ class mAcBase:public mMatch
         acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
         void clean();
         void buildNFA();
+        void buildGeneTrie();
+        void buildTrie();
+        void buildFailure();
         void convertDFA();
 };
 

@@ -26,7 +26,7 @@ typedef unsigned char Uchar;
 typedef unsigned short U16;
 typedef short I16;
 typedef enum{
-    mAC,mWM
+    mAC, geneAC, mWM
 } mAlgtype;
 
 typedef int (* reportFunc)(int patID, int idx);
@@ -36,6 +36,8 @@ class mMatch{
     public:
         virtual int search(char* txt, int n){};
         virtual int search(char* txt){};
+        virtual int searchGene(char* txt, int n){};
+        virtual int searchGene(char* txt){};
         void setReportFunc(reportFunc f){report = f;}
         void init(char** ,int n);
         ~mMatch(){}
