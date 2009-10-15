@@ -6,7 +6,6 @@
 #define ASIZE 256
 #define WORD_SIZE 16
 #define MAXINT2 2147483648 
-#define MAXPATS 100
 #include "stdio.h"
 #include "stdlib.h"
 char* Sbf		(char * text,char *pat);//brute force Ëã·¨ 
