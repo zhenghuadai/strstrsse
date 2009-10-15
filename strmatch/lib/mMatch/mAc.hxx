@@ -33,6 +33,13 @@ mAcBase<CHAR_SET>::mAcBase(char** pat, int n) : mMatch(pat, n)
 template<int CHAR_SET>
 void mAcBase<CHAR_SET>::compile()
 {
+    buildNFA();
+    convertDFA();
+}
+
+template<int CHAR_SET>
+void mAcBase<CHAR_SET>::buildNFA()
+{
 	pRoot= makeNode();	
 	for(int i=0;i<mPatNum; i++){
 		acNodeP curNode = pRoot;
@@ -43,7 +50,7 @@ void mAcBase<CHAR_SET>::compile()
 			curNode-> go[c] = makeNode();
 			curNode = curNode->go[c];
 		}
-		curNode->patID=i;
+        curNode->addPattern(i);
 	}
 
 	queue<acNodeP> Queue;
@@ -68,10 +75,18 @@ void mAcBase<CHAR_SET>::compile()
             acNodeP dst = parent->failure;
             while(dst -> go[i] == NULL) dst = dst->failure;
             curNode->failure = dst->go[i];
+            if(dst->go[i]->isMatched())
+                curNode->addPattern(dst->go[i]);
         }
 
     }
+}
 
+    template<int CHAR_SET>
+void mAcBase<CHAR_SET>::convertDFA()
+{
+    if(pRoot == NULL) return;
+    queue<acNodeP> Queue;
     for(int i=0;i< CHAR_SET; i++){
         if(pRoot->go[i] != pRoot){
             Queue.push(pRoot->go[i]);
@@ -90,7 +105,8 @@ void mAcBase<CHAR_SET>::compile()
     }
 }
 
-template<int CHAR_SET>
+
+    template<int CHAR_SET>
 int mAcBase<CHAR_SET>::search(char* txt)
 {
     unsigned char* p = (Uchar*) txt;	
@@ -98,13 +114,13 @@ int mAcBase<CHAR_SET>::search(char* txt)
     for(;*p; p++){
         state = nextState(state, *p); // state= state->go[*p]; 
         if(state-> isMatched()) {
-            int ret = report(state->patID, p-(unsigned char*)txt);
+            int ret = state->report(report, (char*)p - txt);
         }
     }
     return 0;
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 int mAcBase<CHAR_SET>::search(char* txt, int n)
 {
     unsigned char* p = (Uchar*) txt;	
@@ -112,7 +128,7 @@ int mAcBase<CHAR_SET>::search(char* txt, int n)
     for(int i=0; i<n; p++,i++){
         state = nextState(state, *p);// state= state->go[*p]; 
         if(state-> isMatched()) {
-            int ret = report(state->patID, p-(unsigned char*)txt);
+            int ret = state->report(report, (char*)p - txt);
         }
     }
     return 0;
