@@ -95,6 +95,8 @@ class mAcBase:public mMatch
         virtual int search(char* txt);
         virtual int searchGene(char* txt, int n);
         virtual int searchGene(char* txt);
+        virtual int searchGene4(char* txt, int n);
+        virtual int searchGene4(char* txt);
     protected:
         virtual void compile();
     private:	

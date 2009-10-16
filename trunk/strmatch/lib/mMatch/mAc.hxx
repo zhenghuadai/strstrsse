@@ -38,7 +38,7 @@ mAcBase<CHAR_SET>::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
     if(type==geneAC){
         printf("build Trie...\n");
         buildGeneTrie();
-        printf("build Trie complete");
+        printf("build Trie complete\n");
         printf("build Failure...\n");
         buildFailure();
         printf("build Failure complete\n");
@@ -49,6 +49,7 @@ mAcBase<CHAR_SET>::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
         compile();
     }
     printf("build complete\n");
+	printf("#states num: %d\n", stateNum);
 }
 
     template<int CHAR_SET>
@@ -164,68 +165,105 @@ int mAcBase<CHAR_SET>::searchGene(char* txt)
     unsigned char* p = (Uchar*) txt;	
     acNodeP state=pRoot;
     for(;*p; p++){
-        state = nextState(state, agct2num(*p)); // state= state->go[*p]; 
-        if(state-> isMatched()) {
-            int ret = state->report(report, (char*)p - txt);
-        }
-    }
-    return 0;
+		Uchar c = agct2num(*p);
+		if(c >=4){state= pRoot; continue;}
+		state = nextState(state, c); // state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = state->report(report, (char*)p - txt);
+		}
+	}
+	return 0;
 }
 
-    template<int CHAR_SET>
+	template<int CHAR_SET>
 int mAcBase<CHAR_SET>::searchGene(char* txt, int n)
 {
-    unsigned char* p = (Uchar*) txt;	
-    acNodeP state=pRoot;
-    for(int i=0; i<n; p++,i++){
-        state = nextState(state, agct2num(*p));// state= state->go[*p]; 
-        if(state-> isMatched()) {
-            int ret = state->report(report, (char*)p - txt);
-        }
-    }
-    return 0;
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot;
+	for(int i=0; i<n; p++,i++){
+		Uchar c = agct2num(*p);
+		if(c >=4){state= pRoot; continue;}
+		state = nextState(state, c);// state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = state->report(report, (char*)p - txt);
+		}
+	}
+	return 0;
 }
 
 
     template<int CHAR_SET>
-int mAcBase<CHAR_SET>::search(char* txt)
+int mAcBase<CHAR_SET>::searchGene4(char* txt)
 {
-    printf("search...\n");
     unsigned char* p = (Uchar*) txt;	
     acNodeP state=pRoot;
     for(;*p; p++){
-        state = nextState(state, *p); // state= state->go[*p]; 
-        if(state-> isMatched()) {
-            int ret = state->report(report, (char*)p - txt);
-        }
-    }
-    return 0;
+		Uchar c = (*p);
+		if(c >=4){state= pRoot; continue;}
+		state = nextState(state, c); // state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = state->report(report, (char*)p - txt);
+		}
+	}
+	return 0;
 }
 
-    template<int CHAR_SET>
+	template<int CHAR_SET>
+int mAcBase<CHAR_SET>::searchGene4(char* txt, int n)
+{
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot;
+	for(int i=0; i<n; p++,i++){
+		Uchar c = (*p);
+		if(c >=4){state= pRoot; continue;}
+		state = nextState(state, c);// state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = state->report(report, (char*)p - txt);
+		}
+	}
+	return 0;
+}
+
+
+	template<int CHAR_SET>
+int mAcBase<CHAR_SET>::search(char* txt)
+{
+	printf("search...\n");
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot;
+	for(;*p; p++){
+		state = nextState(state, *p); // state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = state->report(report, (char*)p - txt);
+		}
+	}
+	return 0;
+}
+
+	template<int CHAR_SET>
 int mAcBase<CHAR_SET>::search(char* txt, int n)
 {
-    unsigned char* p = (Uchar*) txt;	
-    acNodeP state=pRoot;
-    for(int i=0; i<n; p++,i++){
-        state = nextState(state, *p);// state= state->go[*p]; 
-        if(state-> isMatched()) {
-            int ret = state->report(report, (char*)p - txt);
-        }
-    }
-    return 0;
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot;
+	for(int i=0; i<n; p++,i++){
+		state = nextState(state, *p);// state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = state->report(report, (char*)p - txt);
+		}
+	}
+	return 0;
 }
 
 
-    template<int CHAR_SET>
+	template<int CHAR_SET>
 void mAcBase<CHAR_SET>::clean()
 {
-    typename list<acNodeP>::iterator i;
-    for(i = nodeList.begin(); i!= nodeList.end(); i++){
-        delete *i;
-    }
-    nodeList.clear();
-    pRoot = 0;
+	typename list<acNodeP>::iterator i;
+	for(i = nodeList.begin(); i!= nodeList.end(); i++){
+		delete *i;
+	}
+	nodeList.clear();
+	pRoot = 0;
 }
 //
 //void test_XXXXXXXXXXXXXXX()
