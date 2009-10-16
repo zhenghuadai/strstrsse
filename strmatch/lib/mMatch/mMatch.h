@@ -38,6 +38,8 @@ class mMatch{
         virtual int search(char* txt){};
         virtual int searchGene(char* txt, int n){};
         virtual int searchGene(char* txt){};
+        virtual int searchGene4(char* txt, int n){};
+        virtual int searchGene4(char* txt){};
         void setReportFunc(reportFunc f){report = f;}
         void init(char** ,int n);
         ~mMatch(){}
