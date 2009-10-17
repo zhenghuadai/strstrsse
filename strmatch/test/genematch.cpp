@@ -5,6 +5,11 @@
 #include "global.h"
 #include<stdio.h>
 #include "mAc.h"
+#include "dmutil.h"
+using namespace std;
+int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts);
+Pattern_fasta* loadGeneFasta(char *pfname);
+char** transList1(list<Pattern_fasta>* tList);
 using namespace dmMatch;
 int main(int argc,char *argv[])
 {
@@ -19,6 +24,32 @@ int main(int argc,char *argv[])
     FILE *fp;
 
     _U64 startrdt,endrdt;
+    if(argc==1)
+    {
+        //quryfname="patterns";
+        //subjfname="sub";
+        return 0;
+    }
+    for(i=1;i<argc;i++)
+    {
+        switch(argv[i][0]){
+            case '-':
+                switch(argv[i][1]){
+                    case 'a':
+                        quryfname=argv[i+1];
+                        i++;
+                        break;
+                    case 'D':
+                        subjfname=argv[i+1];
+                        i++;
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 
     for(i=0;i<5;i++)
         matchalg[i]=NULL;
@@ -38,21 +69,18 @@ int main(int argc,char *argv[])
     Patts[4]="still";
     ps=5;
     Text="Till today, the lantern ncichpc  festival is still held each year ncichpc around the country. Lanterns of various shapes and sizes ncichpc are hung in the streets, attracting countless visitors. Children will hold self-made or bought lanterns to stroll with on the streets, extremely excite";
-    if(argc==1)
-    {
-        quryfname="patterns";
-        subjfname="sub";
-    }
-    else
-    {
-        quryfname=argv[2];
-        subjfname=argv[1];
-    }
-
     printf("reading pattern ...\n");
-    ps=GetGenepatternfromfile(quryfname,Patts);
+    list<Pattern_fasta>* pattsList= new list<Pattern_fasta>;
+    ps=loadGenePatternFasta(quryfname,  pattsList);
+    char** patts = transList1(pattsList);
+    //ps=GetGenepatternfromfile(quryfname,Patts);
+    //char** patts = Patts;
+    //for(int j=0;j<ps;j++) printf("%s\n",patts[j]);
+
     printf("reading reference...\n");
-    Text=GetGenesubjectfromfile(subjfname);
+    //Text=GetGenesubjectfromfile(subjfname);
+    Pattern_fasta* genome = loadGeneFasta(subjfname);
+    Text = genome->str;
 
     //printf("%s\n",Pat);
     occurnum=0;
@@ -60,7 +88,7 @@ int main(int argc,char *argv[])
     printf("\n");
     printf("\n%d ok\n",strlen(Text));
     /* µ÷ÓÃ´®Æ¥Åäº¯Êý */
-    mAcBase<4> ac(Patts, ps, geneAC);
+    mAcBase<4> ac(patts, ps, geneAC);
     i = 0;
     //for(i=0;i<5;i++)
     {

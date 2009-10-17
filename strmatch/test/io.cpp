@@ -112,10 +112,13 @@ int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts)
             buff[psubstep]=0;
             name = (char*) malloc(psubstep+1);
             strcpy(name, buff);
+            psubstep=0;
+        }else {
+            psubstep=0;
+            buff[psubstep++]=temp2;
         }
 
         //! str 
-        psubstep=0;
         while(((temp2=fgetc(pf))!='\n') &&(temp2 != EOF)){
             if( (temp2=='A')||(temp2=='G')||
                     (temp2=='C')||(temp2=='T')||
@@ -143,4 +146,26 @@ int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts)
 
 }
 
+char** transList1(list<Pattern_fasta>* tList)
+{
+    int len = tList->size();
+    char** patternList = (char**) malloc(len *sizeof(char*));
+    int i;
+    list<Pattern_fasta>::iterator it;
+    for(it=tList->begin(), i=0; it!=tList->end(); it++, i++){
+        patternList[i] = (*it).str;
+    }
+    return patternList;
+}
 
+Pattern_fasta* transList2(list<Pattern_fasta>* tList)
+{
+    int len = tList->size();
+    Pattern_fasta* patternList = (Pattern_fasta*) malloc(len *sizeof(Pattern_fasta*));
+    int i;
+    list<Pattern_fasta>::iterator it;
+    for(it=tList->begin(), i=0; it!=tList->end(); it++, i++){
+        patternList[i] = (*it);
+    }
+    return patternList;
+}
