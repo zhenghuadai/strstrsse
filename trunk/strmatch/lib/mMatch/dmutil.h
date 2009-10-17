@@ -29,6 +29,13 @@ struct Pattern_s{
 };
 typedef struct Pattern_s Pattern_t;
 
+struct Pattern_fasta{
+    char* str;
+    char* name;
+    int len;
+};
+typedef struct Pattern_fasta Pattern_fasta;
+
 #ifdef __cplusplus
 inline
 #else
