@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <queue>
+#include <stack>
+#include <map>
 
 //#include "mAc.h"
 namespace dmMatch{
@@ -265,6 +267,68 @@ void mAcBase<CHAR_SET>::clean()
 	nodeList.clear();
 	pRoot = 0;
 }
+
+
+
+    	template<int CHAR_SET>
+void mAcD<CHAR_SET>::transDepthFrom(mAcBase<CHAR_SET>& ac)
+{
+    int curState=0;
+    stateNum = ac.stateNum;
+    mallocMem(stateNum);
+    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
+    stack<typename mAcBase<CHAR_SET>::acNodeP> Stack;
+    Stack.push(ac.pRoot);
+    map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+    while(!Stack.empty()){
+        typename mAcBase<CHAR_SET>::acNodeP curNode= Stack.front();
+        Map[curNode]= curState;
+        Map2[curState]=curNode;
+        curState ++;
+        Stack.pop();
+        for(int i= CHAR_SET-1; i>=0; i--){
+           if( curNode -> go[i] != curNode->failure->go[i])
+            Stack.push(curNode->go[i]);
+        }
+    }
+    for(int s=0;s<stateNum;s++){
+        for(int i=0;i< CHAR_SET; i++) {
+            pRoot[s].go[i] = Map[ Map2[s]->go[i] ]; 
+        }
+    }
+    delete Map2;
+}
+
+    template<int CHAR_SET>
+void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
+{
+    int curState=0;
+    stateNum = ac.stateNum;
+    mallocMem(stateNum);
+    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
+    queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
+    Queue.push(ac.pRoot);
+    map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+    while(!Queue.empty()){
+        typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.front();
+        Map[curNode]= curState;
+        Map2[curState]=curNode;
+        curState ++;
+        Queue.pop();
+        for(int i=0; i< CHAR_SET-1; i++){
+           if( curNode -> go[i] != curNode->failure->go[i])
+            Queue.push(curNode->go[i]);
+        }
+    }
+    for(int s=0;s<stateNum;s++){
+        for(int i=0;i< CHAR_SET; i++) {
+            pRoot[s].go[i] = Map[ Map2[s]->go[i] ]; 
+        }
+    }
+    delete Map2;
+}
+
+
 //
 //void test_XXXXXXXXXXXXXXX()
 //{
