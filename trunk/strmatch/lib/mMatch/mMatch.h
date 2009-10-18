@@ -40,9 +40,16 @@ class mMatch{
         virtual int searchGene(char* txt){};
         virtual int searchGene4(char* txt, int n){};
         virtual int searchGene4(char* txt){};
+        virtual int Tsearch(char* txt, int n){ search(txt,n);};
+        virtual int Tsearch(char* txt){};
+        virtual int TsearchGene(char* txt, int n){};
+        virtual int TsearchGene(char* txt){};
+        virtual int TsearchGene4(char* txt, int n){};
+        virtual int TsearchGene4(char* txt){};
         void setReportFunc(reportFunc f){report = f;}
         void init(char** ,int n);
         ~mMatch(){}
+        unsigned long long getTime(){return timeSearch;}
     protected:
         virtual void compile(){};
     private:
@@ -57,5 +64,6 @@ class mMatch{
         int mPatNum;
         reportFunc report;
         list<Pattern_t> pPatList;
+        unsigned long long timeSearch;
 };
 }

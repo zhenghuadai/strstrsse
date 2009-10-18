@@ -82,6 +82,8 @@ class mAcBase:public mMatch
 {
     public:
         typedef acNode<CHAR_SET>* acNodeP;
+        enum{char_set = CHAR_SET};
+        friend class mAcD;
     private:
         acNodeP pRoot;
         list<acNodeP> nodeList;
@@ -121,10 +123,27 @@ class acNodeShort
         //int isMatched(){ return patID != -1;}
 };
 
-
+typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 //! Depth-Storage 
-class mAcL:public mMatch
+template<int CHAR_SET=256>
+class mAcD:public mMatch
 {
+    public:
+        mAcD(mAcBase<CHAR_SET>& ac,AC_Store_t st= ACWid_First){if(st== ACWid_First) transWidthFrom(ac);else transDepthFrom(ac);}
+    private:
+        void transDepthFrom(mAcBase<CHAR_SET>& ac);
+        void transWidthFrom(mAcBase<CHAR_SET>& ac);
+        void mallocMem(int n){ 
+            nodes= (acNodeShort<CHAR_SET>*)malloc(n * sizeof(acNodeShort<CHAR_SET>*));
+            patIDList = (list<int>**)malloc( n* sizeof(list<int>*));
+        }
+
+        void freeMem(){}
+    private:
+        acNodeShort<CHAR_SET>* nodes;
+        acNodeShort<CHAR_SET>* pRoot;
+        list<int>** patIDList;
+        int stateNum;
 };
 
 //! Broad-Storage
