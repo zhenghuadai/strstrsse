@@ -161,6 +161,23 @@ void mAcBase<CHAR_SET>::convertDFA()
     }
 }
 
+
+template<typename NodeT , NodeT (*nextState)(NodeT, Uchar), int (*isMatched)(NodeT) >
+int ACsearchGene(NodeT pRoot, char* txt)
+{
+    unsigned char* p = (Uchar*) txt;	
+    NodeT state=pRoot;
+    for(;*p; p++){
+		Uchar c = agct2num(*p);
+		if(c >=4){state= pRoot; continue;}
+		state = nextState(state, c); // state= state->go[*p]; 
+		if(isMatched(state)) {
+			//int ret = state->report(report, (char*)p - txt);
+		}
+	}
+	return 0;
+}
+
     template<int CHAR_SET>
 int mAcBase<CHAR_SET>::searchGene(char* txt)
 {

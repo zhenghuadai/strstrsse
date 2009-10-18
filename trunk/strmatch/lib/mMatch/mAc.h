@@ -103,7 +103,8 @@ class mAcBase:public mMatch
         virtual void compile();
     private:	
         acNodeP makeNode() {stateNum++; acNodeP newNode= new acNode<CHAR_SET>(); nodeList.push_back(newNode); return newNode;};
-        acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
+        static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
+        static int isMatched(acNodeP state){return (state-> isMatched());} 
         void clean();
         void buildNFA();
         void buildGeneTrie();
