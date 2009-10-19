@@ -50,7 +50,7 @@ int main(int argc,char *argv[])
         }
     }
 
-
+#if 0
     for(i=0;i<5;i++)
         matchalg[i]=NULL;
     matchalg[0]=acsm;
@@ -61,7 +61,7 @@ int main(int argc,char *argv[])
     matchalgstr[2]="ac";
     matchalg[3]=Mwm;
     matchalgstr[3]="WM";
-
+#endif
     Patts[0]="Natasha";
     Patts[1]="ocean";
     Patts[2]="romantic";
