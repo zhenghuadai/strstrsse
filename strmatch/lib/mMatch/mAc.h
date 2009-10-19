@@ -83,6 +83,8 @@ class mAcBase:public mMatch
     public:
         typedef acNode<CHAR_SET>* acNodeP;
         enum{char_set = CHAR_SET};
+
+		template<int m>
         friend class mAcD;
     private:
         acNodeP pRoot;
@@ -105,6 +107,7 @@ class mAcBase:public mMatch
         acNodeP makeNode() {stateNum++; acNodeP newNode= new acNode<CHAR_SET>(); nodeList.push_back(newNode); return newNode;};
         static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
         static int isMatched(acNodeP state){return (state-> isMatched());} 
+		static int reportMatch(acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
         void clean();
         void buildNFA();
         void buildGeneTrie();

@@ -162,8 +162,8 @@ void mAcBase<CHAR_SET>::convertDFA()
 }
 
 
-template<typename NodeT , NodeT (*nextState)(NodeT, Uchar), int (*isMatched)(NodeT) >
-int ACsearchGene(NodeT pRoot, char* txt)
+template<typename NodeT , NodeT (*nextState)( NodeT, Uchar), int (*isMatched)(NodeT), int (*reportMatch)(NodeT , reportFunc , int ) >
+int ACsearchGene(NodeT pRoot, reportFunc report, char* txt)
 {
     unsigned char* p = (Uchar*) txt;	
     NodeT state=pRoot;
@@ -173,6 +173,7 @@ int ACsearchGene(NodeT pRoot, char* txt)
 		state = nextState(state, c); // state= state->go[*p]; 
 		if(isMatched(state)) {
 			//int ret = state->report(report, (char*)p - txt);
+			int ret = reportMatch( state, report, (char*)p -txt);
 		}
 	}
 	return 0;
@@ -181,9 +182,10 @@ int ACsearchGene(NodeT pRoot, char* txt)
     template<int CHAR_SET>
 int mAcBase<CHAR_SET>::searchGene(char* txt)
 {
-    unsigned char* p = (Uchar*) txt;	
-    acNodeP state=pRoot;
-    for(;*p; p++){
+#if 1
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot;
+	for(;*p; p++){
 		Uchar c = agct2num(*p);
 		if(c >=4){state= pRoot; continue;}
 		state = nextState(state, c); // state= state->go[*p]; 
@@ -192,6 +194,9 @@ int mAcBase<CHAR_SET>::searchGene(char* txt)
 		}
 	}
 	return 0;
+#else
+	ACsearchGene<acNodeP, mAcBase<CHAR_SET>::nextState, isMatched, reportMatch>(pRoot, report, txt);
+#endif
 }
 
 	template<int CHAR_SET>
@@ -211,12 +216,12 @@ int mAcBase<CHAR_SET>::searchGene(char* txt, int n)
 }
 
 
-    template<int CHAR_SET>
+	template<int CHAR_SET>
 int mAcBase<CHAR_SET>::searchGene4(char* txt)
 {
-    unsigned char* p = (Uchar*) txt;	
-    acNodeP state=pRoot;
-    for(;*p; p++){
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot;
+	for(;*p; p++){
 		Uchar c = (*p);
 		if(c >=4){state= pRoot; continue;}
 		state = nextState(state, c); // state= state->go[*p]; 
@@ -277,72 +282,81 @@ int mAcBase<CHAR_SET>::search(char* txt, int n)
 	template<int CHAR_SET>
 void mAcBase<CHAR_SET>::clean()
 {
+#if 0
 	typename list<acNodeP>::iterator i;
 	for(i = nodeList.begin(); i!= nodeList.end(); i++){
 		delete *i;
 	}
 	nodeList.clear();
 	pRoot = 0;
+#else
+	while( ! nodeList.empty()){
+		acNodeP cur = nodeList.front();
+		delete cur;
+		nodeList.pop_front();
+	}
+	pRoot = 0;
+#endif
 }
 
 
 
-    	template<int CHAR_SET>
+	template<int CHAR_SET>
 void mAcD<CHAR_SET>::transDepthFrom(mAcBase<CHAR_SET>& ac)
 {
-    int curState=0;
-    stateNum = ac.stateNum;
-    mallocMem(stateNum);
-    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
-    stack<typename mAcBase<CHAR_SET>::acNodeP> Stack;
-    Stack.push(ac.pRoot);
-    map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
-    while(!Stack.empty()){
-        typename mAcBase<CHAR_SET>::acNodeP curNode= Stack.front();
-        Map[curNode]= curState;
-        Map2[curState]=curNode;
-        curState ++;
-        Stack.pop();
-        for(int i= CHAR_SET-1; i>=0; i--){
-           if( curNode -> go[i] != curNode->failure->go[i])
-            Stack.push(curNode->go[i]);
-        }
-    }
-    for(int s=0;s<stateNum;s++){
-        for(int i=0;i< CHAR_SET; i++) {
-            pRoot[s].go[i] = Map[ Map2[s]->go[i] ]; 
-        }
-    }
-    delete Map2;
+	int curState=0;
+	stateNum = ac.stateNum;
+	mallocMem(stateNum);
+	typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
+	stack<typename mAcBase<CHAR_SET>::acNodeP> Stack;
+	Stack.push(ac.pRoot);
+	map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+	while(!Stack.empty()){
+		typename mAcBase<CHAR_SET>::acNodeP curNode= Stack.front();
+		Map[curNode]= curState;
+		Map2[curState]=curNode;
+		curState ++;
+		Stack.pop();
+		for(int i= CHAR_SET-1; i>=0; i--){
+			if( curNode -> go[i] != curNode->failure->go[i])
+				Stack.push(curNode->go[i]);
+		}
+	}
+	for(int s=0;s<stateNum;s++){
+		for(int i=0;i< CHAR_SET; i++) {
+			pRoot[s].go[i] = Map[ Map2[s]->go[i] ]; 
+		}
+	}
+	delete Map2;
 }
 
-    template<int CHAR_SET>
+	template<int CHAR_SET>
 void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
-    int curState=0;
-    stateNum = ac.stateNum;
-    mallocMem(stateNum);
-    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
-    queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
-    Queue.push(ac.pRoot);
-    map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
-    while(!Queue.empty()){
-        typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.front();
-        Map[curNode]= curState;
-        Map2[curState]=curNode;
-        curState ++;
-        Queue.pop();
-        for(int i=0; i< CHAR_SET-1; i++){
-           if( curNode -> go[i] != curNode->failure->go[i])
-            Queue.push(curNode->go[i]);
-        }
-    }
-    for(int s=0;s<stateNum;s++){
-        for(int i=0;i< CHAR_SET; i++) {
-            pRoot[s].go[i] = Map[ Map2[s]->go[i] ]; 
-        }
-    }
-    delete Map2;
+	int curState=0;
+	stateNum = ac.stateNum;
+	mallocMem(stateNum);
+	typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
+	queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
+	Queue.push(ac.pRoot);
+	map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+	while(!Queue.empty()){
+		typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.front();
+		Map[curNode]= curState;
+		Map2[curState]=curNode;
+		curState ++;
+		Queue.pop();
+		for(int i=0; i< CHAR_SET-1; i++){
+			if( curNode -> go[i] != curNode->failure->go[i])
+				Queue.push(curNode->go[i]);
+		}
+	}
+	for(int s=0;s<stateNum;s++){
+		for(int i=0;i< CHAR_SET; i++) {
+			pRoot[s].go[i] = Map[ Map2[s]->go[i] ]; 
+		}
+	}
+	delete Map2;
 }
 
 

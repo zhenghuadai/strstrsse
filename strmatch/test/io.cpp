@@ -27,6 +27,7 @@
 #include <fcntl.h>
 #include "dmutil.h"
 #include <list>
+#include <string.h>
 using namespace std;
 Pattern_fasta* loadGeneFasta(char *pfname)
 {
