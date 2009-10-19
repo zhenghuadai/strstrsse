@@ -165,14 +165,12 @@ void mAcBase<CHAR_SET>::convertDFA()
 template<typename NodeT , NodeT (*nextState)( NodeT, Uchar), int (*isMatched)(NodeT), int (*reportMatch)(NodeT , reportFunc , int ) >
 int ACsearchGene(NodeT pRoot, reportFunc report, char* txt)
 {
-    unsigned char* p = (Uchar*) txt;	
     NodeT state=pRoot;
-    for(;*p; p++){
+    for(unsigned char* p = (Uchar*) txt;*p; p++){
 		Uchar c = agct2num(*p);
 		if(c >=4){state= pRoot; continue;}
 		state = nextState(state, c); // state= state->go[*p]; 
 		if(isMatched(state)) {
-			//int ret = state->report(report, (char*)p - txt);
 			int ret = reportMatch( state, report, (char*)p -txt);
 		}
 	}
@@ -182,7 +180,7 @@ int ACsearchGene(NodeT pRoot, reportFunc report, char* txt)
     template<int CHAR_SET>
 int mAcBase<CHAR_SET>::searchGene(char* txt)
 {
-#if 1
+#if 0
 	unsigned char* p = (Uchar*) txt;	
 	acNodeP state=pRoot;
 	for(;*p; p++){
@@ -195,7 +193,7 @@ int mAcBase<CHAR_SET>::searchGene(char* txt)
 	}
 	return 0;
 #else
-	ACsearchGene<acNodeP, mAcBase<CHAR_SET>::nextState, isMatched, reportMatch>(pRoot, report, txt);
+return 	ACsearchGene<acNodeP, mAcBase<CHAR_SET>::nextState, mAcBase<CHAR_SET>::isMatched, mAcBase<CHAR_SET>::reportMatch>(pRoot, report, txt);
 #endif
 }
 
@@ -357,6 +355,42 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 		}
 	}
 	delete Map2;
+}
+
+template<int CHAR_SET>
+int mAcD<CHAR_SET>::search(char* txt, int n)
+{
+
+}
+
+template<int CHAR_SET>
+int mAcD<CHAR_SET>::search(char* txt)
+{
+
+}
+
+template<int CHAR_SET>
+int mAcD<CHAR_SET>::searchGene(char* txt, int n)
+{
+
+}
+
+template<int CHAR_SET>
+int mAcD<CHAR_SET>::searchGene(char* txt)
+{
+
+}
+
+template<int CHAR_SET>
+int mAcD<CHAR_SET>::searchGene4(char* txt, int n)
+{
+
+}
+
+template<int CHAR_SET>
+int mAcD<CHAR_SET>::searchGene4(char* txt)
+{
+
 }
 
 
