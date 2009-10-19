@@ -134,6 +134,13 @@ class mAcD:public mMatch
 {
     public:
         mAcD(mAcBase<CHAR_SET>& ac,AC_Store_t st= ACWid_First){if(st== ACWid_First) transWidthFrom(ac);else transDepthFrom(ac);}
+	public:
+        virtual int search(char* txt, int n);
+        virtual int search(char* txt);
+        virtual int searchGene(char* txt, int n);
+        virtual int searchGene(char* txt);
+        virtual int searchGene4(char* txt, int n);
+        virtual int searchGene4(char* txt);
     private:
         void transDepthFrom(mAcBase<CHAR_SET>& ac);
         void transWidthFrom(mAcBase<CHAR_SET>& ac);
