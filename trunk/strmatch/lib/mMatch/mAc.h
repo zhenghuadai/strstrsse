@@ -24,7 +24,7 @@
 //#define CHAR_SET 256
 namespace dmMatch{
 
-
+typedef list<int> listID_t;
 
 template<int CHAR_SET>
 class acNode
@@ -107,7 +107,9 @@ class mAcBase:public mMatch
         acNodeP makeNode() {stateNum++; acNodeP newNode= new acNode<CHAR_SET>(); nodeList.push_back(newNode); return newNode;};
         static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
         static int isMatched(acNodeP state){return (state-> isMatched());} 
-		static int reportMatch(acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
+        static acNodeP nextStateT(acNode<CHAR_SET>* base, acNodeP cur, Uchar c){ return cur->go[c];}
+        static int isMatchedT(list<int>** base, acNodeP state){return (state-> isMatched());} 
+		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
         void clean();
         void buildNFA();
         void buildGeneTrie();
@@ -133,6 +135,7 @@ template<int CHAR_SET=256>
 class mAcD:public mMatch
 {
     public:
+        typedef U16 acNodeP;
         mAcD(mAcBase<CHAR_SET>& ac,AC_Store_t st= ACWid_First){if(st== ACWid_First) transWidthFrom(ac);else transDepthFrom(ac);}
 	public:
         virtual int search(char* txt, int n);
@@ -151,8 +154,14 @@ class mAcD:public mMatch
 
         void freeMem(){}
     private:
+        //static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
+        //static int isMatched(acNodeP state){return (state-> isMatched());} 
+        static acNodeP nextStateT(acNodeShort<CHAR_SET>* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
+        static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
+		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return 1;}
+    private:
         acNodeShort<CHAR_SET>* nodes;
-        acNodeShort<CHAR_SET>* pRoot;
+        acNodeP pRoot;
         list<int>** patIDList;
         int stateNum;
 };

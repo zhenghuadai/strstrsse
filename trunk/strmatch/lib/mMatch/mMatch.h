@@ -33,6 +33,7 @@ typedef int (* reportFunc)(int patID, int idx);
 class mMatch{
     public:
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); init(pat, patNum); report=reportSilent; report=reportDefault;};
+        mMatch(){};
     public:
         virtual int search(char* txt, int n){};
         virtual int search(char* txt){};
