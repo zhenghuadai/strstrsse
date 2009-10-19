@@ -50,18 +50,11 @@ int main(int argc,char *argv[])
         }
     }
 
-#if 0
-    for(i=0;i<5;i++)
+    for(i=0;i<5;i++){
         matchalg[i]=NULL;
-    matchalg[0]=acsm;
+        matchalgstr[i]=NULL;
+    }
     matchalgstr[0]="ac";
-    matchalg[1]=snortwm;
-    matchalgstr[1]="snortwm";
-    matchalg[2]=Mac;
-    matchalgstr[2]="ac";
-    matchalg[3]=Mwm;
-    matchalgstr[3]="WM";
-#endif
     Patts[0]="Natasha";
     Patts[1]="ocean";
     Patts[2]="romantic";
@@ -89,6 +82,7 @@ int main(int argc,char *argv[])
     printf("\n%d ok\n",strlen(Text));
     /* 调用串匹配函数 */
     mAcBase<4> ac(patts, ps, geneAC);
+    //mAcD<4> acD(ac);
     i = 0;
     //for(i=0;i<5;i++)
     {
@@ -103,17 +97,10 @@ int main(int argc,char *argv[])
         }
     }
     //fclose(fp);
+    printf("test finished\n");
 
     /* 输出结果 */ 
     for(i=0;i<occurnum;i++)
         printf("%d,",occurrenceint[i]);
-    /*printf("\nzqd's algorithm takes %20.15f seconds.\n", elapsed_time );
-      Mtime( &startrdt );
-
-      strmat_ac_match(Patts, ps, Text, stats_flag);
-      Mtime( &endrdt );
-      elapsed_time= Mdifftime( startrdt, endrdt );
-      printf("\n algorithm takes %20.15f seconds.\n", elapsed_time );
-      */	 
 
 }

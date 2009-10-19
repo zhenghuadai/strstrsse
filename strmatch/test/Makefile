@@ -7,9 +7,9 @@ else
 	DFLAGS:=-c 
 endif
 ifeq ($(debug), yes)
-Gflag= -g -O0 #-fPIC 
+Gflag= -g -O3 #-fPIC 
 else 
-Gflag= -O0 #-fPIC 
+Gflag= -O3 #-fPIC 
 endif
 INC_PATH= -I../lib -I../others -I../lib/mMatch
 LIB= -lstrmatch
