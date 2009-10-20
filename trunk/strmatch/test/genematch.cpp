@@ -26,27 +26,28 @@ int main(int argc,char *argv[])
     _U64 startrdt,endrdt;
     if(argc==1)
     {
-        //quryfname="patterns";
-        //subjfname="sub";
-        return 0;
-    }
-    for(i=1;i<argc;i++)
-    {
-        switch(argv[i][0]){
-            case '-':
-                switch(argv[i][1]){
-                    case 'a':
-                        quryfname=argv[i+1];
-                        i++;
-                        break;
-                    case 'D':
-                        subjfname=argv[i+1];
-                        i++;
-                        break;
-                }
-                break;
-            default:
-                break;
+        quryfname="q1_mapped.txt";
+        subjfname="chrM.fa";
+        //return 0;
+    } else{ 
+        for(i=1;i<argc;i++)
+        {
+            switch(argv[i][0]){
+                case '-':
+                    switch(argv[i][1]){
+                        case 'a':
+                            quryfname=argv[i+1];
+                            i++;
+                            break;
+                        case 'D':
+                            subjfname=argv[i+1];
+                            i++;
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -82,7 +83,7 @@ int main(int argc,char *argv[])
     printf("\n%d ok\n",strlen(Text));
     /* µ÷ÓÃ´®Æ¥Åäº¯Êý */
     mAcBase<4> ac(patts, ps, geneAC);
-    mAcD<4> acD(ac);
+    //mAcD<4> acD(ac);
     i = 0;
     //for(i=0;i<5;i++)
     {
