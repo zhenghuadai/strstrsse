@@ -278,7 +278,7 @@ int mAcBase<CHAR_SET>::search(char* txt, int n)
 
 
 	template<int CHAR_SET>
-void mAcBase<CHAR_SET>::clean()
+void mAcBase<CHAR_SET>::clean(list<acNodeP>& tnodeList)
 {
 #if 0
 	typename list<acNodeP>::iterator i;
@@ -288,10 +288,10 @@ void mAcBase<CHAR_SET>::clean()
 	nodeList.clear();
 	pRoot = 0;
 #else
-	while( ! nodeList.empty()){
-		acNodeP cur = nodeList.front();
+	while( ! tnodeList.empty()){
+		acNodeP cur = tnodeList.front();
 		delete cur;
-		nodeList.pop_front();
+		tnodeList.pop_front();
 	}
 	pRoot = 0;
 #endif
@@ -315,7 +315,7 @@ void mAcD<CHAR_SET>::transDepthFrom(mAcBase<CHAR_SET>& ac)
 		Map2[curState]=curNode;
 		curState ++;
 		Stack.pop();
-		for(int i= CHAR_SET-1; i>=0; i--){
+		for(int i= CHAR_SET; i>=0; i--){
 			if( curNode -> go[i] != curNode->failure->go[i])
 				Stack.push(curNode->go[i]);
 		}
@@ -337,13 +337,12 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 	mallocMem(stateNum);
 	typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
 	queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
-	Queue.push(ac.pRoot);
 	//map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
     map<unsigned long long, U16> Map;
 
     Map[(unsigned long long)ac.pRoot]= curState;
     Map2[curState]=ac.pRoot;
-    for(int i=0; i< CHAR_SET-1; i++){
+    for(int i=0; i< CHAR_SET; i++){
         if( ac.pRoot-> go[i] != ac.pRoot) 
             Queue.push(ac.pRoot->go[i]);
     }
@@ -356,14 +355,17 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
         Map2[curState]=curNode;
         curState ++;
         Queue.pop();
-        for(int i=0; i< CHAR_SET-1; i++){
+        for(int i=0; i< CHAR_SET; i++){
             if(( curNode -> go[i] != curNode->failure->go[i]) )
                 Queue.push(curNode->go[i]);
         }
     }
+	printf(" stateNum :%d %d\n", stateNum, curState);
     for(int s=0;s<stateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
             nodes[s].go[i] = Map[(unsigned long long) Map2[s]->go[i] ]; 
+			//U16 u16 = Map.find((unsigned long long) Map2[s]->go[i] )->second;
+			//nodes[s].go[i] = u16;
         }
     }
     delete Map2;

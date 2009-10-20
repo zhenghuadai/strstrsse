@@ -53,6 +53,7 @@ class mMatch{
         unsigned long long getTime(){return timeSearch;}
     protected:
         virtual void compile(){};
+		unsigned int charNum(){unsigned int n=0; for(int i=0;i<mPatNum;i++) n += strlen(mPatterns[i]); return n; }
     private:
         void clean();
     public:
