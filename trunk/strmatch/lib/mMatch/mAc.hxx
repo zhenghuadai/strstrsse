@@ -25,18 +25,17 @@
 
 //#include "mAc.h"
 namespace dmMatch{
-template<int CHAR_SET>
-mAcBase<CHAR_SET>::mAcBase(char** pat, int n) : mMatch(pat, n)
+template<int CHAR_SET, StoreType ST>
+mAcBase<CHAR_SET, ST>::mAcBase(char** pat, int n) : mMatch(pat, n)
 {
-    stateNum=0;
 	this->compile();
 }
 
-template<int CHAR_SET>
-mAcBase<CHAR_SET>::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
+template<int CHAR_SET, StoreType ST>
+mAcBase<CHAR_SET, ST>::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
 {
     type = t;
-    stateNum=0;
+    acNodesPool.setMaxStateNum(charNum());
     if(type==geneAC){
         printf("build Trie...\n");
         buildGeneTrie();
@@ -50,30 +49,31 @@ mAcBase<CHAR_SET>::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
     }else {
         compile();
     }
+    reLocate();
     printf("build complete\n");
-	printf("#states num: %d\n", stateNum);
+	//printf("#states num: %d\n", mStateNum);
 }
 
-    template<int CHAR_SET>
-void mAcBase<CHAR_SET>::compile()
+    template<int CHAR_SET, StoreType ST>
+void mAcBase<CHAR_SET, ST>::compile()
 {
     buildNFA();
     convertDFA();
 }
 
-    template<int CHAR_SET>
-void mAcBase<CHAR_SET>::buildNFA()
+    template<int CHAR_SET, StoreType ST>
+void mAcBase<CHAR_SET, ST>::buildNFA()
 {
     buildTrie();
     buildFailure();
 }
 
-    template<int CHAR_SET>
-void mAcBase<CHAR_SET>::buildTrie()
+    template<int CHAR_SET, StoreType ST>
+void mAcBase<CHAR_SET, ST>::buildTrie()
 {
-    pRoot= makeNode();	
+    pRoot()= makeNode();	
     for(int i=0;i<mPatNum; i++){
-        acNodeP curNode = pRoot;
+        acNodeP curNode = pRoot();
         char* p = mPatterns[i];
         while( *p && (curNode->go[*p]!=NULL)){ curNode=curNode->go[*p]; p++; }
         for(; *p; p++){
@@ -86,12 +86,12 @@ void mAcBase<CHAR_SET>::buildTrie()
 
 }
 
-    template<int CHAR_SET>
-void mAcBase<CHAR_SET>::buildGeneTrie()
+    template<int CHAR_SET, StoreType ST>
+void mAcBase<CHAR_SET, ST>::buildGeneTrie()
 {
-    pRoot= makeNode();	
+    pRoot()= makeNode();	
     for(int i=0;i<mPatNum; i++){
-        acNodeP curNode = pRoot;
+        acNodeP curNode = pRoot();
         unsigned char* p =(unsigned char*) mPatterns[i];
         int n = strlen((const char *)p);
         while( *p && (curNode->go[agct2num(*p)]!=NULL)){ curNode=curNode->go[agct2num(*p)]; p++; }
@@ -106,20 +106,20 @@ void mAcBase<CHAR_SET>::buildGeneTrie()
 }
 
 
-    template<int CHAR_SET>
-void mAcBase<CHAR_SET>::buildFailure()
+    template<int CHAR_SET, StoreType ST>
+void mAcBase<CHAR_SET, ST>::buildFailure()
 {
     queue<acNodeP> Queue;
     //! the first level
     for(int i=0;i< CHAR_SET; i++){
-        if(pRoot->go[i] == NULL){
-            pRoot-> go[i] = pRoot;
+        if(pRoot()->go[i] == NULL){
+            pRoot()-> go[i] = pRoot();
         }else{
-            pRoot->go[i]->failure= pRoot;
-            Queue.push(pRoot->go[i]);
+            pRoot()->go[i]->failure= pRoot();
+            Queue.push(pRoot()->go[i]);
         }
     }
-    pRoot->failure = pRoot;
+    pRoot()->failure = pRoot();
     while(!Queue.empty())
     {
         acNodeP parent= Queue.front();
@@ -138,14 +138,14 @@ void mAcBase<CHAR_SET>::buildFailure()
     }
 }
 
-    template<int CHAR_SET>
-void mAcBase<CHAR_SET>::convertDFA()
+    template<int CHAR_SET, StoreType ST>
+void mAcBase<CHAR_SET, ST>::convertDFA()
 {
-    if(pRoot == NULL) return;
+    if(pRoot() == NULL) return;
     queue<acNodeP> Queue;
     for(int i=0;i< CHAR_SET; i++){
-        if(pRoot->go[i] != pRoot){
-            Queue.push(pRoot->go[i]);
+        if(pRoot()->go[i] != pRoot()){
+            Queue.push(pRoot()->go[i]);
         }
     }
     while(!Queue.empty()){
@@ -177,34 +177,35 @@ int ACsearchGene(acNodeT* acBase, listID_t** listBase, NodeT pRoot, reportFunc r
 	return 0;
 }
 
-    template<int CHAR_SET>
-int mAcBase<CHAR_SET>::searchGene(char* txt)
+    template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene(char* txt)
 {
 #if 0
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot;
+	acNodeP state=pRoot();
 	for(;*p; p++){
 		Uchar c = agct2num(*p);
-		if(c >=4){state= pRoot; continue;}
+		if(c >=4){state= pRoot(); continue;}
 		state = nextState(state, c); // state= state->go[*p]; 
 		if(state-> isMatched()) {
+        //printf("%0x - %0x = %d\n",p,txt, (char*)p -txt);
 			int ret = state->report(report, (char*)p - txt);
 		}
 	}
 	return 0;
 #else
-return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, mAcBase<CHAR_SET>::nextStateT, mAcBase<CHAR_SET>::isMatchedT, mAcBase<CHAR_SET>::reportMatchT>(NULL, NULL, pRoot, report, txt);
+return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, mAcBase<CHAR_SET>::nextStateT, mAcBase<CHAR_SET>::isMatchedT, mAcBase<CHAR_SET>::reportMatchT>(NULL, NULL, pRoot(), report, txt);
 #endif
 }
 
-	template<int CHAR_SET>
-int mAcBase<CHAR_SET>::searchGene(char* txt, int n)
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene(char* txt, int n)
 {
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot;
+	acNodeP state=pRoot();
 	for(int i=0; i<n; p++,i++){
 		Uchar c = agct2num(*p);
-		if(c >=4){state= pRoot; continue;}
+		if(c >=4){state= pRoot(); continue;}
 		state = nextState(state, c);// state= state->go[*p]; 
 		if(state-> isMatched()) {
 			int ret = state->report(report, (char*)p - txt);
@@ -214,14 +215,14 @@ int mAcBase<CHAR_SET>::searchGene(char* txt, int n)
 }
 
 
-	template<int CHAR_SET>
-int mAcBase<CHAR_SET>::searchGene4(char* txt)
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene4(char* txt)
 {
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot;
+	acNodeP state=pRoot();
 	for(;*p; p++){
 		Uchar c = (*p);
-		if(c >=4){state= pRoot; continue;}
+		if(c >=4){state= pRoot(); continue;}
 		state = nextState(state, c); // state= state->go[*p]; 
 		if(state-> isMatched()) {
 			int ret = state->report(report, (char*)p - txt);
@@ -230,14 +231,14 @@ int mAcBase<CHAR_SET>::searchGene4(char* txt)
 	return 0;
 }
 
-	template<int CHAR_SET>
-int mAcBase<CHAR_SET>::searchGene4(char* txt, int n)
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene4(char* txt, int n)
 {
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot;
+	acNodeP state=pRoot();
 	for(int i=0; i<n; p++,i++){
 		Uchar c = (*p);
-		if(c >=4){state= pRoot; continue;}
+		if(c >=4){state= pRoot(); continue;}
 		state = nextState(state, c);// state= state->go[*p]; 
 		if(state-> isMatched()) {
 			int ret = state->report(report, (char*)p - txt);
@@ -247,12 +248,12 @@ int mAcBase<CHAR_SET>::searchGene4(char* txt, int n)
 }
 
 
-	template<int CHAR_SET>
-int mAcBase<CHAR_SET>::search(char* txt)
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::search(char* txt)
 {
 	printf("search...\n");
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot;
+	acNodeP state=pRoot();
 	for(;*p; p++){
 		state = nextState(state, *p); // state= state->go[*p]; 
 		if(state-> isMatched()) {
@@ -262,11 +263,11 @@ int mAcBase<CHAR_SET>::search(char* txt)
 	return 0;
 }
 
-	template<int CHAR_SET>
-int mAcBase<CHAR_SET>::search(char* txt, int n)
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::search(char* txt, int n)
 {
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot;
+	acNodeP state=pRoot();
 	for(int i=0; i<n; p++,i++){
 		state = nextState(state, *p);// state= state->go[*p]; 
 		if(state-> isMatched()) {
@@ -276,75 +277,52 @@ int mAcBase<CHAR_SET>::search(char* txt, int n)
 	return 0;
 }
 
-
-	template<int CHAR_SET>
-void mAcBase<CHAR_SET>::clean(list<acNodeP>& tnodeList)
-{
-#if 0
-	typename list<acNodeP>::iterator i;
-	for(i = nodeList.begin(); i!= nodeList.end(); i++){
-		delete *i;
-	}
-	nodeList.clear();
-	pRoot = 0;
-#else
-	while( ! tnodeList.empty()){
-		acNodeP cur = tnodeList.front();
-		delete cur;
-		tnodeList.pop_front();
-	}
-	pRoot = 0;
-#endif
-}
-
-
-
-	template<int CHAR_SET>
+    template<int CHAR_SET>
 void mAcD<CHAR_SET>::transDepthFrom(mAcBase<CHAR_SET>& ac)
 {
-	int curState=0;
-	stateNum = ac.stateNum;
-	mallocMem(stateNum);
-	typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
-	stack<typename mAcBase<CHAR_SET>::acNodeP> Stack;
-	Stack.push(ac.pRoot);
-	map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
-	while(!Stack.empty()){
-		typename mAcBase<CHAR_SET>::acNodeP curNode= Stack.top();
-		Map[curNode]= curState;
-		Map2[curState]=curNode;
-		curState ++;
-		Stack.pop();
-		for(int i= CHAR_SET; i>=0; i--){
-			if( curNode -> go[i] != curNode->failure->go[i])
-				Stack.push(curNode->go[i]);
-		}
-	}
-	for(int s=0;s<stateNum;s++){
-		for(int i=0;i< CHAR_SET; i++) {
-			nodes[s].go[i] = Map[ Map2[s]->go[i] ]; 
-		}
-	}
-	delete Map2;
+    int curState=0;
+    mStateNum = ac.mStateNum();
+    mallocMem(mStateNum);
+    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
+    stack<typename mAcBase<CHAR_SET>::acNodeP> Stack;
+    Stack.push(ac.pRoot());
+    map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+    while(!Stack.empty()){
+        typename mAcBase<CHAR_SET>::acNodeP curNode= Stack.top();
+        Map[curNode]= curState;
+        Map2[curState]=curNode;
+        curState ++;
+        Stack.pop();
+        for(int i= CHAR_SET; i>=0; i--){
+            if( curNode -> go[i] != curNode->failure->go[i])
+                Stack.push(curNode->go[i]);
+        }
+    }
+    for(int s=0;s<mStateNum;s++){
+        for(int i=0;i< CHAR_SET; i++) {
+            nodes[s].go[i] = Map[ Map2[s]->go[i] ]; 
+        }
+    }
+    delete Map2;
     pRoot = 0;
 }
 
-	template<int CHAR_SET>
+    template<int CHAR_SET>
 void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
-	int curState=0;
-	stateNum = ac.stateNum;
-	mallocMem(stateNum);
-	typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
-	queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
-	//map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+    int curState=0;
+    mStateNum = ac.mStateNum();
+    mallocMem(mStateNum);
+    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
+    queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
+    //map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
     map<unsigned long long, U16> Map;
 
-    Map[(unsigned long long)ac.pRoot]= curState;
-    Map2[curState]=ac.pRoot;
+    Map[(unsigned long long)ac.pRoot()]= curState;
+    Map2[curState]=ac.pRoot();
     for(int i=0; i< CHAR_SET; i++){
-        if( ac.pRoot-> go[i] != ac.pRoot) 
-            Queue.push(ac.pRoot->go[i]);
+        if( ac.pRoot()-> go[i] != ac.pRoot()) 
+            Queue.push(ac.pRoot()->go[i]);
     }
     curState++;
 
@@ -360,12 +338,12 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
                 Queue.push(curNode->go[i]);
         }
     }
-	printf(" stateNum :%d %d\n", stateNum, curState);
-    for(int s=0;s<stateNum;s++){
+    printf(" mStateNum :%d %d\n", mStateNum, curState);
+    for(int s=0;s<mStateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
             nodes[s].go[i] = Map[(unsigned long long) Map2[s]->go[i] ]; 
-			//U16 u16 = Map.find((unsigned long long) Map2[s]->go[i] )->second;
-			//nodes[s].go[i] = u16;
+            //U16 u16 = Map.find((unsigned long long) Map2[s]->go[i] )->second;
+            //nodes[s].go[i] = u16;
         }
     }
     delete Map2;

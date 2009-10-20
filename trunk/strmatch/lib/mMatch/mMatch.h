@@ -25,6 +25,7 @@ namespace dmMatch{
 typedef unsigned char Uchar;
 typedef unsigned short U16;
 typedef short I16;
+typedef int SSize;
 typedef enum{
     mAC, geneAC, mWM
 } mAlgtype;
