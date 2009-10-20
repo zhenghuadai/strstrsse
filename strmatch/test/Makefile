@@ -7,7 +7,7 @@ else
 	DFLAGS:=-c 
 endif
 ifeq ($(debug), yes)
-Gflag= -g -O3 #-fPIC 
+Gflag= -g -O0 #-fPIC 
 else 
 Gflag= -O3 #-fPIC 
 endif

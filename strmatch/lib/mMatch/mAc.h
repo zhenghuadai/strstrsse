@@ -92,9 +92,9 @@ class mAcBase:public mMatch
         int stateNum;
     public:
         mAcBase();
-        ~mAcBase(){this->clean(); }
         mAcBase(char** pat, int n);
         mAcBase(char** pat, int n, mAlgtype t);
+        ~mAcBase(){this->clean(nodeList); }
         virtual int search(char* txt, int n);
         virtual int search(char* txt);
         virtual int searchGene(char* txt, int n);
@@ -110,7 +110,7 @@ class mAcBase:public mMatch
         static acNodeP nextStateT(acNode<CHAR_SET>* base, acNodeP cur, Uchar c){ return cur->go[c];}
         static int isMatchedT(list<int>** base, acNodeP state){return (state-> isMatched());} 
 		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
-        void clean();
+        void clean(list<acNodeP>& nodeList);
         void buildNFA();
         void buildGeneTrie();
         void buildTrie();
@@ -121,12 +121,12 @@ class mAcBase:public mMatch
 template<int CHAR_SET=256>
 class acNodeShort
 {
-    public:
-        //I16 patID;
-        U16 go[CHAR_SET];
-    public:
-        acNodeShort(){memset(this, 0, sizeof(acNodeShort)); }
-        //int isMatched(){ return patID != -1;}
+	public:
+		//I16 patID;
+		U16 go[CHAR_SET];
+	public:
+		acNodeShort(){memset(this, 0, sizeof(acNodeShort)); }
+		//int isMatched(){ return patID != -1;}
 };
 
 typedef enum {ACDep_First, ACWid_First} AC_Store_t;
@@ -134,36 +134,36 @@ typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 template<int CHAR_SET=256>
 class mAcD:public mMatch
 {
-    public:
-        typedef U16 acNodeP;
-        mAcD(mAcBase<CHAR_SET>& ac,AC_Store_t st= ACWid_First){if(st== ACWid_First) transWidthFrom(ac);else transDepthFrom(ac);}
 	public:
-        virtual int search(char* txt, int n);
-        virtual int search(char* txt);
-        virtual int searchGene(char* txt, int n);
-        virtual int searchGene(char* txt);
-        virtual int searchGene4(char* txt, int n);
-        virtual int searchGene4(char* txt);
-    private:
-        void transDepthFrom(mAcBase<CHAR_SET>& ac);
-        void transWidthFrom(mAcBase<CHAR_SET>& ac);
-        void mallocMem(int n){ 
-            nodes= (acNodeShort<CHAR_SET>*)malloc(n * sizeof(acNodeShort<CHAR_SET>*));
-            patIDList = (list<int>**)malloc( n* sizeof(list<int>*));
-        }
+		typedef U16 acNodeP;
+		mAcD(mAcBase<CHAR_SET>& ac,AC_Store_t st= ACWid_First){if(st== ACWid_First) transWidthFrom(ac);else transDepthFrom(ac);}
+	public:
+		virtual int search(char* txt, int n);
+		virtual int search(char* txt);
+		virtual int searchGene(char* txt, int n);
+		virtual int searchGene(char* txt);
+		virtual int searchGene4(char* txt, int n);
+		virtual int searchGene4(char* txt);
+	private:
+		void transDepthFrom(mAcBase<CHAR_SET>& ac);
+		void transWidthFrom(mAcBase<CHAR_SET>& ac);
+		void mallocMem(int n){ 
+			nodes= (acNodeShort<CHAR_SET>*)malloc(n * sizeof(acNodeShort<CHAR_SET>));
+			patIDList = (list<int>**)malloc( n* sizeof(list<int>*));
+		}
 
-        void freeMem(){}
-    private:
-        //static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
-        //static int isMatched(acNodeP state){return (state-> isMatched());} 
-        static acNodeP nextStateT(acNodeShort<CHAR_SET>* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
-        static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
+		void freeMem(){}
+	private:
+		//static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
+		//static int isMatched(acNodeP state){return (state-> isMatched());} 
+		static acNodeP nextStateT(acNodeShort<CHAR_SET>* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
+		static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
 		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return 1;}
-    private:
-        acNodeShort<CHAR_SET>* nodes;
-        acNodeP pRoot;
-        list<int>** patIDList;
-        int stateNum;
+	private:
+		acNodeShort<CHAR_SET>* nodes;
+		acNodeP pRoot;
+		list<int>** patIDList;
+		int stateNum;
 };
 
 //! Broad-Storage
