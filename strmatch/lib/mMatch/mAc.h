@@ -159,8 +159,8 @@ class AcNodeStore<CHAR_SET, StoreArray>
 
 };
 
-//template<int CHAR_SET=256, StoreType ST=StoreArray>
-template<int CHAR_SET=256, StoreType ST=StoreList>
+//template<int CHAR_SET=256, StoreType ST=StoreList>
+template<int CHAR_SET=256, StoreType ST=StoreArray>
 class mAcBase:public mMatch
 {
     public:
