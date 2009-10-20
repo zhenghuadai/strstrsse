@@ -338,43 +338,54 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 	typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [stateNum];
 	queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
 	Queue.push(ac.pRoot);
-	map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
-	while(!Queue.empty()){
-		typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.front();
-		Map[curNode]= curState;
-		Map2[curState]=curNode;
-		curState ++;
-		Queue.pop();
-		for(int i=0; i< CHAR_SET-1; i++){
-			if( curNode -> go[i] != curNode->failure->go[i])
-				Queue.push(curNode->go[i]);
-		}
-	}
-	for(int s=0;s<stateNum;s++){
-		for(int i=0;i< CHAR_SET; i++) {
-			nodes[s].go[i] = Map[ Map2[s]->go[i] ]; 
-		}
-	}
-	delete Map2;
+	//map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+    map<unsigned long long, U16> Map;
+
+    Map[(unsigned long long)ac.pRoot]= curState;
+    Map2[curState]=ac.pRoot;
+    for(int i=0; i< CHAR_SET-1; i++){
+        if( ac.pRoot-> go[i] != ac.pRoot) 
+            Queue.push(ac.pRoot->go[i]);
+    }
+    curState++;
+
+    while(!Queue.empty()){
+        typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.front();
+        Map[(unsigned long long)curNode]= curState;
+        //Map.insert(map<typename mAcBase<CHAR_SET>::acNodeP, U16>::value_type(curNode, curState));
+        Map2[curState]=curNode;
+        curState ++;
+        Queue.pop();
+        for(int i=0; i< CHAR_SET-1; i++){
+            if(( curNode -> go[i] != curNode->failure->go[i]) )
+                Queue.push(curNode->go[i]);
+        }
+    }
+    for(int s=0;s<stateNum;s++){
+        for(int i=0;i< CHAR_SET; i++) {
+            nodes[s].go[i] = Map[(unsigned long long) Map2[s]->go[i] ]; 
+        }
+    }
+    delete Map2;
     pRoot = 0;
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 int mAcD<CHAR_SET>::search(char* txt, int n)
 {
 
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 int mAcD<CHAR_SET>::search(char* txt)
 {
 
 }
 
-template<int CHAR_SET>
+    template<int CHAR_SET>
 int mAcD<CHAR_SET>::searchGene(char* txt, int n)
 {
-return 	ACsearchGene<acNodeP, acNodeShort<CHAR_SET>, mAcD<CHAR_SET>::nextStateT, mAcD<CHAR_SET>::isMatchedT, mAcD<CHAR_SET>::reportMatchT>(nodes, patIDList,pRoot, report, txt);
+    return 	ACsearchGene<acNodeP, acNodeShort<CHAR_SET>, mAcD<CHAR_SET>::nextStateT, mAcD<CHAR_SET>::isMatchedT, mAcD<CHAR_SET>::reportMatchT>(nodes, patIDList,pRoot, report, txt);
 }
 
     template<int CHAR_SET>
