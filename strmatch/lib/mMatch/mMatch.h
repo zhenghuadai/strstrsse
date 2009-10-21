@@ -66,8 +66,10 @@ class mMatch{
     protected:
         virtual void compile(){};
 		unsigned int charNum(){unsigned int n=0; for(int i=0;i<mPatNum;i++) n += strlen(mPatterns[i]); return n; }
+		int reportList(int patID, int idx){ return report(patID, idx);}
 		int reportList(list<int>* patIDList, int idx){
 			int ret;
+			if(patIDList ==NULL) return 0;
 			for(list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++) ret = report(*i, idx);
 			return ret;
 		}

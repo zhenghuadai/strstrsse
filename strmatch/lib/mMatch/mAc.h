@@ -54,6 +54,10 @@ class acNode
 			for(typename list<int>::iterator i= node->patIDList->begin(); i!= node->patIDList->end(); i++) 
 				patIDList->push_back(*i); 
 		}
+		void copyPatListTo(list<int>* dst){
+			if(patIDList ==NULL) return;
+			for(typename list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++)  dst->push_back(*i);
+		}
 #else 
 		~acNode(){}
 		int isMatched(){ return patID!=0; }
@@ -168,7 +172,7 @@ class mAcBase:public mMatch
 		typedef acNode<CHAR_SET>  acNodeT;
 		enum{char_set = CHAR_SET};
 
-		template<int m>
+		template<int m, typename T>
 			friend class mAcD;
 	private:
 		AcNodeStore<CHAR_SET, ST> acNodesPool;
@@ -207,12 +211,12 @@ class mAcBase:public mMatch
 
 };
 
-template<int CHAR_SET=256>
+template<int CHAR_SET=256, typename idxT=U16>
 class acNodeShort
 {
 	public:
 		//I16 patID;
-		U16 go[CHAR_SET];
+		idxT go[CHAR_SET];
 	public:
 		acNodeShort(){memset(this, 0, sizeof(acNodeShort)); }
 		//int isMatched(){ return patID != -1;}
@@ -220,11 +224,12 @@ class acNodeShort
 
 typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 //! Depth-Storage 
-template<int CHAR_SET=256>
+template<int CHAR_SET=256, typename idxT=U16>
 class mAcD:public mMatch
 {
 	public:
-		typedef U16 acNodeP;
+		typedef idxT acNodeP;
+		typedef acNodeShort<CHAR_SET,idxT> acNodeT;
 		mAcD(mAcBase<CHAR_SET>& ac,AC_Store_t st= ACWid_First){if(st== ACWid_First) transWidthFrom(ac);else transDepthFrom(ac);}
 	public:
 		virtual int search(char* txt, int n);
@@ -237,8 +242,9 @@ class mAcD:public mMatch
 		void transDepthFrom(mAcBase<CHAR_SET>& ac);
 		void transWidthFrom(mAcBase<CHAR_SET>& ac);
 		void mallocMem(int n){ 
-			nodes= (acNodeShort<CHAR_SET>*)malloc(n * sizeof(acNodeShort<CHAR_SET>));
+			nodes= (acNodeT*)malloc(n * sizeof(acNodeT));
 			patIDList = (list<int>**)malloc( n* sizeof(list<int>*));
+			memset(patIDList, 0 , n* sizeof(list<int>*));
 		}
 
 		void freeMem(){}
@@ -246,12 +252,12 @@ class mAcD:public mMatch
 		acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].go[c];}
 		int isMatched(acNodeP state){return (patIDList[state]!=NULL);} 
 		list<int>* matchedList(acNodeP s){ return patIDList[s];}
-		static acNodeP nextStateT(acNodeShort<CHAR_SET>* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
+		static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
 		static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
 		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return 1;}
 		acNodeP& pRoot(){return m_pRoot;}
 	private:
-		acNodeShort<CHAR_SET>* nodes;
+		acNodeT* nodes;
 		acNodeP m_pRoot;
 		list<int>** patIDList;
 		int mStateNum;
