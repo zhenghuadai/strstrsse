@@ -45,7 +45,7 @@ typedef int (* reportFunc)(int patID, int idx);
 class mMatch{
     public:
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); init(pat, patNum); report=reportSilent; report=reportDefault;};
-        mMatch(){};
+        mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
     public:
         virtual int search(char* txt, int n){};
         virtual int search(char* txt){};
@@ -73,27 +73,28 @@ class mMatch{
 			for(list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++) ret = report(*i, idx);
 			return ret;
 		}
-
-		int reportList(int* patIDList, int idx){
-			int ret;
-			if(patIDList ==NULL) return 0;
-			for(int i=0; i<patIDList[0]; i++) ret = report(patIDList[i+1], idx);
-			return ret;
-		}
-
-
-	private:
-		void clean();
-	public:
-		static int reportDefault(int patid, int idx){ printf("(%d,%d) ", idx, patid);}
-		static int reportSilent(int patid, int idx){}
-	protected:
-		int type;
-		char** mPatterns;
-		int* mPatLen;
-		int mPatNum;
-		reportFunc report;
-		list<Pattern_t>* pPatList;
-		unsigned long long timeSearch;
+        static int reportList(int* patIDList,reportFunc report, int idx){
+            int ret;
+            if(patIDList ==NULL) return 0;
+            for(int i=1; i<=patIDList[0]; i++) 
+                ret = report(patIDList[i], idx);
+            return ret;
+        }
+        int reportList(int* patIDList, int idx){
+            reportList(patIDList, report, idx);
+        }
+    private:
+        void clean();
+    public:
+        static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
+        static int reportSilent(int patid, int idx){}
+    protected:
+        int type;
+        char** mPatterns;
+        int* mPatLen;
+        int mPatNum;
+        reportFunc report;
+        list<Pattern_t>* pPatList;
+        unsigned long long timeSearch;
 };
 }

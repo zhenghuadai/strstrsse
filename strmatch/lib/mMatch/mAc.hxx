@@ -162,16 +162,16 @@ void mAcBase<CHAR_SET, ST>::convertDFA()
 }
 
 
-template<typename NodeT , typename acNodeT, NodeT (*nextState)( acNodeT*, NodeT, Uchar), int (*isMatched)(listID_t**, NodeT), int (*reportMatch)(listID_t**, NodeT , reportFunc , int ) >
-int ACsearchGene(acNodeT* acBase, listID_t** listBase, NodeT pRoot, reportFunc report, char* txt)
+template<typename NodeT , typename acNodeT, typename matchListT, NodeT (*nextState)( acNodeT*, NodeT, Uchar), int (*isMatched)(matchListT**, NodeT), int (*reportMatch)(matchListT**, NodeT , reportFunc , int ) >
+int ACsearchGene(acNodeT* acBase, matchListT** matchListBase, NodeT pRoot, reportFunc report, char* txt)
 {
     NodeT state=pRoot;
     for(unsigned char* p = (Uchar*) txt;*p; p++){
 		Uchar c = agct2num(*p);
 		if(c >=4){state= pRoot; continue;}
 		state = nextState(acBase, state, c); // state= state->go[*p]; 
-		if(isMatched((listID_t**)listBase, state)) {
-			int ret = reportMatch( (listID_t**)listBase, state, report, (char*)p -txt);
+		if(isMatched((matchListT**)matchListBase, state)) {
+			int ret = reportMatch( (matchListT**)matchListBase, state, report, (char*)p -txt);
 		}
 	}
 	return 0;
@@ -180,7 +180,7 @@ int ACsearchGene(acNodeT* acBase, listID_t** listBase, NodeT pRoot, reportFunc r
     template<int CHAR_SET, StoreType ST>
 int mAcBase<CHAR_SET, ST>::searchGene(char* txt)
 {
-#if 1
+#if 0
 	unsigned char* p = (Uchar*) txt;	
 	acNodeP state=pRoot();
 	for(;*p; p++){
@@ -189,12 +189,11 @@ int mAcBase<CHAR_SET, ST>::searchGene(char* txt)
 		state = nextState(state, c); // state= state->go[*p]; 
 		if(isMatched(state)) {
 			int ret = reportList(matchedList(state), (char*)p - txt);
-			//int ret = state->report(report, (char*)p -txt);
 		}
 	}
 	return 0;
 #else
-return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, mAcBase<CHAR_SET>::nextStateT, mAcBase<CHAR_SET>::isMatchedT, mAcBase<CHAR_SET>::reportMatchT>(NULL, NULL, pRoot(), report, txt);
+return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, int, mAcBase<CHAR_SET,ST>::nextStateT, mAcBase<CHAR_SET,ST>::isMatchedT, mAcBase<CHAR_SET,ST>::reportMatchT>(NULL, NULL, pRoot(), report, txt);
 #endif
 }
 
@@ -284,7 +283,7 @@ template<typename T>
 T top( stack<T>& q){return q.top();} 
 
 	template<int CHAR_SET, typename idxT,  class travalT>
-void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, int** patIDList, int* matchList)
+void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, int** patIDList, int* patMatchList)
 {
 	int curState=0;
 	int mStateNum = ac.mStateNum();
@@ -319,14 +318,14 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
 		}
 	}
 	printf(" mStateNum :%d %d\n", mStateNum, curState);
-	memcpy(matchList, ac.patMatchList(), ac.patMatchListLen()*sizeof(int));
+	memcpy(patMatchList, ac.patMatchList(), ac.patMatchListLen()*sizeof(int));
 	for(int s=0;s<mStateNum;s++){
 		for(int i=0;i< CHAR_SET; i++) {
 			nodes[s].go[i] = MapIndex(Map2[s]->go[i] ); 
 		}
 		if(Map2[s]-> isMatched()){
-			patIDList[s] = matchList + (Map2[s]->patIDArray - ac.patMatchList());
-		}
+			patIDList[s] = patMatchList + (Map2[s]->patIDArray - ac.patMatchList());
+        }
 	}
 
 	delete Map2;
@@ -337,8 +336,8 @@ void mAcD<CHAR_SET,idxT>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
 	mStateNum = ac.mStateNum();
 	mallocMem(mStateNum);
-	matchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
-	transNode2Short<CHAR_SET, idxT, queue<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, matchList);
+	patMatchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
+	transNode2Short<CHAR_SET, idxT, queue<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
 	pRoot() = 0;
 }
 
@@ -347,8 +346,8 @@ void mAcD<CHAR_SET,idxT>::transDepthFrom(mAcBase<CHAR_SET>& ac)
 {
 	mStateNum = ac.mStateNum();
 	mallocMem(mStateNum);
-	matchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
-	transNode2Short<CHAR_SET,idxT, stack<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, matchList);
+	patMatchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
+	transNode2Short<CHAR_SET,idxT, stack<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
 	pRoot() = 0;
 }
 
@@ -373,7 +372,7 @@ int mAcD<CHAR_SET,idxT>::searchGene(char* txt, int n)
 	template<int CHAR_SET, typename idxT>
 int mAcD<CHAR_SET,idxT>::searchGene(char* txt)
 {
-#if 1
+#if 0
 	unsigned char* p = (Uchar*) txt;	
 	acNodeP state=pRoot();
 	for(;*p; p++){
@@ -386,7 +385,7 @@ int mAcD<CHAR_SET,idxT>::searchGene(char* txt)
 	}
 	return 0;
 #else
-	return 	ACsearchGene<acNodeP, acNodeShort<CHAR_SET>, mAcD<CHAR_SET>::nextStateT, mAcD<CHAR_SET>::isMatchedT, mAcD<CHAR_SET>::reportMatchT>(nodes, patIDList,pRoot(), report, txt);
+	return 	ACsearchGene<acNodeP, acNodeShort<CHAR_SET,idxT>, int, mAcD<CHAR_SET,idxT>::nextStateT, mAcD<CHAR_SET,idxT>::isMatchedT, mAcD<CHAR_SET,idxT>::reportMatchT>(nodes, patIDList,pRoot(), report, txt);
 #endif
 
 }

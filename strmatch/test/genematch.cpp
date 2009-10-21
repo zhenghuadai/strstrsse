@@ -91,7 +91,7 @@ int main(int argc,char *argv[])
 
         {
             Mtime( &startrdt );
-            ac.searchGene(Text);
+            acD.searchGene(Text);
             Mtime( &endrdt );
             elapsed_time= Mdifftime( startrdt, endrdt );
             printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
