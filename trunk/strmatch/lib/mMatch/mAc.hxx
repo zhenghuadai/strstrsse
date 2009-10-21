@@ -189,6 +189,7 @@ int mAcBase<CHAR_SET, ST>::searchGene(char* txt)
 		state = nextState(state, c); // state= state->go[*p]; 
 		if(isMatched(state)) {
 			int ret = reportList(matchedList(state), (char*)p - txt);
+			//int ret = state->report(report, (char*)p -txt);
 		}
 	}
 	return 0;
@@ -283,7 +284,7 @@ template<typename T>
 T top( stack<T>& q){return q.top();} 
 
 	template<int CHAR_SET, typename idxT,  class travalT>
-void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, list<int>** patIDList)
+void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, int** patIDList, int* matchList)
 {
 	int curState=0;
 	int mStateNum = ac.mStateNum();
@@ -318,12 +319,13 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, l
 		}
 	}
 	printf(" mStateNum :%d %d\n", mStateNum, curState);
+	memcpy(matchList, ac.patMatchList(), ac.patMatchListLen()*sizeof(int));
 	for(int s=0;s<mStateNum;s++){
 		for(int i=0;i< CHAR_SET; i++) {
 			nodes[s].go[i] = MapIndex(Map2[s]->go[i] ); 
 		}
 		if(Map2[s]-> isMatched()){
-			patIDList[s] = new list<int>(*(Map2[s]->patIDList));
+			patIDList[s] = matchList + (Map2[s]->patIDArray - ac.patMatchList());
 		}
 	}
 
@@ -335,7 +337,8 @@ void mAcD<CHAR_SET,idxT>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
 	mStateNum = ac.mStateNum();
 	mallocMem(mStateNum);
-	transNode2Short<CHAR_SET, idxT, queue<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList);
+	matchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
+	transNode2Short<CHAR_SET, idxT, queue<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, matchList);
 	pRoot() = 0;
 }
 
@@ -344,7 +347,8 @@ void mAcD<CHAR_SET,idxT>::transDepthFrom(mAcBase<CHAR_SET>& ac)
 {
 	mStateNum = ac.mStateNum();
 	mallocMem(mStateNum);
-	transNode2Short<CHAR_SET,idxT, stack<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList);
+	matchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
+	transNode2Short<CHAR_SET,idxT, stack<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, matchList);
 	pRoot() = 0;
 }
 
