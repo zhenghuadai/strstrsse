@@ -43,7 +43,7 @@ inline
 static
 #endif
 unsigned char num2agct(unsigned char n){
-    static unsigned char code[4]={'A','G','C','T'};
+    static unsigned char code[4]={'A','C','T','G'};
     if(n>4) return 'N';
     return code[n];
 }
@@ -54,16 +54,26 @@ inline
 static
 #endif
 unsigned char agct2num(unsigned char bp){
+#if 1
+    return ((bp>>1) & 7);
+#else
     switch(bp){
         case 'a': case'A': return 0 ;
-        case 'g': case'G': return 1 ;
-        case 'c': case'C': return 2 ;
-        case 't': case'T': return 3 ;
+        case 'c': case'C': return 1 ;
+        case 't': case'T': return 2 ;
+        case 'g': case'G': return 3 ;
         default: return 4;
     }
+#endif
 }
 // a 97  0110 0001       00
-// g 103 0110 0111       01
-// c 99  0110 0011       10
-// t 116 0111 0100       11
+// c 99  0110 0011       01
+// t 116 0111 0100       10
+// g 103 0110 0111       11
+// a 65  0100 0001       00
+// c 67  0100 0011       01
+// t 84  0101 0100       10
+// g 71  0100 0111       11
+//
+// N 78  0100 1110
 #endif   /* ----- #ifndef UTIL_HEADER__INC  ----- */
