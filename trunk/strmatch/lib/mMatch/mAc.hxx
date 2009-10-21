@@ -315,10 +315,14 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
     mallocMem(mStateNum);
     typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
     queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
-    //map<typename mAcBase<CHAR_SET>::acNodeP, U16> Map;
+#if 0
     map<unsigned long long, U16> Map;
-
-    Map[(unsigned long long)ac.pRoot()]= curState;
+    #define MapIndex(a) Map[(unsigned long long)a]
+#else
+    U16* Map = new U16[mStateNum];
+    #define MapIndex(a) Map[a - ac.pRoot()]
+#endif
+    MapIndex(ac.pRoot())= curState;
     Map2[curState]=ac.pRoot();
     for(int i=0; i< CHAR_SET; i++){
         if( ac.pRoot()-> go[i] != ac.pRoot()) 
@@ -328,7 +332,7 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 
     while(!Queue.empty()){
         typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.front();
-        Map[(unsigned long long)curNode]= curState;
+        MapIndex(curNode)= curState;
         //Map.insert(map<typename mAcBase<CHAR_SET>::acNodeP, U16>::value_type(curNode, curState));
         Map2[curState]=curNode;
         curState ++;
@@ -341,7 +345,7 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
     printf(" mStateNum :%d %d\n", mStateNum, curState);
     for(int s=0;s<mStateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
-            nodes[s].go[i] = Map[(unsigned long long) Map2[s]->go[i] ]; 
+            nodes[s].go[i] = MapIndex(Map2[s]->go[i] ); 
             //U16 u16 = Map.find((unsigned long long) Map2[s]->go[i] )->second;
             //nodes[s].go[i] = u16;
         }

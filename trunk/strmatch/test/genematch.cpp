@@ -83,7 +83,7 @@ int main(int argc,char *argv[])
     printf("\n%d ok\n",strlen(Text));
     /* µ÷ÓÃ´®Æ¥Åäº¯Êý */
     mAcBase<4> ac(patts, ps, geneAC);
-    //mAcD<4> acD(ac);
+    mAcD<4> acD(ac);
     i = 0;
     //for(i=0;i<5;i++)
     {
