@@ -172,8 +172,6 @@ class mAcBase:public mMatch
 			friend class mAcD;
 	private:
 		AcNodeStore<CHAR_SET, ST> acNodesPool;
-		acNodeP& pRoot(){ return acNodesPool.pRoot;}
-		int mStateNum(){return acNodesPool.mStateNum;}
 	public:
 		mAcBase();
 		mAcBase(char** pat, int n);
@@ -185,6 +183,9 @@ class mAcBase:public mMatch
 		virtual int searchGene(char* txt);
 		virtual int searchGene4(char* txt, int n);
 		virtual int searchGene4(char* txt);
+	public:
+		acNodeP& pRoot(){ return acNodesPool.pRoot;}
+		int mStateNum(){return acNodesPool.mStateNum;}
 	protected:
 		virtual void compile();
 	private:	
