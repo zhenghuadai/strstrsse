@@ -57,9 +57,9 @@ class acNode
 		}
 		//! when search
 		int report(reportFunc reportf, int idx){
+			//for(typename list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++) ret = reportf(*i, idx);
 			int ret;
-			for(typename list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++) ret = reportf(*i, idx);
-			//for(int i=0;i<patMatchNum;i++) ret = reportf(patIDArray[i], idx);
+			for(int i=0;i<patMatchNum();i++) ret = reportf(patIDArray[i+1], idx);
 			return ret;
 		}
 
@@ -67,14 +67,16 @@ class acNode
 			if(patIDList ==NULL) return;
 			for(typename list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++)  dst->push_back(*i);
 		}
-		void transPatList2Array(int* pstart){
-			if(patMatchNum==0) return ;
-			int k=0;
+		int transPatList2Array(int* pstart){
+			if(patMatchNum()==0) return 0;
+			int k=1;
+			pstart[0] = patMatchNum();
 			for(typename list<int>::iterator i=patIDList->begin(); i!= patIDList->end(); i++,k++) 
 				pstart[k++] = *i;
 			delete patIDList;
 			patIDList = 0;
 			patIDArray = pstart;
+			return k;
 		}
 		int patMatchNum(){return mMatchNum;}
 #else 
@@ -116,8 +118,9 @@ class AcNodeStore<CHAR_SET, StoreList>
 		int mStateNum;
 		int mMaxStateNum;
 		int *patMatchList;
+		int patMatchListLen;
 	public:
-		AcNodeStore():pRoot(0), mStateNum(0), mMaxStateNum(0){};
+		AcNodeStore():pRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
 		~AcNodeStore(){ this -> clean(nodeList);}
 		void setMaxStateNum(int n){mMaxStateNum = n;}
 	public:
@@ -146,6 +149,7 @@ class AcNodeStore<CHAR_SET, StoreList>
 			for(typename list<acNodeP>::iterator i = nodeList.begin(); i!= nodeList.end(); i++){
 				pcur += *i-> transPatList2Array(pcur);
 			}
+			patMatchListLen = pcur - patMatchList;
 		}
 		void reLocate(){}
 		acNodeP makeNode() {mStateNum++; acNodeP newNode= new acNode<CHAR_SET>(); nodeList.push_back(newNode); return newNode;};
@@ -164,8 +168,9 @@ class AcNodeStore<CHAR_SET, StoreArray>
 		int mStateNum;
 		int mMaxStateNum;
 		int *patMatchList;
+		int patMatchListLen;
 	public:
-		AcNodeStore():pRoot(0), mStateNum(0), mMaxStateNum(0){};
+		AcNodeStore():pRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
 		~AcNodeStore(){ this -> clean(nodeList);}
 		void setMaxStateNum(int n){mMaxStateNum = n;}
 	public:
@@ -184,8 +189,9 @@ class AcNodeStore<CHAR_SET, StoreArray>
 			patMatchList = new int [mStateNum];
 			int *pcur=patMatchList;
 			for(int i=0;i< mStateNum;i++){ 
-				pcur += nodeList[i]-> transPatList2Array(pcur);
+				pcur += nodeList[i].transPatList2Array(pcur);
 			}
+			patMatchListLen = pcur - patMatchList;
 		}
 		void reLocate(){
 			acNodeP tmpNodeList = (acNodeP)malloc(mStateNum* sizeof(acNodeT)); 
@@ -225,12 +231,15 @@ class mAcBase:public mMatch
 	public:
 		acNodeP& pRoot(){ return acNodesPool.pRoot;}
 		int mStateNum(){return acNodesPool.mStateNum;}
+
+		int patMatchListLen() {return acNodesPool.patMatchListLen;}
+		int* patMatchList(){return acNodesPool.patMatchList;}
 	protected:
 		virtual void compile();
 	private:	
 		static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
 		static int isMatched(acNodeP state){return (state-> isMatched());} 
-		list<int>* matchedList(acNodeP s){ return s->patIDList;}
+		int* matchedList(acNodeP s){ return s->patIDArray;}
 
 		static acNodeP nextStateT(acNode<CHAR_SET>* base, acNodeP cur, Uchar c){ return cur->go[c];}
 		static int isMatchedT(list<int>** base, acNodeP state){return (state-> isMatched());} 
@@ -242,7 +251,7 @@ class mAcBase:public mMatch
 		void convertDFA();
 	private:
 		acNodeP makeNode() {return acNodesPool.makeNode(); }
-		void reLocate(){ acNodesPool.reLocate(); }
+		void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
 
 };
 
@@ -278,15 +287,15 @@ class mAcD:public mMatch
 		void transWidthFrom(mAcBase<CHAR_SET>& ac);
 		void mallocMem(int n){ 
 			nodes= (acNodeT*)malloc(n * sizeof(acNodeT));
-			patIDList = (list<int>**)malloc( n* sizeof(list<int>*));
-			memset(patIDList, 0 , n* sizeof(list<int>*));
+			patIDList = (int**)malloc( n* sizeof(int*));
+			memset(patIDList, 0 , n* sizeof(int*));
 		}
 
 		void freeMem(){}
 	private:
 		acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].go[c];}
 		int isMatched(acNodeP state){return (patIDList[state]!=NULL);} 
-		list<int>* matchedList(acNodeP s){ return patIDList[s];}
+		int* matchedList(acNodeP s){ return patIDList[s];}
 		static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
 		static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
 		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return 1;}
@@ -294,8 +303,9 @@ class mAcD:public mMatch
 	private:
 		acNodeT* nodes;
 		acNodeP m_pRoot;
-		list<int>** patIDList;
+		int** patIDList;
 		int mStateNum;
+		int* matchList;
 };
 
 //! Broad-Storage

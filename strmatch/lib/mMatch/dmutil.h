@@ -23,6 +23,7 @@
  */
 #ifndef  UTIL_HEADER__INC
 #define  UTIL_HEADER__INC
+
 struct Pattern_s{
     char* str;
     int len;

@@ -73,18 +73,27 @@ class mMatch{
 			for(list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++) ret = report(*i, idx);
 			return ret;
 		}
-    private:
-        void clean();
-    public:
-        static int reportDefault(int patid, int idx){ printf("(%d,%d) ", idx, patid);}
-        static int reportSilent(int patid, int idx){}
-    protected:
-        int type;
-        char** mPatterns;
-        int* mPatLen;
-        int mPatNum;
-        reportFunc report;
-        list<Pattern_t>* pPatList;
-        unsigned long long timeSearch;
+
+		int reportList(int* patIDList, int idx){
+			int ret;
+			if(patIDList ==NULL) return 0;
+			for(int i=0; i<patIDList[0]; i++) ret = report(patIDList[i+1], idx);
+			return ret;
+		}
+
+
+	private:
+		void clean();
+	public:
+		static int reportDefault(int patid, int idx){ printf("(%d,%d) ", idx, patid);}
+		static int reportSilent(int patid, int idx){}
+	protected:
+		int type;
+		char** mPatterns;
+		int* mPatLen;
+		int mPatNum;
+		reportFunc report;
+		list<Pattern_t>* pPatList;
+		unsigned long long timeSearch;
 };
 }
