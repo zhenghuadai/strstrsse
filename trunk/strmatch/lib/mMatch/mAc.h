@@ -43,7 +43,7 @@ class acNode
         acNode(){memset(this, 0, sizeof(acNode*)*CHAR_SET); }
         void adjust(SSize bytes){ for(int i=0;i<CHAR_SET;i++){if(go[i]!=0) go[i] =(acNode*) ( ((char*)go[i]) + bytes); }  if(failure!= NULL) failure = (acNode*)(((char*)failure)+bytes);}
 #if 1
-        ~acNode(){if(patIDList) delete patIDList;}
+        ~acNode(){}
         //int isMatched(){ return patIDList != NULL;}
         int isMatched(){return patMatchNum()!= 0;}
 		//! when compile
@@ -242,8 +242,10 @@ class mAcBase:public mMatch
 		int* matchedList(acNodeP s){ return s->patIDArray;}
 
 		static acNodeP nextStateT(acNode<CHAR_SET>* base, acNodeP cur, Uchar c){ return cur->go[c];}
-		static int isMatchedT(list<int>** base, acNodeP state){return (state-> isMatched());} 
-		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
+		//static int isMatchedT(list<int>** base, acNodeP state){return (state-> isMatched());} 
+		//static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
+		static int isMatchedT(int** base, acNodeP state){return (state-> isMatched());} 
+		static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
 		void buildNFA();
 		void buildGeneTrie();
 		void buildTrie();
@@ -296,16 +298,18 @@ class mAcD:public mMatch
 		acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].go[c];}
 		int isMatched(acNodeP state){return (patIDList[state]!=NULL);} 
 		int* matchedList(acNodeP s){ return patIDList[s];}
+		//static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
+		//static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return 1;}
 		static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
-		static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
-		static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return 1;}
+		static int isMatchedT(int** base, acNodeP state){return (base[state] !=NULL);} 
+		static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return reportList(base[s],rf,idx);}
 		acNodeP& pRoot(){return m_pRoot;}
 	private:
 		acNodeT* nodes;
 		acNodeP m_pRoot;
 		int** patIDList;
 		int mStateNum;
-		int* matchList;
+		int* patMatchList;
 };
 
 //! Broad-Storage
