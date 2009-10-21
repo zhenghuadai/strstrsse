@@ -180,16 +180,15 @@ int ACsearchGene(acNodeT* acBase, listID_t** listBase, NodeT pRoot, reportFunc r
     template<int CHAR_SET, StoreType ST>
 int mAcBase<CHAR_SET, ST>::searchGene(char* txt)
 {
-#if 0
+#if 1
 	unsigned char* p = (Uchar*) txt;	
 	acNodeP state=pRoot();
 	for(;*p; p++){
 		Uchar c = agct2num(*p);
 		if(c >=4){state= pRoot(); continue;}
 		state = nextState(state, c); // state= state->go[*p]; 
-		if(state-> isMatched()) {
-        //printf("%0x - %0x = %d\n",p,txt, (char*)p -txt);
-			int ret = state->report(report, (char*)p - txt);
+		if(isMatched(state)) {
+			int ret = reportList(matchedList(state), (char*)p - txt);
 		}
 	}
 	return 0;
@@ -304,7 +303,7 @@ void mAcD<CHAR_SET>::transDepthFrom(mAcBase<CHAR_SET>& ac)
         }
     }
     delete Map2;
-    pRoot = 0;
+    pRoot() = 0;
 }
 
     template<int CHAR_SET>
@@ -333,7 +332,6 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
     while(!Queue.empty()){
         typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.front();
         MapIndex(curNode)= curState;
-        //Map.insert(map<typename mAcBase<CHAR_SET>::acNodeP, U16>::value_type(curNode, curState));
         Map2[curState]=curNode;
         curState ++;
         Queue.pop();
@@ -346,12 +344,10 @@ void mAcD<CHAR_SET>::transWidthFrom(mAcBase<CHAR_SET>& ac)
     for(int s=0;s<mStateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
             nodes[s].go[i] = MapIndex(Map2[s]->go[i] ); 
-            //U16 u16 = Map.find((unsigned long long) Map2[s]->go[i] )->second;
-            //nodes[s].go[i] = u16;
         }
     }
     delete Map2;
-    pRoot = 0;
+    pRoot() = 0;
 }
 
     template<int CHAR_SET>
@@ -369,7 +365,22 @@ int mAcD<CHAR_SET>::search(char* txt)
     template<int CHAR_SET>
 int mAcD<CHAR_SET>::searchGene(char* txt, int n)
 {
-    return 	ACsearchGene<acNodeP, acNodeShort<CHAR_SET>, mAcD<CHAR_SET>::nextStateT, mAcD<CHAR_SET>::isMatchedT, mAcD<CHAR_SET>::reportMatchT>(nodes, patIDList,pRoot, report, txt);
+#if 1
+	unsigned char* p = (Uchar*) txt;	
+	acNodeP state=pRoot();
+	for(;*p; p++){
+		Uchar c = agct2num(*p);
+		if(c >=4){state= pRoot(); continue;}
+		state = nextState(state, c); // state= state->go[*p]; 
+		if( isMatched(state)) {
+        //printf("%0x - %0x = %d\n",p,txt, (char*)p -txt);
+			int ret = reportList(matchedList(state), (char*)p - txt);
+		}
+	}
+	return 0;
+#else
+    return 	ACsearchGene<acNodeP, acNodeShort<CHAR_SET>, mAcD<CHAR_SET>::nextStateT, mAcD<CHAR_SET>::isMatchedT, mAcD<CHAR_SET>::reportMatchT>(nodes, patIDList,pRoot(), report, txt);
+	#endif
 }
 
     template<int CHAR_SET>
