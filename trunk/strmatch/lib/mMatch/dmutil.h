@@ -24,6 +24,27 @@
 #ifndef  UTIL_HEADER__INC
 #define  UTIL_HEADER__INC
 
+#if __amd64 || __x86_64
+    #define BIT_64 1 	
+#else
+    #define BIT_64 0 	
+#endif
+typedef unsigned char Uchar;
+typedef unsigned short U16;
+typedef short I16;
+#if BIT_64 == 1
+typedef long long SSize;
+#else 
+typedef int SSize;
+#endif
+
+
+#ifdef __cplusplus
+#define __INLINE__ inline
+#else
+#define __INLINE__ static
+#endif
+
 struct Pattern_s{
     char* str;
     int len;
@@ -37,22 +58,24 @@ struct Pattern_fasta{
 };
 typedef struct Pattern_fasta Pattern_fasta;
 
-#ifdef __cplusplus
-inline
-#else
-static
-#endif
+// a 97  0110 0001       00
+// c 99  0110 0011       01
+// t 116 0111 0100       10
+// g 103 0110 0111       11
+// a 65  0100 0001       00
+// c 67  0100 0011       01
+// t 84  0101 0100       10
+// g 71  0100 0111       11
+// N 78  0100 1110
+
+__INLINE__
 unsigned char num2agct(unsigned char n){
     static unsigned char code[4]={'A','C','T','G'};
     if(n>4) return 'N';
     return code[n];
 }
 
-#ifdef __cplusplus
-inline
-#else
-static
-#endif
+__INLINE__
 unsigned char agct2num(unsigned char bp){
 #if 1
     return ((bp>>1) & 7);
@@ -66,14 +89,36 @@ unsigned char agct2num(unsigned char bp){
     }
 #endif
 }
-// a 97  0110 0001       00
-// c 99  0110 0011       01
-// t 116 0111 0100       10
-// g 103 0110 0111       11
-// a 65  0100 0001       00
-// c 67  0100 0011       01
-// t 84  0101 0100       10
-// g 71  0100 0111       11
-//
-// N 78  0100 1110
+
+__INLINE__
+unsigned int geneHash3(unsigned char* bp){
+    unsigned int code= 0;
+    unsigned char c0= agct2num(bp[0]);
+    unsigned char c1= agct2num(bp[1]);
+    unsigned char c2= agct2num(bp[2]);
+    if(c0+c1+c2 > 9) return -1;
+    return (c0 |(c1<<2) | (c2<<4));
+}
+__INLINE__
+unsigned int geneHash9(unsigned char* bp){
+    unsigned int code= 0;
+    unsigned char c0= agct2num(bp[0]);
+    unsigned char c1= agct2num(bp[1]);
+    unsigned char c2= agct2num(bp[2]);
+    unsigned char c3= agct2num(bp[3]);
+    unsigned char c4= agct2num(bp[4]);
+    unsigned char c5= agct2num(bp[5]);
+    unsigned char c6= agct2num(bp[6]);
+    unsigned char c7= agct2num(bp[7]);
+    unsigned char c8= agct2num(bp[8]);
+    if(c0+c1+c2+c3+c4+c5+c6+c7+c8 > 27) return -1;
+    return ((c0    ) |(c1<<2 ) | (c2<<4 ) |
+            (c3<<6 ) |(c4<<8 ) | (c5<<10) |
+            (c6<<12) |(c7<<14) | (c8<<16) 
+            );
+}
+__INLINE__
+unsigned int geneHash9(char* bp){
+}
+#undef __INLINE__ 
 #endif   /* ----- #ifndef UTIL_HEADER__INC  ----- */

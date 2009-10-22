@@ -20,23 +20,8 @@
 #include <string.h>
 #include <list>
 #include "dmutil.h"
-
-#if __amd64 || __x86_64
-	#define BIT_64 1 	
-#else
-	#define BIT_64 0 	
-#endif
-
 using namespace std;
 namespace dmMatch{
-typedef unsigned char Uchar;
-typedef unsigned short U16;
-typedef short I16;
-#if BIT_64 == 1
-typedef long long SSize;
-#else 
-typedef int SSize;
-#endif
 typedef enum{
     mAC, geneAC, mWM
 } mAlgtype;
