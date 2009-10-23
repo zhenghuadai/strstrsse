@@ -43,3 +43,15 @@ char* Sshiftor(char *text,char *pat) {
 	n=strlen(text); 
 	return Sshiftor2(text , pat ,n ,m);
 }
+
+typedef struct{
+int limit;
+unsigned int S[256];
+}structSshiftor;
+
+void* preSshiftor(char* pat)
+{
+	structSshiftor* s= (structSshiftor*)malloc(sizeof(structSshiftor));;
+	s->limit=preSo(pat, strlen(pat), s->S);
+	return (void*) s;
+}
