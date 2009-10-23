@@ -372,13 +372,14 @@ int mAcD<CHAR_SET,idxT>::searchGene(char* txt, int n)
 	template<int CHAR_SET, typename idxT>
 int mAcD<CHAR_SET,idxT>::searchGene(char* txt)
 {
-#if 0
+#if 1
 	unsigned char* p = (Uchar*) txt;	
 	acNodeP state=pRoot();
 	for(;*p; p++){
 		Uchar c = agct2num(*p);
 		if(c >=4){state= pRoot(); continue;}
-		state = nextState(state, c); // state= state->go[*p]; 
+		state = nextState(state, c); 
+		//state= nodes[state].go[c]; 
 		if( isMatched(state)) {
 			int ret = reportList(matchedList(state), (char*)p - txt);
 		}
