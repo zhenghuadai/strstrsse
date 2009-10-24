@@ -54,3 +54,16 @@ char* Skmp(char *text,char *pat) //KMPËã·¨
    return Skmp2(text, pat, n, m);
 }
 
+typedef struct{
+    structHeader header;
+    int limit;
+    unsigned int kmpNext[XSIZE];
+}structSkmp;
+
+void* preSkmp(char* pat, int m)
+{
+    if(m == 0) m = strlen(pat);
+    structSkmp* s= (structSkmp*)malloc(sizeof(structSkmp));;
+    preKmp(pat,m,s->kmpNext);
+    return (void*) s;
+}

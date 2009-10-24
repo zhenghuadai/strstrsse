@@ -43,3 +43,17 @@ char* Sshiftand(char *text,char *pat)
 	n=strlen(text); 
 	return Sshiftand2(text, pat, n, m);
 }
+
+typedef struct{
+    structHeader header;
+    int limit;
+    unsigned int S[256];
+}structSshiftand;
+
+void* preSshiftand(char* pat, int m)
+{
+    if(m == 0) m = strlen(pat);
+    structSshiftand* s= (structSshiftand*)malloc(sizeof(structSshiftand));;
+    s->limit=preSa(pat, m, s->S);
+    return (void*) s;
+}

@@ -22,4 +22,11 @@ int  outputs(int whichp,int addr);
 //#define SRET(i) if( (i)< n) return (text + j) ; else return NULL;
 #define SRET(i)  return NULL;
 #define OUTPUTs(which, i) if( outputs(which, i) == STOP ) return ;
+
+typedef struct {
+    char str[3];
+    char type;
+}structHeader;
+
+
 #endif
