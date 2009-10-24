@@ -80,3 +80,19 @@ char* Sbm(char *text, char *pat) {
 	n=strlen(text);
 	return Sbm2(text,pat,n,m);
 }
+
+typedef struct{
+    structHeader header;
+    int limit;
+    int bmGs[XSIZE];
+    int bmBc[ASIZE];
+}structSbm;
+
+void* preSbm(char* pat, int m)
+{
+    if(m == 0) m = strlen(pat);
+    structSbm* s= (structSbm*)malloc(sizeof(structSbm));;
+	preBmGs(pat, m, s->bmGs);
+	preBmBc(pat, m, s->bmBc);
+    return (void*) s;
+}

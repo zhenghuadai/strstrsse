@@ -45,13 +45,15 @@ char* Sshiftor(char *text,char *pat) {
 }
 
 typedef struct{
-int limit;
-unsigned int S[256];
+    structHeader header;
+    int limit;
+    unsigned int S[256];
 }structSshiftor;
 
-void* preSshiftor(char* pat)
+void* preSshiftor(char* pat, int m)
 {
-	structSshiftor* s= (structSshiftor*)malloc(sizeof(structSshiftor));;
-	s->limit=preSo(pat, strlen(pat), s->S);
-	return (void*) s;
+    if(m == 0) m = strlen(pat);
+    structSshiftor* s= (structSshiftor*)malloc(sizeof(structSshiftor));;
+    s->limit=preSo(pat, m, s->S);
+    return (void*) s;
 }
