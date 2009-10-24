@@ -117,8 +117,10 @@ unsigned int geneHash9(unsigned char* bp){
             (c6<<12) |(c7<<14) | (c8<<16) 
             );
 }
-__INLINE__
-unsigned int geneHash9(char* bp){
-}
+//
+//__INLINE__
+//unsigned int geneHash9(char* bp){
+//  return  geneHash9((unsigned char*)bp);
+//}
 #undef __INLINE__ 
 #endif   /* ----- #ifndef UTIL_HEADER__INC  ----- */
