@@ -35,7 +35,7 @@ void iobuffer::fwrite(int fileNo)
     FILE* fp;
     char fname[512];
     int lastN;
-    sprintf(fname,".%s.%d.index", fnDataBase, fileNo);
+    sprintf(fname,".%s.%d.index", fnInput, fileNo);
     int curlen = curIdx[fileNo] < bufSize? curIdx[fileNo]:bufSize;
     if(access(fname, 0)== -1) 
         fwriteHeader(fname);

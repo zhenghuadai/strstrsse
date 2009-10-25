@@ -53,7 +53,7 @@ int main(int argc,char *argv[])
     printf("reading reference...\n");
     Pattern_fasta* genome = loadGeneFasta(inputfname);
     Text = genome->str;
-    geneIndex GI;
+    geneIndex GI(inputfname);
     {
 
         {

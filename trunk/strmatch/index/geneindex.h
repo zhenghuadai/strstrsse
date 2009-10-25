@@ -31,6 +31,7 @@ class geneIndex:public index
 {
     public:
         geneIndex(){}
+        geneIndex(char* fn):index(fn){}
     public:
         void build3();
         void build9();
