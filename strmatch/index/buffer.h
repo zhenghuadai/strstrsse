@@ -33,9 +33,11 @@ class iobuffer
         enum{ bufSize = 1024*64};
     public:
         iobuffer(){ memset(this, 0, sizeof(iobuffer));init();}
+        iobuffer(char* fnin){ memset(this, 0, sizeof(iobuffer));init(); setFnInput(fnin);}
     public:
         void write(int h, Uint idx);
     public:
+        void setFnInput(char* fn){ fnInput = strdup(fn);}
         void init();
         void distroy();
         void fwrite(int fileNo);
@@ -49,7 +51,7 @@ class iobuffer
         Uint* memBuffer; 
         int* buffer[64];
         int curIdx[64];
-        char* fnDataBase;
+        char* fnInput;
 
 };
 #endif   /* ----- #ifndef BUFFER_HEADER__INC  ----- */

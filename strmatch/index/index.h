@@ -33,6 +33,7 @@ class index:public iobuffer
 {
     public:
         index(){}
+        index(char* fn):iobuffer(fn){}
     public:
 };
 #endif   /* ----- #ifndef INDEX_HEADER__INC  ----- */
