@@ -23,21 +23,32 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 #ifndef  BUFFER_HEADER__INC
 #define  BUFFER_HEADER__INC
-
+#include "dmutil.h"
 class iobuffer
 {
     public:
-        iobuffer(){}
+        enum{ bufSize = 1024*64};
     public:
-        void write(int h, size_t idx){printf("(%d %d)", h, idx);}
-
+        iobuffer(){ memset(this, 0, sizeof(iobuffer));init();}
+    public:
+        void write(int h, Uint idx);
+    public:
+        void init();
+        void distroy();
+        void fwrite(int fileNo);
+    protected:
+        void finish();
     protected:
         FILE* fpin;
         FILE* fpDataBase;
         FILE* fpLog;
+        Uint* memBuffer; 
+        int* buffer[64];
+        int curIdx[64];
+        char* fnDataBase;
 
 };
 #endif   /* ----- #ifndef BUFFER_HEADER__INC  ----- */
