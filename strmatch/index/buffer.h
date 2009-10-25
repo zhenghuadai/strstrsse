@@ -41,6 +41,7 @@ class iobuffer
         void fwrite(int fileNo);
     protected:
         void finish();
+        void fwriteHeader(char* fn);
     protected:
         FILE* fpin;
         FILE* fpDataBase;
