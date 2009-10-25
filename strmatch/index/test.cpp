@@ -6,6 +6,7 @@
 #include<stdio.h>
 #include "dmutil.h"
 #include <list>
+#include "geneindex.h"
 using namespace std;
 int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts);
 Pattern_fasta* loadGeneFasta(char *pfname);
@@ -50,16 +51,17 @@ int main(int argc,char *argv[])
         }
     }
     printf("reading reference...\n");
-    Pattern_fasta* genome = loadGeneFasta(databasefname);
+    Pattern_fasta* genome = loadGeneFasta(inputfname);
     Text = genome->str;
-
+    geneIndex GI;
     {
 
         {
             Mtime( &startrdt );
+            GI.build3(Text, 0, 1024);
             Mtime( &endrdt );
             elapsed_time= Mdifftime( startrdt, endrdt );
-            printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
+            printf("\nbuild takes\t %20.15f seconds.\n", elapsed_time );
         }
     }
     //fclose(fp);

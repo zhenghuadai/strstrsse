@@ -21,9 +21,12 @@
  *
  * =====================================================================================
  */
+
+#ifndef  GENEINDEX_HEADER__INC
+#define  GENEINDEX_HEADER__INC
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "index.h"
 class geneIndex:public index
 {
     public:
@@ -31,4 +34,8 @@ class geneIndex:public index
     public:
         void build3();
         void build9();
+        void build3(const char* genome, size_t startIdx=0, size_t len=0);
+        void build9(const char* genome, size_t startIdx=0, size_t len=0);
+    private:
 };
+#endif   /* ----- #ifndef GENEINDEX_HEADER__INC  ----- */

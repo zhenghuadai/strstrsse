@@ -16,10 +16,11 @@ LIB= -lstrmatch
 LIBPATH= -L../lib -L../lib/mMatch
 #Gflag= -O0 -g
 utilobj:= Mtime.o  io.o 
+libobj:= geneindex.o
 
 all:  test
 
-test:test.o ${utilobj}
+test:test.o ${utilobj} ${libobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
 %.o:%.c

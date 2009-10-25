@@ -31,6 +31,7 @@
 #endif
 typedef unsigned char Uchar;
 typedef unsigned short U16;
+typedef unsigned int Uint;
 typedef short I16;
 #if BIT_64 == 1
 typedef long long SSize;
@@ -91,16 +92,16 @@ unsigned char agct2num(unsigned char bp){
 }
 
 __INLINE__
-unsigned int geneHash3(unsigned char* bp){
+unsigned int geneHash3(const unsigned char* bp){
     unsigned int code= 0;
     unsigned char c0= agct2num(bp[0]);
     unsigned char c1= agct2num(bp[1]);
     unsigned char c2= agct2num(bp[2]);
     if(c0+c1+c2 > 9) return -1;
-    return (c0 |(c1<<2) | (c2<<4));
+    return (c2 |(c1<<2) | (c0<<4));
 }
 __INLINE__
-unsigned int geneHash9(unsigned char* bp){
+unsigned int geneHash9(const unsigned char* bp){
     unsigned int code= 0;
     unsigned char c0= agct2num(bp[0]);
     unsigned char c1= agct2num(bp[1]);
@@ -112,9 +113,9 @@ unsigned int geneHash9(unsigned char* bp){
     unsigned char c7= agct2num(bp[7]);
     unsigned char c8= agct2num(bp[8]);
     if(c0+c1+c2+c3+c4+c5+c6+c7+c8 > 27) return -1;
-    return ((c0    ) |(c1<<2 ) | (c2<<4 ) |
-            (c3<<6 ) |(c4<<8 ) | (c5<<10) |
-            (c6<<12) |(c7<<14) | (c8<<16) 
+    return ((c8    ) |(c7<<2 ) | (c6<<4 ) |
+            (c5<<6 ) |(c4<<8 ) | (c3<<10) |
+            (c2<<12) |(c1<<14) | (c0<<16) 
             );
 }
 //

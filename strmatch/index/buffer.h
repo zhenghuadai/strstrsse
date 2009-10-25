@@ -4,15 +4,15 @@
  *
  *
  *
- * =====================================
- * =====================================
+ * ==================================
+ * ==================================
  *
- *       Filename:  index.h
+ *       Filename:  buffer.h
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  2009年10月22日 20时20分49秒
+ *        Created:  2009年10月25日 10时32分43秒
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -21,18 +21,23 @@
  *
  * =====================================================================================
  */
-
-#ifndef  INDEX_HEADER__INC
-#define  INDEX_HEADER__INC
-
 #include <stdio.h>
 #include <stdlib.h>
-#include "dmutil.h"
-#include "buffer.h"
-class index:public iobuffer
+
+#ifndef  BUFFER_HEADER__INC
+#define  BUFFER_HEADER__INC
+
+class iobuffer
 {
     public:
-        index(){}
+        iobuffer(){}
     public:
+        void write(int h, size_t idx){printf("(%d %d)", h, idx);}
+
+    protected:
+        FILE* fpin;
+        FILE* fpDataBase;
+        FILE* fpLog;
+
 };
-#endif   /* ----- #ifndef INDEX_HEADER__INC  ----- */
+#endif   /* ----- #ifndef BUFFER_HEADER__INC  ----- */
