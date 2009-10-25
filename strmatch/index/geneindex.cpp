@@ -29,20 +29,33 @@ void geneIndex::build3(const char* genome, size_t startIdx, size_t len)
     const unsigned char* p =(const unsigned char*) genome;
     int i;
     Uint h = geneHash3(p) >> 2;
-    for(i=0; i <len;i++, p++){
-        h = ((h << 2) |  agct2num(*(p+2))) &( 63);
+    for(i=0,p+=2; i <len;i++, p++){
+        h = ((h << 2) |  agct2num(*(p))) &( 63);
         write(h, startIdx+i);
     }
     finish();
 }
+
+void geneIndex::build3(const char* genome, size_t startIdx)
+{
+    const unsigned char* p =(const unsigned char*) genome;
+    int i;
+    Uint h = geneHash3(p) >> 2;
+    for(i=0,p+=2; *p;i++, p++){
+        h = ((h << 2) |  agct2num(*(p))) &( 63);
+        write(h, startIdx+i);
+    }
+    finish();
+}
+
 
 void geneIndex::build9(const char* genome, size_t startIdx, size_t len)
 {
     const unsigned char* p =(const unsigned char*) genome;
     int i;
     Uint h = geneHash9(p) >> 2;
-    for(i=0;i <len;i++, p++){
-        h = ((h << 2) |  agct2num(*(p+8))) &( (1<<18)-1);
+    for(i=0,p+=8;i <len;i++, p++){
+        h = ((h << 2) |  agct2num(*(p))) &( (1<<18)-1);
         write(h, startIdx+i);
     }
 }

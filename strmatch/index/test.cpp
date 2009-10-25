@@ -58,7 +58,8 @@ int main(int argc,char *argv[])
 
         {
             Mtime( &startrdt );
-            GI.build3(Text, 0, 1024);
+            //GI.build3(Text, 0, 1024);
+            GI.build3(Text, 0);
             Mtime( &endrdt );
             elapsed_time= Mdifftime( startrdt, endrdt );
             printf("\nbuild takes\t %20.15f seconds.\n", elapsed_time );
