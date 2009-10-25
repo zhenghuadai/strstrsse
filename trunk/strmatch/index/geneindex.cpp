@@ -33,6 +33,7 @@ void geneIndex::build3(const char* genome, size_t startIdx, size_t len)
         h = ((h << 2) |  agct2num(*(p+2))) &( 63);
         write(h, startIdx+i);
     }
+    finish();
 }
 
 void geneIndex::build9(const char* genome, size_t startIdx, size_t len)

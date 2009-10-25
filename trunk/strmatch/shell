@@ -7,5 +7,5 @@ do
 #sed "s/output/OUTPUT/" $i >>tmp.c
 #sed  "s/global.h/util.h/" $i > tmp.c
 #mv tmp.c $i
-svn mv $i lib/
+#svn mv $i lib/
 done

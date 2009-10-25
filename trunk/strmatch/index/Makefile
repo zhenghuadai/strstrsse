@@ -16,7 +16,7 @@ LIB= -lstrmatch
 LIBPATH= -L../lib -L../lib/mMatch
 #Gflag= -O0 -g
 utilobj:= Mtime.o  io.o 
-libobj:= geneindex.o
+libobj:= geneindex.o buffer.o
 
 all:  test
 
