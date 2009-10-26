@@ -33,21 +33,21 @@ class acNode
 	public:
 		acNode* go[CHAR_SET];
 		acNode* failure;
-        union{
-            list<int>* patIDList;
-            int patID;
-        };
+		union{
+			list<int>* patIDList;
+			int patID;
+		};
 		int* patIDArray;
 		int mMatchNum;
-    public:
-        acNode(){memset(this, 0, sizeof(acNode*)*CHAR_SET); }
-        void adjust(SSize bytes){ for(int i=0;i<CHAR_SET;i++){if(go[i]!=0) go[i] =(acNode*) ( ((char*)go[i]) + bytes); }  if(failure!= NULL) failure = (acNode*)(((char*)failure)+bytes);}
-        ~acNode(){}
-        //int isMatched(){ return patIDList != NULL;}
-        int isMatched(){return patMatchNum()!= 0;}
+	public:
+		acNode(){memset(this, 0, sizeof(acNode*)*CHAR_SET); }
+		void adjust(SSize bytes){ for(int i=0;i<CHAR_SET;i++){if(go[i]!=0) go[i] =(acNode*) ( ((char*)go[i]) + bytes); }  if(failure!= NULL) failure = (acNode*)(((char*)failure)+bytes);}
+		~acNode(){}
+		//int isMatched(){ return patIDList != NULL;}
+		int isMatched(){return patMatchNum()!= 0;}
 		//! when compile
-        void addPattern(int i){if(!patIDList){patIDList= new list<int>(); patIDList->push_back(i);}  mMatchNum++;}
-		
+		void addPattern(int i){if(!patIDList){patIDList= new list<int>(); patIDList->push_back(i);}  mMatchNum++;}
+
 		void addPattern(acNode* node){
 			if(!patIDList) patIDList = new list<int>();
 			for(typename list<int>::iterator i= node->patIDList->begin(); i!= node->patIDList->end(); i++) 
@@ -63,8 +63,9 @@ class acNode
 			if(patMatchNum()==0) return 0;
 			int k=1;
 			pstart[0] = patMatchNum();
-			for(typename list<int>::iterator i=patIDList->begin(); i!= patIDList->end(); i++,k++) 
-				pstart[k++] = *i;
+			for(typename list<int>::iterator i=patIDList->begin(); i!= patIDList->end(); i++,k++){ 
+				pstart[k] = *i;
+			}
 			delete patIDList;
 			patIDList = 0;
 			patIDArray = pstart;
@@ -125,11 +126,22 @@ class AcNodeStore<CHAR_SET, StoreList>
 #endif
 		}
 
+		int computeMatchListLen(){
+			int nlen=0;
+			for(typename list<acNodeP>::iterator i = nodeList.begin(); i!= nodeList.end(); i++){
+				if( *i -> isMatched())
+					nlen += (( *i-> mMatchNum )+1);
+			}
+			return nlen;
+		}
+
 		void transPatList2Array(){
-			patMatchList = new int [mStateNum];
+			int tlen = computeMatchListLen();
+			patMatchList = new int [tlen];
 			int *pcur=patMatchList;
 			for(typename list<acNodeP>::iterator i = nodeList.begin(); i!= nodeList.end(); i++){
-				pcur += *i-> transPatList2Array(pcur);
+				int ret = *i-> transPatList2Array(pcur);
+				pcur += ret;
 			}
 			patMatchListLen = pcur - patMatchList;
 		}
@@ -167,11 +179,23 @@ class AcNodeStore<CHAR_SET, StoreArray>
 			mStateNum++;  acNodeP newNode= new(&nodeList[mStateNum-1]) acNodeT;
 			return newNode;
 		}
+
+		int computeMatchListLen(){
+			int nlen=0;
+			for(int i=0;i< mStateNum;i++){ 
+				if( nodeList[i] . isMatched())
+					nlen += (( nodeList[i]. mMatchNum )+1);
+			}
+			return nlen;
+		}
+
 		void transPatList2Array(){
-			patMatchList = new int [mStateNum];
+			int tlen = computeMatchListLen();
+			patMatchList = new int [tlen];
 			int *pcur=patMatchList;
 			for(int i=0;i< mStateNum;i++){ 
-				pcur += nodeList[i].transPatList2Array(pcur);
+				int ret = nodeList[i].transPatList2Array(pcur);
+				pcur += ret;
 			}
 			patMatchListLen = pcur - patMatchList;
 		}

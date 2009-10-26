@@ -17,7 +17,7 @@ FILE* fpout;
 int  myreport(int patID, int idx)
 {
 	fprintf(fpout, "\n-----------------------\n");
-	fprintf(fpout, "%s\n", gPatList[patID]);
+	fprintf(fpout, "%s Pos:%d; patID:%d\n", gPatList[patID],idx, patID);
 	int m = strlen(gPatList[patID]);
 	for(int i=1-m;i< 30;i++)
 		fprintf(fpout, "%c", curText[idx+i]);
