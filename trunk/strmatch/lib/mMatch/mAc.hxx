@@ -28,7 +28,10 @@ namespace dmMatch{
 template<int CHAR_SET, StoreType ST>
 mAcBase<CHAR_SET, ST>::mAcBase(char** pat, int n) : mMatch(pat, n)
 {
+    type = mAC;
+    acNodesPool.setMaxStateNum(charNum());
 	this->compile();
+    reLocate();
 }
 
 template<int CHAR_SET, StoreType ST>
@@ -178,11 +181,11 @@ int ACsearchGene(acNodeT* acBase, matchListT** matchListBase, NodeT pRoot, repor
 }
 
     template<int CHAR_SET, StoreType ST>
-int mAcBase<CHAR_SET, ST>::searchGene(char* txt)
+int mAcBase<CHAR_SET, ST>::searchGene(acNodeP& state, char* txt)
 {
-#if 0
+#if 1
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot();
+	//acNodeP state=pRoot();
 	for(;*p; p++){
 		Uchar c = agct2num(*p);
 		if(c >=4){state= pRoot(); continue;}
@@ -198,53 +201,122 @@ return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, int, mAcBase<CHAR_SET,ST>::nextS
 }
 
 	template<int CHAR_SET, StoreType ST>
-int mAcBase<CHAR_SET, ST>::searchGene(char* txt, int n)
+int mAcBase<CHAR_SET, ST>::searchGene(acNodeP& state, char* txt, int n)
 {
 	unsigned char* p = (Uchar*) txt;	
-	acNodeP state=pRoot();
+	//acNodeP state=pRoot();
 	for(int i=0; i<n; p++,i++){
 		Uchar c = agct2num(*p);
 		if(c >=4){state= pRoot(); continue;}
 		state = nextState(state, c);// state= state->go[*p]; 
 		if(state-> isMatched()) {
-			int ret = state->report(report, (char*)p - txt);
+			int ret = reportList(matchedList(state), (char*)p - txt);
 		}
 	}
 	return 0;
+}
+
+
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene4(acNodeP& state, char* txt)
+{
+	unsigned char* p = (Uchar*) txt;	
+	//acNodeP state=pRoot();
+	for(;*p; p++){
+		Uchar c = (*p);
+		if(c >=4){state= pRoot(); continue;}
+		state = nextState(state, c); // state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = reportList(matchedList(state), (char*)p - txt);
+		}
+	}
+	return 0;
+}
+
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene4(acNodeP& state, char* txt, int n)
+{
+	unsigned char* p = (Uchar*) txt;	
+	//acNodeP state=pRoot();
+	for(int i=0; i<n; p++,i++){
+		Uchar c = (*p);
+		if(c >=4){state= pRoot(); continue;}
+		state = nextState(state, c);// state= state->go[*p]; 
+		if(state-> isMatched()) {
+			int ret = reportList(matchedList(state), (char*)p - txt);
+		}
+	}
+	return 0;
+}
+
+    template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene(char* txt)
+{
+	acNodeP state=pRoot();
+	return searchGene(state, txt);
+}
+
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene(char* txt, int n)
+{
+	acNodeP state=pRoot();
+	return searchGene(state, txt, n);
 }
 
 
 	template<int CHAR_SET, StoreType ST>
 int mAcBase<CHAR_SET, ST>::searchGene4(char* txt)
 {
-	unsigned char* p = (Uchar*) txt;	
 	acNodeP state=pRoot();
-	for(;*p; p++){
-		Uchar c = (*p);
-		if(c >=4){state= pRoot(); continue;}
-		state = nextState(state, c); // state= state->go[*p]; 
-		if(state-> isMatched()) {
-			int ret = state->report(report, (char*)p - txt);
-		}
-	}
-	return 0;
+	return searchGene4(state, txt);
 }
 
 	template<int CHAR_SET, StoreType ST>
 int mAcBase<CHAR_SET, ST>::searchGene4(char* txt, int n)
 {
-	unsigned char* p = (Uchar*) txt;	
 	acNodeP state=pRoot();
-	for(int i=0; i<n; p++,i++){
-		Uchar c = (*p);
-		if(c >=4){state= pRoot(); continue;}
-		state = nextState(state, c);// state= state->go[*p]; 
-		if(state-> isMatched()) {
-			int ret = state->report(report, (char*)p - txt);
-		}
-	}
-	return 0;
+	return searchGene4(state, txt, n);
 }
+
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGeneC(char* txt)
+{
+	acNodeP state=pCur();
+	int ret=searchGene(state, txt);
+	pCur()=state;
+	return ret; 
+}
+
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGeneC(char* txt, int n)
+{
+	acNodeP state=pCur();
+	int ret=searchGene(state, txt, n);
+	pCur()=state;
+	return  ret; 
+}
+
+
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene4C(char* txt)
+{
+	acNodeP state=pCur();
+	int ret=searchGene4(state, txt);
+	pCur()=state;
+	return  ret; 
+}
+
+	template<int CHAR_SET, StoreType ST>
+int mAcBase<CHAR_SET, ST>::searchGene4C(char* txt, int n)
+{
+	acNodeP state=pCur();
+	int ret=searchGene4(state, txt, n);
+	pCur()=state;
+	return  ret; 
+}
+
+
+
 
 
 	template<int CHAR_SET, StoreType ST>
@@ -256,7 +328,7 @@ int mAcBase<CHAR_SET, ST>::search(char* txt)
 	for(;*p; p++){
 		state = nextState(state, *p); // state= state->go[*p]; 
 		if(state-> isMatched()) {
-			int ret = state->report(report, (char*)p - txt);
+			int ret = reportList(matchedList(state), (char*)p - txt);
 		}
 	}
 	return 0;
@@ -270,7 +342,7 @@ int mAcBase<CHAR_SET, ST>::search(char* txt, int n)
 	for(int i=0; i<n; p++,i++){
 		state = nextState(state, *p);// state= state->go[*p]; 
 		if(state-> isMatched()) {
-			int ret = state->report(report, (char*)p - txt);
+			int ret = reportList(matchedList(state), (char*)p - txt);
 		}
 	}
 	return 0;
@@ -325,7 +397,7 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
 		}
 		if(Map2[s]-> isMatched()){
 			patIDList[s] = patMatchList + (Map2[s]->patIDArray - ac.patMatchList());
-        }
+		}
 	}
 
 	delete Map2;
