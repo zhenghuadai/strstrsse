@@ -44,6 +44,12 @@ namespace dmMatch{
             virtual int searchGene(char* txt){};
             virtual int searchGene4(char* txt, int n){};
             virtual int searchGene4(char* txt){};
+            virtual int searchC(char* txt, int n){};
+            virtual int searchC(char* txt){};
+            virtual int searchGeneC(char* txt, int n){};
+            virtual int searchGeneC(char* txt){};
+            virtual int searchGene4C(char* txt, int n){};
+            virtual int searchGene4C(char* txt){};
             int Tsearch(char* txt, int n)     {startTime(); search(txt,n);     endTime();}
             int Tsearch(char* txt)            {startTime(); search(txt);       endTime();}
             int TsearchGene(char* txt, int n) {startTime(); searchGene(txt,n); endTime();}

@@ -6,6 +6,20 @@
 #include<stdio.h>
 #include "mAc.h"
 using namespace dmMatch;
+
+static char** gPatList=0;
+static char* curText = 0;
+
+int  myreport(int patID, int idx)
+{
+	printf("\n-----------------------\n");
+	printf("%s\n", gPatList[patID]);
+	int m = strlen(gPatList[patID]);
+	for(int i=1-m;i< 10;i++)
+		printf("%c", curText[idx+i]);
+}
+
+
 int main(int argc,char *argv[])
 {
     /*  读入目标串和模式串 初始化 */ 
@@ -22,13 +36,9 @@ int main(int argc,char *argv[])
 
     for(i=0;i<5;i++)
         matchalg[i]=NULL;
-    matchalg[0]=acsm;
     matchalgstr[0]="ac";
-    matchalg[1]=snortwm;
     matchalgstr[1]="snortwm";
-    matchalg[2]=Mac;
     matchalgstr[2]="ac";
-    matchalg[3]=Mwm;
     matchalgstr[3]="WM";
 
     Patts[0]="Natasha";
@@ -58,7 +68,13 @@ int main(int argc,char *argv[])
     printf("\n");
     printf("\n%d ok\n",strlen(Text));
     /* 调用串匹配函数 */
-    mAcBase<> ac(Patts, ps);
+    mAcBase<256> ac(Patts, ps);
+
+	
+	ac.setReportFunc(myreport);
+	gPatList=Patts;
+	curText = Text;
+
     i = 0;
     //for(i=0;i<5;i++)
     {
@@ -73,17 +89,4 @@ int main(int argc,char *argv[])
         }
     }
     //fclose(fp);
-
-    /* 输出结果 */ 
-    for(i=0;i<occurnum;i++)
-        printf("%d,",occurrenceint[i]);
-    /*printf("\nzqd's algorithm takes %20.15f seconds.\n", elapsed_time );
-      Mtime( &startrdt );
-
-      strmat_ac_match(Patts, ps, Text, stats_flag);
-      Mtime( &endrdt );
-      elapsed_time= Mdifftime( startrdt, endrdt );
-      printf("\n algorithm takes %20.15f seconds.\n", elapsed_time );
-      */	 
-
 }

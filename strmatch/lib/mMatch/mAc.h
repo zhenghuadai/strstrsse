@@ -42,7 +42,6 @@ class acNode
     public:
         acNode(){memset(this, 0, sizeof(acNode*)*CHAR_SET); }
         void adjust(SSize bytes){ for(int i=0;i<CHAR_SET;i++){if(go[i]!=0) go[i] =(acNode*) ( ((char*)go[i]) + bytes); }  if(failure!= NULL) failure = (acNode*)(((char*)failure)+bytes);}
-#if 1
         ~acNode(){}
         //int isMatched(){ return patIDList != NULL;}
         int isMatched(){return patMatchNum()!= 0;}
@@ -56,13 +55,6 @@ class acNode
 			mMatchNum += node->mMatchNum;
 		}
 		//! when search
-		int report(reportFunc reportf, int idx){
-			//for(typename list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++) ret = reportf(*i, idx);
-			int ret;
-			for(int i=0;i<patMatchNum();i++) ret = reportf(patIDArray[i+1], idx);
-			return ret;
-		}
-
 		void copyPatListTo(list<int>* dst){
 			if(patIDList ==NULL) return;
 			for(typename list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++)  dst->push_back(*i);
@@ -79,16 +71,6 @@ class acNode
 			return k;
 		}
 		int patMatchNum(){return mMatchNum;}
-#else 
-		~acNode(){}
-		int isMatched(){ return patID!=0; }
-		void addPattern(int i){patID = i;  }
-		int report(reportFunc reportf, int idx){
-			return  reportf(patID, idx);
-		}
-		void addPattern(acNode* node){}
-
-#endif
 
 };
 typedef enum {
@@ -217,6 +199,7 @@ class mAcBase:public mMatch
 			friend class mAcD;
 	private:
 		AcNodeStore<CHAR_SET, ST> acNodesPool;
+		acNodeP m_pCur;
 	public:
 		mAcBase();
 		mAcBase(char** pat, int n);
@@ -228,29 +211,37 @@ class mAcBase:public mMatch
 		virtual int searchGene(char* txt);
 		virtual int searchGene4(char* txt, int n);
 		virtual int searchGene4(char* txt);
+		virtual int searchGeneC(char* txt, int n);
+		virtual int searchGeneC(char* txt);
+		virtual int searchGene4C(char* txt, int n);
+		virtual int searchGene4C(char* txt);
 	public:
 		acNodeP& pRoot(){ return acNodesPool.pRoot;}
+		acNodeP& pCur(){ return m_pCur;}
 		int mStateNum(){return acNodesPool.mStateNum;}
 
 		int patMatchListLen() {return acNodesPool.patMatchListLen;}
 		int* patMatchList(){return acNodesPool.patMatchList;}
+		void rewind(){ m_pCur = pRoot();}
 	protected:
 		virtual void compile();
 	private:	
 		static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
 		static int isMatched(acNodeP state){return (state-> isMatched());} 
-		int* matchedList(acNodeP s){ return s->patIDArray;}
+		static int* matchedList(acNodeP s){ return s->patIDArray;}
 
 		static acNodeP nextStateT(acNode<CHAR_SET>* base, acNodeP cur, Uchar c){ return cur->go[c];}
-		//static int isMatchedT(list<int>** base, acNodeP state){return (state-> isMatched());} 
-		//static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
 		static int isMatchedT(int** base, acNodeP state){return (state-> isMatched());} 
-		static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return s->report(rf,  idx);}
+		static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return  reportList(matchedList(s), rf,  idx);}
 		void buildNFA();
 		void buildGeneTrie();
 		void buildTrie();
 		void buildFailure();
 		void convertDFA();
+		int searchGene(acNodeP&, char* txt, int n);
+		int searchGene(acNodeP&, char* txt);
+		int searchGene4(acNodeP&, char* txt, int n);
+		int searchGene4(acNodeP&, char* txt);
 	private:
 		acNodeP makeNode() {return acNodesPool.makeNode(); }
 		void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
@@ -294,22 +285,23 @@ class mAcD:public mMatch
 		}
 
 		void freeMem(){}
+		void rewind(){ m_pCur = pRoot();}
 	private:
 		acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].go[c];}
 		int isMatched(acNodeP state){return (patIDList[state]!=NULL);} 
 		int* matchedList(acNodeP s){ return patIDList[s];}
-		//static int isMatchedT(list<int>** base, acNodeP state){return (base[state] !=NULL);} 
-		//static int reportMatchT(list<int>** base, acNodeP s, reportFunc rf, int idx ){ return 1;}
 		static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
 		static int isMatchedT(int** base, acNodeP state){return (base[state] !=NULL);} 
 		static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return reportList(base[s],rf,idx);}
 		acNodeP& pRoot(){return m_pRoot;}
+		acNodeP& pCur(){ return m_pCur;}
 	private:
 		acNodeT* nodes;
 		acNodeP m_pRoot;
 		int** patIDList;
 		int mStateNum;
 		int* patMatchList;
+		acNodeP m_pCur;
 };
 
 //! Broad-Storage
