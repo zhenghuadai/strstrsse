@@ -13,14 +13,14 @@ char** transList1(list<Pattern_fasta>* tList);
 
 static char** gPatList=0;
 static char* curText = 0;
-
+FILE* fpout;
 int  myreport(int patID, int idx)
 {
-	printf("\n-----------------------\n");
-	printf("%s\n", gPatList[patID]);
+	fprintf(fpout, "\n-----------------------\n");
+	fprintf(fpout, "%s\n", gPatList[patID]);
 	int m = strlen(gPatList[patID]);
 	for(int i=1-m;i< 30;i++)
-		printf("%c", curText[idx+i]);
+		fprintf(fpout, "%c", curText[idx+i]);
 }
 
 using namespace dmMatch;
@@ -35,8 +35,10 @@ int main(int argc,char *argv[])
 	char * matchalgstr[5];
 	int boolmatch[5];
 	FILE *fp;
+	char* fnout;
 
 	_U64 startrdt,endrdt;
+	fpout = stdout;
 	if(argc==1)
 	{
 		quryfname="q1_mapped.txt";
@@ -54,6 +56,11 @@ int main(int argc,char *argv[])
 							break;
 						case 'D':
 							subjfname=argv[i+1];
+							i++;
+							break;
+						case 'o':
+							fnout=argv[i+1];
+							fpout = fopen(fnout, "w");
 							i++;
 							break;
 					}
@@ -98,7 +105,7 @@ int main(int argc,char *argv[])
 	mAcBase<4> ac(patts, ps, geneAC);
 	mAcD<4,unsigned int> acD(ac);
 	//mAcD<4,unsigned short> acD(ac);
-	
+
 	ac.setReportFunc(myreport);
 	gPatList=patts;
 	curText = Text;
