@@ -1,6 +1,6 @@
 #CMPCOUNT:=
 CC=gcc
-CXX=g++-4.2 
+CXX=g++ 
 ifeq ($(CMPCOUNT),y)
 	DFLAGS:=-c -DCMPCOUNT
 else
