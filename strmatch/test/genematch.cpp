@@ -6,9 +6,9 @@
 #include<stdio.h>
 #include "mAc.h"
 #include "dmutil.h"
+#include "io.h"
 using namespace std;
 int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts);
-Pattern_fasta* loadGeneFasta(char *pfname);
 char** transList1(list<Pattern_fasta>* tList);
 
 static char** gPatList=0;

@@ -28,8 +28,11 @@
 #include "dmutil.h"
 #include <list>
 #include <string.h>
+#include "io.h"
 using namespace std;
-Pattern_fasta* loadGeneFasta(char *pfname)
+
+template<CASE_TYPE case_type>
+Pattern_fasta* loadGene_fasta(char *pfname)
 {
     int psubstep=0,buffcounts;
     unsigned int temp;
@@ -73,14 +76,14 @@ Pattern_fasta* loadGeneFasta(char *pfname)
     {
 		if( (temp2=='A')||(temp2=='G')||
 				(temp2=='C')||(temp2=='T')||(temp2=='N')){
-			psub[psubstep++]=temp2;
+			psub[psubstep++]=temp2 + case_num<case_type>::low_case;
 		}
 		else if(
 				(temp2=='a')||(temp2=='g')||
 				(temp2=='c')||(temp2=='t')||
 				(temp2=='n'))
 		{
-			psub[psubstep++]=temp2 -32;
+			psub[psubstep++]=temp2 - case_num<case_type>::upper_case;
 		}
 	}
 	psub[psubstep]=0;
@@ -89,6 +92,10 @@ Pattern_fasta* loadGeneFasta(char *pfname)
 	return pat_fasta;
 
 }
+
+template Pattern_fasta* loadGene_fasta<NORMAL_CASE>(char *pfname);
+template Pattern_fasta* loadGene_fasta<LOWER_CASE >(char *pfname);
+template Pattern_fasta* loadGene_fasta<UPPER_CASE >(char *pfname);
 
 int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts)
 {
