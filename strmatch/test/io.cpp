@@ -71,102 +71,105 @@ Pattern_fasta* loadGeneFasta(char *pfname)
     psubstep=0;
     while((temp2=fgetc(pf))!=EOF)
     {
-        if( (temp2=='A')||(temp2=='G')||
-                (temp2=='C')||(temp2=='T')||
-                (temp2=='a')||(temp2=='g')||
-                (temp2=='c')||(temp2=='t')||
-                (temp2=='n')||(temp2=='N'))
-        {
-            psub[psubstep++]=temp2;
-        }
-    }
-    psub[psubstep]=0;
-    pat_fasta->str = psub;
-    pat_fasta->len= psubstep;
-    return pat_fasta;
+		if( (temp2=='A')||(temp2=='G')||
+				(temp2=='C')||(temp2=='T')||(temp2=='N')){
+			psub[psubstep++]=temp2;
+		}
+		else if(
+				(temp2=='a')||(temp2=='g')||
+				(temp2=='c')||(temp2=='t')||
+				(temp2=='n'))
+		{
+			psub[psubstep++]=temp2 -32;
+		}
+	}
+	psub[psubstep]=0;
+	pat_fasta->str = psub;
+	pat_fasta->len= psubstep;
+	return pat_fasta;
 
 }
 
 int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts)
 {
-    int psubstep=0,buffcounts;
-    //      unsigned int temp;
-    char buff[256];
-    char * psub;
-    char temp2;
-    int patno=0,i;
-    FILE *pf;	
-    char* name = 0;
-    char* str = 0;
-    if((pf=fopen(pfname,"r"))==NULL)
-    {
-        printf("cannot open input string");	
-        exit(0);
-    }
+	int psubstep=0,buffcounts;
+	//      unsigned int temp;
+	char buff[256];
+	char * psub;
+	char temp2;
+	int patno=0,i;
+	FILE *pf;	
+	char* name = 0;
+	char* str = 0;
+	if((pf=fopen(pfname,"r"))==NULL)
+	{
+		printf("cannot open input string");	
+		exit(0);
+	}
 
-    while((temp2=fgetc(pf))!=EOF)
-    {
-        if(temp2 == '>'){ //! name
-            while(((temp2=fgetc(pf))!='\n') &&(temp2 != EOF)){
-                buff[psubstep++]=temp2;
-            }
-            buff[psubstep]=0;
-            name = (char*) malloc(psubstep+1);
-            strcpy(name, buff);
-            psubstep=0;
-        }else {
-            psubstep=0;
-            buff[psubstep++]=temp2;
-        }
+	while((temp2=fgetc(pf))!=EOF)
+	{
+		if(temp2 == '>'){ //! name
+			while(((temp2=fgetc(pf))!='\n') &&(temp2 != EOF)){
+				buff[psubstep++]=temp2;
+			}
+			buff[psubstep]=0;
+			name = (char*) malloc(psubstep+1);
+			strcpy(name, buff);
+			psubstep=0;
+		}else {
+			psubstep=0;
+			buff[psubstep++]=temp2;
+		}
 
-        //! str 
-        while(((temp2=fgetc(pf))!='\n') &&(temp2 != EOF)){
-            if( (temp2=='A')||(temp2=='G')||
-                    (temp2=='C')||(temp2=='T')||
-                    (temp2=='a')||(temp2=='g')||
-                    (temp2=='c')||(temp2=='t')||
-                    (temp2=='n')||(temp2=='N'))
-            {
-                buff[psubstep++]=temp2;
-            }
-        }
-        buff[psubstep]=0;
-        str= (char*) malloc(psubstep+1);
-        strcpy(str, buff);
+		//! str 
+		while(((temp2=fgetc(pf))!='\n') &&(temp2 != EOF)){
+			if( (temp2=='A')||(temp2=='G')||
+					(temp2=='C')||(temp2=='T')||
+					(temp2=='a')||(temp2=='g')||
+					(temp2=='c')||(temp2=='t')||
+					(temp2=='n')||(temp2=='N'))
+			{
+				buff[psubstep++]=temp2;
+			}
+		}
+		buff[psubstep]=0;
+		str= (char*) malloc(psubstep+1);
+		strcpy(str, buff);
 
-        Pattern_fasta pat_fasta;
-        pat_fasta.name = name;
-        pat_fasta.str = str;
-        pat_fasta.len = psubstep;
-        patts->push_back(pat_fasta);
-        patno ++;
-        name = 0;
-        str = 0;
-    }
-    return patno;
+		Pattern_fasta pat_fasta;
+		pat_fasta.name = name;
+		pat_fasta.str = str;
+		pat_fasta.len = psubstep;
+		patts->push_back(pat_fasta);
+		patno ++;
+		name = 0;
+		str = 0;
+	}
+	return patno;
 
 }
 
 char** transList1(list<Pattern_fasta>* tList)
 {
-    int len = tList->size();
-    char** patternList = (char**) malloc(len *sizeof(char*));
-    int i;
-    list<Pattern_fasta>::iterator it;
-    for(it=tList->begin(), i=0; it!=tList->end(); it++, i++){
-        patternList[i] = (*it).str;
-    }
-    return patternList;
+	int len = tList->size();
+	char** patternList = (char**) malloc(len *sizeof(char*));
+	int i;
+	list<Pattern_fasta>::iterator it;
+	for(it=tList->begin(), i=0; it!=tList->end(); it++, i++){
+		patternList[i] = (*it).str;
+	}
+	return patternList;
 }
 
 Pattern_fasta* transList2(list<Pattern_fasta>* tList)
 {
-    int len = tList->size();
-    Pattern_fasta* patternList = (Pattern_fasta*) malloc(len *sizeof(Pattern_fasta*));
-    int i;
-    list<Pattern_fasta>::iterator it;
-    for(it=tList->begin(), i=0; it!=tList->end(); it++, i++){
-        patternList[i] = (*it);
-    }
-    return patternList;
+	int len = tList->size();
+	Pattern_fasta* patternList = (Pattern_fasta*) malloc(len *sizeof(Pattern_fasta*));
+	int i;
+	list<Pattern_fasta>::iterator it;
+	for(it=tList->begin(), i=0; it!=tList->end(); it++, i++){
+		patternList[i] = (*it);
+	}
+	return patternList;
 }
