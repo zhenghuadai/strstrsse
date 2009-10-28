@@ -8,7 +8,6 @@
 #include "dmutil.h"
 #include "io.h"
 using namespace std;
-int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts);
 char** transList1(list<Pattern_fasta>* tList);
 
 static char** gPatList=0;
@@ -158,7 +157,7 @@ int main(int argc,char *argv[])
 
 	printf("reading reference %s...\n", subjfname);
 	//Text=GetGenesubjectfromfile(subjfname);
-	Pattern_fasta* genome = loadGeneFasta(subjfname);
+	Pattern_fasta* genome = loadGeneFastaU(subjfname);
 	Text = genome->str;
 
 	//printf("%s\n",Pat);
