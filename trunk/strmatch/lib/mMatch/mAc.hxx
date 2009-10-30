@@ -97,7 +97,8 @@ void mAcBase<CHAR_SET, ST>::buildGeneTrie()
         acNodeP curNode = pRoot();
         unsigned char* p =(unsigned char*) mPatterns[i];
         int n = strlen((const char *)p);
-        while( *p && (curNode->go[agct2num(*p)]!=NULL)){ curNode=curNode->go[agct2num(*p)]; p++; }
+        while( *p && (curNode->go[agct2num(*p)]!=NULL)){ 
+		curNode=curNode->go[agct2num(*p)]; p++; }
         for(; *p; p++){
             Uchar c=agct2num(*p);
             curNode-> go[c] = makeNode();

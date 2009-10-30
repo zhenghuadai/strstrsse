@@ -80,10 +80,12 @@ class mMatch{
         int reportList(int* patIDList, int idx){
             reportList(patIDList, report, idx);
         }
+        unsigned int minPatLen(){unsigned int n=patLen(0); for(int i=1;i<mPatNum;i++) n=(n < patLen(i)? n:patLen(i)); return n; }
     private:
         void clean();
         void startTime(){};
         void endTime(){};
+		unsigned int patLen(unsigned idx) { return strlen( mPatterns[idx]);}
     public:
         static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
         static int reportSilent(int patid, int idx){}
