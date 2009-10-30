@@ -90,7 +90,8 @@ unsigned char num2agct(unsigned char n){
 __INLINE__
 unsigned char agct2num(unsigned char bp){
 #if 1
-	return ((bp>>1) & 7);
+    if(bp == 'N' || bp == 'n') return 4;
+	return ((bp>>1) & 3);
 #else
 	switch(bp){
 		case 'a': case'A': return 0 ;

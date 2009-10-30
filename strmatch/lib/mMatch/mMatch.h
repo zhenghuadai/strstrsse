@@ -44,6 +44,7 @@ class mMatch{
         virtual int searchGene(char* txt){};
         virtual int searchGene4(char* txt, int n){};
         virtual int searchGene4(char* txt){};
+        //! continue searching 
         virtual int searchC(char* txt, int n){};
         virtual int searchC(char* txt){};
         virtual int searchGeneC(char* txt, int n){};
