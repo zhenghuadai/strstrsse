@@ -33,10 +33,29 @@ namespace dmMatch{
 
 class mWm :public mMatch
 {
-    public:
-    mWm(){}
-    public:
+	private:
+		enum{WM_BLOCK_WIDTH=2 ,SHIFT_WIDTH=2, SHIFT_TABLE_SIZE=(1<< (SHIFT_WIDTH * 8))};
+	public:
+		mWm(){}
+	public:
+		virtual void compile();
+		virtual int search(char* txt, int n);
+		virtual int search(char* txt);
+		virtual int searchGene(char* txt, int n);
+		virtual int searchGene(char* txt);
+		virtual int searchGene4(char* txt, int n);
+		virtual int searchGene4(char* txt);
+		virtual int searchGeneC(char* txt, int n);
+		virtual int searchGeneC(char* txt);
+		virtual int searchGene4C(char* txt, int n);
+		virtual int searchGene4C(char* txt);
+	private:
+		Uint hash(Uchar* pc){ return ((U16*)pc)[-1];}
+	private:
+		Uchar mShift[SHIFT_TABLE_SIZE];
+		Uint mMinPatLen;
 };
 
 }//! dmMatch
+#include "mWm.hxx"
 #endif   /* ----- #ifndef MWM_HEADER__INC  ----- */
