@@ -210,8 +210,11 @@ class AcNodeStore<CHAR_SET, StoreArray>
 
 };
 
-//template<int CHAR_SET=256, StoreType ST=StoreList>
-template<int CHAR_SET=256, StoreType ST=StoreArray>
+typedef enum {
+ notUseBadChar=0, 	UseBadChar=1
+}UseBadChar_T ;
+
+template<int CHAR_SET=256, StoreType ST=StoreArray, UseBadChar_T USE_BAD_CHAR= UseBadChar>
 class mAcBase:public mMatch
 {
 	public:
@@ -266,6 +269,7 @@ class mAcBase:public mMatch
 		int searchGene(acNodeP&, char* txt);
 		int searchGene4(acNodeP&, char* txt, int n);
 		int searchGene4(acNodeP&, char* txt);
+        int isBadChar(Uchar c) { return (c >= CHAR_SET);}
 	private:
 		acNodeP makeNode() {return acNodesPool.makeNode(); }
 		void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
@@ -291,6 +295,8 @@ class mAcD:public mMatch
 	public:
 		typedef idxT acNodeP;
 		typedef acNodeShort<CHAR_SET,idxT> acNodeT;
+		enum{char_set = CHAR_SET};
+	public:
 		mAcD(mAcBase<CHAR_SET>& ac,AC_Store_t st= ACWid_First){if(st== ACWid_First) transWidthFrom(ac);else transDepthFrom(ac);}
 	public:
 		virtual int search(char* txt, int n);

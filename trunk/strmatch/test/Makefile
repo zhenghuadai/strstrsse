@@ -11,6 +11,9 @@ Gflag= -g -O0 #-fPIC
 else 
 Gflag= -O3 #-fPIC 
 endif
+
+Gflag+= -Wall
+
 INC_PATH= -I../lib -I../others -I../lib/mMatch
 LIB= -lstrmatch
 LIBPATH= -L../lib -L../lib/mMatch
