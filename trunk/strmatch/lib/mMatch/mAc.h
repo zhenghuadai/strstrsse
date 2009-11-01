@@ -85,9 +85,15 @@ class AcNodeStore
 		typedef acNode<CHAR_SET>* acNodeP;
 	public:
 		acNodeP nodeList;//! root is the first element
-		acNodeP pRoot;
+		acNodeP mRoot;
 		int mStateNum;
 		//int type;
+    public:
+        //!interface
+		int computeMatchListLen();
+		void transPatList2Array();
+		void reLocate();
+        acNodeP makeNode();
 };
 
 template<int CHAR_SET>
@@ -97,15 +103,17 @@ class AcNodeStore<CHAR_SET, StoreList>
 		typedef acNode<CHAR_SET>* acNodeP;
 	public:
 		list<acNodeP> nodeList;//! root is the first element
-		acNodeP pRoot;
+		acNodeP mRoot;
 		int mStateNum;
 		int mMaxStateNum;
 		int *patMatchList;
 		int patMatchListLen;
 	public:
-		AcNodeStore():pRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
-		~AcNodeStore(){ this -> clean(nodeList);}
+		AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
+		~AcNodeStore(){ this -> clean(nodeList); delete patMatchList;}
 		void setMaxStateNum(int n){mMaxStateNum = n;}
+    public:
+        acNodeP& pRoot() {return mRoot;}
 	public:
 		void clean(list<acNodeP>& tnodeList)
 		{
@@ -122,7 +130,7 @@ class AcNodeStore<CHAR_SET, StoreList>
 				delete cur;
 				tnodeList.pop_front();
 			}
-			pRoot = 0;
+			pRoot() = 0;
 #endif
 		}
 
@@ -158,15 +166,18 @@ class AcNodeStore<CHAR_SET, StoreArray>
 		typedef acNode<CHAR_SET>  acNodeT;
 	public:
 		acNodeP nodeList;//! root is the first element
-		acNodeP pRoot;
+		acNodeP mRoot;
 		int mStateNum;
 		int mMaxStateNum;
 		int *patMatchList;
 		int patMatchListLen;
 	public:
-		AcNodeStore():pRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
-		~AcNodeStore(){ this -> clean(nodeList);}
+		AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
+		~AcNodeStore(){ this -> clean(nodeList);delete patMatchList;}
 		void setMaxStateNum(int n){mMaxStateNum = n;}
+        void trans2WidthFirst();
+    public:
+        acNodeP& pRoot() {return mRoot;}
 	public:
 		void clean(acNodeP tNodeList){
 			for(int i=0;i< mStateNum; i++){
@@ -175,7 +186,7 @@ class AcNodeStore<CHAR_SET, StoreArray>
 			free(tNodeList);
 		}
 		acNodeP makeNode() {
-			if(pRoot==0) nodeList = (acNodeP)malloc(mMaxStateNum * sizeof(acNodeT)); 
+			if(pRoot()==0) nodeList = (acNodeP)malloc(mMaxStateNum * sizeof(acNodeT)); 
 			mStateNum++;  acNodeP newNode= new(&nodeList[mStateNum-1]) acNodeT;
 			return newNode;
 		}
@@ -205,7 +216,7 @@ class AcNodeStore<CHAR_SET, StoreArray>
 			for(int i=0;i< mStateNum;i++){ tmpNodeList[i].adjust((SSize)tmpNodeList - (SSize)nodeList);}
 			free(nodeList); 
 			nodeList = tmpNodeList;
-			pRoot=nodeList;
+			pRoot()=nodeList;
 		}
 
 };
@@ -243,7 +254,7 @@ class mAcBase:public mMatch
 		virtual int searchGene4C(char* txt, int n);
 		virtual int searchGene4C(char* txt);
 	public:
-		acNodeP& pRoot(){ return acNodesPool.pRoot;}
+		acNodeP& pRoot(){ return acNodesPool.pRoot();}
 		acNodeP& pCur(){ return m_pCur;}
 		int mStateNum(){return acNodesPool.mStateNum;}
 

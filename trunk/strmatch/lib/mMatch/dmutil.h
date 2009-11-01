@@ -105,7 +105,6 @@ unsigned char agct2num(unsigned char bp){
 
 __INLINE__
 unsigned int geneHash3(const unsigned char* bp){
-	unsigned int code= 0;
 	unsigned char c0= agct2num(bp[0]);
 	unsigned char c1= agct2num(bp[1]);
 	unsigned char c2= agct2num(bp[2]);
@@ -114,7 +113,6 @@ unsigned int geneHash3(const unsigned char* bp){
 }
 __INLINE__
 unsigned int geneHash9(const unsigned char* bp){
-	unsigned int code= 0;
 	unsigned char c0= agct2num(bp[0]);
 	unsigned char c1= agct2num(bp[1]);
 	unsigned char c2= agct2num(bp[2]);
