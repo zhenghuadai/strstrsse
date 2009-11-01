@@ -199,7 +199,7 @@ mAcBase_DEFINITION_HEADER(int)::searchGene(acNodeP& state, char* txt, int n)
     unsigned char* p = (Uchar*) txt;	
     for(int i=0; i<n; p++,i++){
         Uchar c = agct2num(*p);
-        if(c >=CHAR_SET){state= pRoot(); continue;}
+        if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
         state = nextState(state, c);// state= state->go[*p]; 
         if(state-> isMatched()) {
             int ret = reportList(matchedList(state), (char*)p - txt);
@@ -214,7 +214,7 @@ mAcBase_DEFINITION_HEADER(int)::searchGene4(acNodeP& state, char* txt)
     unsigned char* p = (Uchar*) txt;	
     for(;*p; p++){
         Uchar c = (*p);
-        if(c >=CHAR_SET){state= pRoot(); continue;}
+        if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
         state = nextState(state, c); // state= state->go[*p]; 
         if(state-> isMatched()) {
             int ret = reportList(matchedList(state), (char*)p - txt);
@@ -228,7 +228,7 @@ mAcBase_DEFINITION_HEADER(int)::searchGene4(acNodeP& state, char* txt, int n)
     unsigned char* p = (Uchar*) txt;	
     for(int i=0; i<n; p++,i++){
         Uchar c = (*p);
-        if(c>= CHAR_SET){state= pRoot(); continue;}
+        if(USE_BAD_CHAR){if(c>= CHAR_SET){state= pRoot(); continue;}}
         state = nextState(state, c);// state= state->go[*p]; 
         if(state-> isMatched()) {
             int ret = reportList(matchedList(state), (char*)p - txt);
@@ -381,6 +381,63 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
     delete Map2;
 }
 
+    template<int CHAR_SET, typename idxT,  class travalT>
+void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes, int** patIDList, int* patMatchList)
+{
+    int curState=0;
+    int mStateNum = ac.mStateNum;
+    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
+    travalT Queue;
+#if 0
+    map<unsigned long long, U16> Map;
+#define MapIndex(a) Map[(unsigned long long)a]
+#else
+    idxT* Map = new idxT[mStateNum];
+//#define MapIndex(a) Map[a - ac.pRoot()]
+#endif
+    MapIndex(ac.pRoot())= curState;
+    Map2[curState]=ac.pRoot();
+    for(int i=0; i< CHAR_SET; i++){
+        if( ac.pRoot()-> go[i] != ac.pRoot()) 
+            Queue.push(ac.pRoot()->go[i]);
+    }
+    curState++;
+
+    while(!Queue.empty()){
+        //typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.top();
+        typename mAcBase<CHAR_SET>::acNodeP curNode= top(Queue);
+        MapIndex(curNode)= curState;
+        Map2[curState]=curNode;
+        curState ++;
+        Queue.pop();
+        for(int i=0; i< CHAR_SET; i++){
+            if(( curNode -> go[i] != curNode->failure->go[i]) )
+                Queue.push(curNode->go[i]);
+        }
+    }
+    printf(" mStateNum :%d %d\n", mStateNum, curState);
+    for(int s=0;s<mStateNum;s++){
+        for(int i=0;i< CHAR_SET; i++) {
+            nodes[s].go[i] = nodes + MapIndex(Map2[s]->go[i] ); 
+        }
+        nodes[s].failure = nodes + MapIndex( Map2[s]-> failure);
+        nodes[s].patIDArray = Map2[s] -> patIDArray;
+        nodes[s].mMatchNum= Map2[s] -> mMatchNum;
+    }
+
+    delete Map2;
+}
+
+template<int CHAR_SET>
+void AcNodeStore<CHAR_SET, StoreArray>::trans2WidthFirst()
+{
+    acNodeP tmpNodeList = (acNodeP)malloc(mStateNum* sizeof(acNodeT)); 
+    transNode2Short<CHAR_SET, Uint, queue<typename mAcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
+    clean(nodeList);
+    nodeList = tmpNodeList;
+    pRoot()= nodeList;
+}
+
     template<int CHAR_SET, typename idxT>
 void mAcD<CHAR_SET,idxT>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
@@ -405,18 +462,20 @@ void mAcD<CHAR_SET,idxT>::transDepthFrom(mAcBase<CHAR_SET>& ac)
     template<int CHAR_SET, typename idxT>
 int mAcD<CHAR_SET,idxT>::search(char* txt, int n)
 {
-
+    return 0;
 }
 
     template<int CHAR_SET, typename idxT>
 int mAcD<CHAR_SET,idxT>::search(char* txt)
 {
 
+    return 0;
 }
 
     template<int CHAR_SET, typename idxT>
 int mAcD<CHAR_SET,idxT>::searchGene(char* txt, int n)
 {
+    return 0;
 }
 
     template<int CHAR_SET, typename idxT>
@@ -445,12 +504,14 @@ int mAcD<CHAR_SET,idxT>::searchGene(char* txt)
 int mAcD<CHAR_SET,idxT>::searchGene4(char* txt, int n)
 {
 
+    return 0;
 }
 
     template<int CHAR_SET, typename idxT>
 int mAcD<CHAR_SET,idxT>::searchGene4(char* txt)
 {
 
+    return 0;
 }
 
 

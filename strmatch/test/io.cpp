@@ -35,7 +35,6 @@ template<CASE_TYPE case_type>
 Pattern_fasta* loadGene_fasta(char *pfname)
 {
     int psubstep=0,buffcounts;
-    unsigned int temp;
     char * psub;
     char temp2;
     FILE *pf;	
@@ -94,12 +93,11 @@ template Pattern_fasta* loadGene_fasta<UPPER_CASE >(char *pfname);
     template<CASE_TYPE case_type>
 int   loadGenePattern_Fasta(char *pfname, list<Pattern_fasta>* patts)
 {
-    int psubstep=0,buffcounts;
+    int psubstep=0;
     //      unsigned int temp;
     char buff[256];
-    char * psub;
     char temp2;
-    int patno=0,i;
+    int patno=0;
     FILE *pf;	
     char* name = 0;
     char* str = 0;
