@@ -5,6 +5,7 @@
 #include "global.h"
 #include<stdio.h>
 #include "mAc.h"
+#include "mWm.h"
 using namespace dmMatch;
 
 static char** gPatList=0;
