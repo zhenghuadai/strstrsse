@@ -32,6 +32,7 @@ mAcBase_DEFINITION_HEADER():: mAcBase(char** pat, int n) : mMatch(pat, n)
 {
     type = mAC;
     acNodesPool.setMaxStateNum(charNum());
+	acNodesPool.type()=type;
 	this->compile();
     reLocate();
 }
@@ -39,8 +40,9 @@ mAcBase_DEFINITION_HEADER():: mAcBase(char** pat, int n) : mMatch(pat, n)
 mAcBase_DEFINITION_HEADER()::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
 {
     type = t;
+	acNodesPool.type()=t;
     acNodesPool.setMaxStateNum(charNum());
-    if(type==geneAC){
+    if((type==geneAC)||(type==geneACWid) ||(type==geneACDep)){
         printf("build Trie...\n");
         buildGeneTrie();
         printf("build Trie complete\n");
@@ -367,7 +369,7 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
                 Queue.push(curNode->go[i]);
         }
     }
-    printf(" mStateNum :%d %d\n", mStateNum, curState);
+	ASSERT(mStateNum== curState);
     memcpy(patMatchList, ac.patMatchList(), ac.patMatchListLen()*sizeof(int));
     for(int s=0;s<mStateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
@@ -415,12 +417,13 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
                 Queue.push(curNode->go[i]);
         }
     }
-    printf(" mStateNum :%d %d\n", mStateNum, curState);
+	ASSERT(mStateNum== curState);
     for(int s=0;s<mStateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
             nodes[s].go[i] = nodes + MapIndex(Map2[s]->go[i] ); 
         }
         nodes[s].failure = nodes + MapIndex( Map2[s]-> failure);
+        nodes[s].patIDList= Map2[s] ->patIDList;
         nodes[s].patIDArray = Map2[s] -> patIDArray;
         nodes[s].mMatchNum= Map2[s] -> mMatchNum;
     }
@@ -432,7 +435,7 @@ template<int CHAR_SET>
 void AcNodeStore<CHAR_SET, StoreArray>::trans2WidthFirst()
 {
     acNodeP tmpNodeList = (acNodeP)malloc(mStateNum* sizeof(acNodeT)); 
-    transNode2Short<CHAR_SET, Uint, queue<typename mAcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
+	reoderacNode <CHAR_SET, Uint, queue<typename mAcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
     clean(nodeList);
     nodeList = tmpNodeList;
     pRoot()= nodeList;

@@ -108,12 +108,14 @@ class AcNodeStore<CHAR_SET, StoreList>
 		int mMaxStateNum;
 		int *patMatchList;
 		int patMatchListLen;
+		int mType;
 	public:
-		AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
+		AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0),mType(mAC){};
 		~AcNodeStore(){ this -> clean(nodeList); delete patMatchList;}
 		void setMaxStateNum(int n){mMaxStateNum = n;}
     public:
         acNodeP& pRoot() {return mRoot;}
+		int& type(){return mType;}
 	public:
 		void clean(list<acNodeP>& tnodeList)
 		{
@@ -171,13 +173,16 @@ class AcNodeStore<CHAR_SET, StoreArray>
 		int mMaxStateNum;
 		int *patMatchList;
 		int patMatchListLen;
+		int mType;
 	public:
-		AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0){};
+		AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0),mType(mAC){};
 		~AcNodeStore(){ this -> clean(nodeList);delete patMatchList;}
 		void setMaxStateNum(int n){mMaxStateNum = n;}
         void trans2WidthFirst();
     public:
         acNodeP& pRoot() {return mRoot;}
+		int& type(){return mType;}
+
 	public:
 		void clean(acNodeP tNodeList){
 			for(int i=0;i< mStateNum; i++){
@@ -217,12 +222,14 @@ class AcNodeStore<CHAR_SET, StoreArray>
 			free(nodeList); 
 			nodeList = tmpNodeList;
 			pRoot()=nodeList;
+			if((mType == mACWid) ||(mType == geneACWid))
+				trans2WidthFirst();
 		}
 
 };
 
 typedef enum {
- notUseBadChar=0, 	UseBadChar=1
+	notUseBadChar=0, 	UseBadChar=1
 }UseBadChar_T ;
 
 template<int CHAR_SET=256, StoreType ST=StoreArray, UseBadChar_T USE_BAD_CHAR= UseBadChar>
@@ -280,7 +287,7 @@ class mAcBase:public mMatch
 		int searchGene(acNodeP&, char* txt);
 		int searchGene4(acNodeP&, char* txt, int n);
 		int searchGene4(acNodeP&, char* txt);
-        int isBadChar(Uchar c) { return (c >= CHAR_SET);}
+		int isBadChar(Uchar c) { return (c >= CHAR_SET);}
 	private:
 		acNodeP makeNode() {return acNodesPool.makeNode(); }
 		void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
@@ -298,7 +305,6 @@ class acNodeShort
 		//int isMatched(){ return patID != -1;}
 };
 
-typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 //! Depth-Storage 
 template<int CHAR_SET=256, typename idxT=U16>
 class mAcD:public mMatch
