@@ -54,8 +54,8 @@ class mWm :public mMatch
 		int reportwmList(list<int>* patIDList, int idx, char* txt){ 
 			int ret;
 			for(list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++){
-				if( strncmp(txt+idx,mPatterns[*i],strlen(mPatterns[*i])) ==0) 
-					ret = report(*i, idx+strlen(mPatterns[*i])-1);
+				if( strncmp(txt+idx,mPatterns[*i],mPatLen[*i]) ==0) 
+					ret = report(*i, idx+(mPatLen[*i])-1);
 			}
 			return ret;
 		};

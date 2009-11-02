@@ -68,7 +68,7 @@ class mMatch{
         int TsearchGene4(char* txt)       {startTime(); searchGene4(txt);  endTime();}
         void setReportFunc(reportFunc f){report = f;}
         void init(char** ,int n);
-        ~mMatch(){}
+        ~mMatch(){ free(mPatLen);}
         double getTime(){return mTimeSearch;}
     protected:
         virtual void compile(){};
