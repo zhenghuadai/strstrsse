@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <list>
+#include <assert.h>
 #include "dmutil.h"
 
 #ifndef rdtsc 
@@ -26,11 +27,15 @@
     __asm__ __volatile__("xorl %%eax, %%eax; cpuid; rdtsc" : "=a" (low), "=d" (high)::"%ecx","%ebx");
 #endif
 
+//#define ASSERT(a, ...) {if(! (a)){ err(__VA_ARGS__##__LINE__);}}
+#define ASSERT(a, ...) {assert(a);}
+
 using namespace std;
 namespace dmMatch{
 typedef enum{
-    mAC, geneAC, mWM
+    mAC, geneAC, mWM, mACDep, mACWid, geneACDep, geneACWid
 } mAlgtype;
+typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 
 typedef int (* reportFunc)(int patID, int idx);
 class mMatch{
