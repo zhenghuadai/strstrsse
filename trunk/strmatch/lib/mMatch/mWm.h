@@ -36,7 +36,7 @@ class mWm :public mMatch
 	private:
 		enum{WM_BLOCK_WIDTH=2 ,SHIFT_WIDTH=2, SHIFT_TABLE_SIZE=(1<< (SHIFT_WIDTH * 8))};
 	public:
-		mWm(){}
+		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0){type=mAC;}
 	public:
 		virtual void compile();
 		virtual int search(char* txt, int n);
@@ -51,9 +51,20 @@ class mWm :public mMatch
 		virtual int searchGene4C(char* txt);
 	private:
 		Uint hash(Uchar* pc){ return ((U16*)pc)[-1];}
+		int reportwmList(list<int>* patIDList, int idx, char* txt){ 
+			int ret;
+			for(list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++){
+				if( strcmp(txt+idx,mPatterns[*i]) ==0) 
+					ret = report(*i, idx);
+			}
+			return ret;
+		};
+
 	private:
 		Uchar mShift[SHIFT_TABLE_SIZE];
 		Uint mMinPatLen;
+		list<int>** matchList;
+		int** matchArray;
 };
 
 }//! dmMatch
