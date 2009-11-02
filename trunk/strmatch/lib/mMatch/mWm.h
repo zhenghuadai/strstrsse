@@ -58,13 +58,28 @@ class mWm :public mMatch
 					ret = report(*i, idx+(mPatLen[*i])-1);
 			}
 			return ret;
-		};
+		}
 
-	private:
-		Uchar mShift[SHIFT_TABLE_SIZE];
-		Uint mMinPatLen;
-		list<int>** matchList;
-		int** matchArray;
+        int reportwmList(int* patIDList, int idx, char* txt){ 
+            int ret;
+            for(int i=1; i<=patIDList[0];i++){
+                int patI = patIDList[i];
+                if( strncmp(txt+idx,mPatterns[patI],mPatLen[patI]) ==0) 
+                    ret = report(patI, idx+(mPatLen[patI])-1);
+            }
+            return ret;
+        }
+
+
+        static void transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n);
+        static void freeList(list<int>**& matchList,int n);
+
+    private:
+        Uchar mShift[SHIFT_TABLE_SIZE];
+        Uint mMinPatLen;
+        list<int>** matchList;
+        int** matchArray;
+        int* matchArrayMem;
 };
 
 }//! dmMatch

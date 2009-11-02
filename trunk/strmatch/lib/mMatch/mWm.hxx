@@ -7,8 +7,8 @@ namespace dmMatch{
 void mWm::compile()
 {
 	mMinPatLen=	minPatLen();
-	matchList= (list<int>**) malloc( mPatNum * sizeof(list<int>*));
-	memset(matchList, 0, mPatNum * sizeof(list<int>*));
+	matchList= (list<int>**) malloc( SHIFT_TABLE_SIZE* sizeof(list<int>*));
+	memset(matchList, 0, SHIFT_TABLE_SIZE* sizeof(list<int>*));
 	
 	for(int i=0;i<SHIFT_TABLE_SIZE;i++) mShift[i] = mMinPatLen-WM_BLOCK_WIDTH+1;
 	Uint tHash;
@@ -26,29 +26,66 @@ void mWm::compile()
 			matchList[tHash]->push_back(i);
 		}
 	}//end for i
+    transList(matchList, matchArray, matchArrayMem, SHIFT_TABLE_SIZE);
+}
+
+void mWm::transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n)
+{
+    int memSize = 0;
+    for(int i=0;i<n;i++)
+        if( matchList[i] != NULL)
+            memSize +=( matchList[i]->size() + 1) ;
+    matchArrayMem = (int*) malloc(memSize * sizeof(int));        
+    matchArray = (int**) malloc(n * sizeof(int*));
+    int* pstart =matchArrayMem;
+    for(int i=0; i<n;i++){
+        if(matchList[i] ==NULL) continue;
+        int k=1;
+        pstart[0] = matchList[i]->size();
+        for(list<int>::iterator it=matchList[i]->begin(); it!= matchList[i]->end(); it++,k++){ 
+            pstart[k] = *it;
+        }
+        //delete matchList[i];
+        //matchList[i]= 0;
+        matchArray[i]= pstart;
+        pstart += k;
+    }
+    //free(matchList);
+    //matchList = 0;
+    freeList(matchList, n);
+}
+
+void mWm::freeList(list<int>**& matchList,int n){
+    for(int i=0;i<n;i++){
+        delete matchList[i];
+    }
+    free(matchList);
+    matchList=0;
 }
 
 int mWm::search(char* txt)
 {
-	int n = strlen(txt);
-	mWm::search(txt,n);
+    int n = strlen(txt);
+    return    mWm::search(txt,n);
+
 }
 
 int mWm::search(char* txt, int n)
 {
-	unsigned char* p = (Uchar*) txt + mMinPatLen;	
-	unsigned char* pEnd = (Uchar*) txt + n;	
-	Uint tHash;
-	while(p < pEnd){
-		tHash= hash(p);
-		if(mShift[tHash] > 0){
-			p += mShift[tHash];
-		}else{
-			//! compare candidate
-			reportwmList(matchList[tHash],(char*)p-txt-mMinPatLen, txt);
-			p++;
-		}
-	}//! end while
+    unsigned char* p = (Uchar*) txt + mMinPatLen;	
+    unsigned char* pEnd = (Uchar*) txt + n;	
+    Uint tHash;
+    while(p < pEnd){
+        tHash= hash(p);
+        if(mShift[tHash] > 0){
+            p += mShift[tHash];
+        }else{
+            //! compare candidate
+            //reportwmList(matchList[tHash],(char*)p-txt-mMinPatLen, txt);
+            reportwmList(matchArray[tHash],(char*)p-txt-mMinPatLen, txt);
+            p++;
+        }
+    }//! end while
 }
 
 }
