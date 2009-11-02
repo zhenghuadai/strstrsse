@@ -32,6 +32,8 @@ void mMatch::init(char** pat, int n)
 {
     this->mPatterns = pat;
     this->mPatNum = n;
+	mPatLen =(int*) malloc( n* sizeof(int)) ;
+	for(int i=0;i<n;i++) mPatLen[i] = strlen(pat[i]);
 }
 
 
