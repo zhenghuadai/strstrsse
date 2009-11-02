@@ -13,7 +13,7 @@ static char* curText = 0;
 
 int  myreport(int patID, int idx)
 {
-	printf("\n-----------------------\n");
+	printf("\n-----------------------%d %d\n", patID, idx);
 	printf("%s\n", gPatList[patID]);
 	int m = strlen(gPatList[patID]);
 	for(int i=1-m;i< 10;i++)
@@ -70,9 +70,11 @@ int main(int argc,char *argv[])
     printf("\n%d ok\n",strlen(Text));
     /* µ÷ÓÃ´®Æ¥Åäº¯Êý */
     mAcBase<256> ac(Patts, ps);
+    mWm wm(Patts, ps);
 
 	
 	ac.setReportFunc(myreport);
+	wm.setReportFunc(myreport);
 	gPatList=Patts;
 	curText = Text;
 
@@ -83,6 +85,8 @@ int main(int argc,char *argv[])
         {
             Mtime( &startrdt );
             ac.search(Text);
+			printf("\n\n");
+            wm.search(Text);
             Mtime( &endrdt );
             elapsed_time= Mdifftime( startrdt, endrdt );
             printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
