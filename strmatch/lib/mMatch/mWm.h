@@ -22,8 +22,8 @@
  * =====================================================================================
  */
 
-#ifndef  MWM_HEADER__INC
-#define  MWM_HEADER__INC
+#ifndef  MWM_TEMPLATE_HEADER__INC
+#define  MWM_TEMPLATE_HEADER__INC
 #include <stdio.h>
 #include <stdlib.h>
 #include "mMatch.h"
@@ -36,26 +36,26 @@ class mWm :public mMatch
 	private:
 		enum{WM_BLOCK_WIDTH=2 ,SHIFT_WIDTH=2, SHIFT_TABLE_SIZE=(1<< (SHIFT_WIDTH * 8))};
 	public:
-		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0){type=mAC;}
+		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0){type=mAC; mWm::compile();}
 	public:
 		virtual void compile();
 		virtual int search(char* txt, int n);
 		virtual int search(char* txt);
-		virtual int searchGene(char* txt, int n);
-		virtual int searchGene(char* txt);
-		virtual int searchGene4(char* txt, int n);
-		virtual int searchGene4(char* txt);
-		virtual int searchGeneC(char* txt, int n);
-		virtual int searchGeneC(char* txt);
-		virtual int searchGene4C(char* txt, int n);
-		virtual int searchGene4C(char* txt);
+		virtual int searchGene(char* txt, int n){};
+		virtual int searchGene(char* txt){};
+		virtual int searchGene4(char* txt, int n){};
+		virtual int searchGene4(char* txt){};
+		virtual int searchGeneC(char* txt, int n){};
+		virtual int searchGeneC(char* txt){};
+		virtual int searchGene4C(char* txt, int n){};
+		virtual int searchGene4C(char* txt){};
 	private:
 		Uint hash(Uchar* pc){ return ((U16*)pc)[-1];}
 		int reportwmList(list<int>* patIDList, int idx, char* txt){ 
 			int ret;
 			for(list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++){
-				if( strcmp(txt+idx,mPatterns[*i]) ==0) 
-					ret = report(*i, idx);
+				if( strncmp(txt+idx,mPatterns[*i],strlen(mPatterns[*i])) ==0) 
+					ret = report(*i, idx+strlen(mPatterns[*i])-1);
 			}
 			return ret;
 		};
