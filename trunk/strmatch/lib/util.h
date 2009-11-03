@@ -2,11 +2,13 @@
 #define UTILL_match
 typedef struct 
 {
-    unsigned long long u64;
-    struct{
-        unsigned int low;
-        unsigned int high;
-    };
+	union{
+		unsigned long long u64;
+		struct{
+			unsigned int low;
+			unsigned int high;
+		};
+	};
 } _U64;
 char * Getsubjectfromfile(char *pfname);
 int  Getpatternfromfile(char *pfname,char **patts);
@@ -24,8 +26,8 @@ int  outputs(int whichp,int addr);
 #define OUTPUTs(which, i) if( outputs(which, i) == STOP ) return ;
 
 typedef struct {
-    char str[3];
-    char type;
+	char str[3];
+	char type;
 }structHeader;
 
 

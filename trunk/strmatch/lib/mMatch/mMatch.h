@@ -69,7 +69,7 @@ class mMatch{
         void setReportFunc(reportFunc f){report = f;}
         void init(char** ,int n);
         ~mMatch(){ free(mPatLen);}
-        double getTime(){return mTimeSearch;}
+        double getTime(){return (double)(mTimeEnd - mTimeStart);}
     protected:
         virtual void compile(){};
         unsigned int charNum(){unsigned int n=0; for(int i=0;i<mPatNum;i++) n += strlen(mPatterns[i]); return n; }
@@ -93,8 +93,8 @@ class mMatch{
         unsigned int minPatLen(){unsigned int n=patLen(0); for(int i=1;i<mPatNum;i++) n=(n < patLen(i)? n:patLen(i)); return n; }
     private:
         void clean();
-        void startTime(){};
-        void endTime(){};
+        void startTime(){ rdtsc(mTimeStartLow, mTimeStartHigh);};
+        void endTime(){ rdtsc(mTimeEndLow, mTimeEndHigh) ;};
 		unsigned int patLen(unsigned idx) { return strlen( mPatterns[idx]);}
     public:
         static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
@@ -106,7 +106,21 @@ class mMatch{
         int mPatNum;
         reportFunc report;
         list<Pattern_t>* pPatList;
-        double mTimeSearch;
+		union{
+			unsigned long long mTimeStart;
+			struct{
+				unsigned int mTimeStartLow;
+				unsigned int mTimeStartHigh;
+			};
+		};
+		union{
+			unsigned long long mTimeEnd;
+			struct{
+				unsigned int mTimeEndLow;
+				unsigned int mTimeEndHigh;
+			};
+		};
+
 };
 }
 #endif   /* ----- #ifndef MMATCH_INC  ----- */

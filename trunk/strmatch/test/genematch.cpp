@@ -179,12 +179,13 @@ int main(int argc,char *argv[])
 	//for(i=0;i<5;i++)
 	{
 		{
-			Mtime( &startrdt );
-			ac.searchGene(Text);
-			Mtime( &endrdt );
-			elapsed_time= Mdifftime( startrdt, endrdt );
-			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
-			//  fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, matchalgstr[i]);
+			//Mtime( &startrdt );
+			//ac.searchGene(Text);
+			//Mtime( &endrdt );
+			//elapsed_time= Mdifftime( startrdt, endrdt );
+			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
+			ac.TsearchGene(Text);
+			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
 		}
 	}
 	//fclose(fp);
