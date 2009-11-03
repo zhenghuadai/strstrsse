@@ -31,10 +31,14 @@
 
 namespace dmMatch{
 
+typedef Uint (*wmHashFunc)(Uchar* pc);
+inline Uint hash2bytes(Uchar* pc){ return ((U16*)pc)[-1];}
+
+template<int WM_BLOCK_WIDTH=2, wmHashFunc hash=hash2bytes, int HashCompressRatio=1>
 class mWm :public mMatch
 {
 	private:
-		enum{WM_BLOCK_WIDTH=2 ,SHIFT_WIDTH=2, SHIFT_TABLE_SIZE=(1<< (SHIFT_WIDTH * 8))};
+		enum{SHIFT_WIDTH=WM_BLOCK_WIDTH, SHIFT_TABLE_SIZE=(1<< (SHIFT_WIDTH * 8))/HashCompressRatio};
 	public:
 		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0){type=mAC; mWm::compile();}
 	public:
@@ -50,7 +54,7 @@ class mWm :public mMatch
 		virtual int searchGene4C(char* txt, int n){};
 		virtual int searchGene4C(char* txt){};
 	private:
-		Uint hash(Uchar* pc){ return ((U16*)pc)[-1];}
+		//Uint hash(Uchar* pc){ return ((U16*)pc)[-1];}
 		int reportwmList(list<int>* patIDList, int idx, char* txt){ 
 			int ret;
 			for(list<int>::iterator i= patIDList->begin(); i!= patIDList->end(); i++){

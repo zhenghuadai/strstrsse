@@ -47,25 +47,25 @@ class mMatch{
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); init(pat, patNum); report=reportSilent; report=reportDefault;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
     public:
-        virtual int search(char* txt, int n){};
-        virtual int search(char* txt){};
-        virtual int searchGene(char* txt, int n){};
-        virtual int searchGene(char* txt){};
-        virtual int searchGene4(char* txt, int n){};
-        virtual int searchGene4(char* txt){};
+        virtual int search(char* txt, int n) 		{return 0;}
+        virtual int search(char* txt) 			 	{return 0;}
+        virtual int searchGene(char* txt, int n) 	{return 0;}
+        virtual int searchGene(char* txt) 			{return 0;}
+        virtual int searchGene4(char* txt, int n) 	{return 0;}
+        virtual int searchGene4(char* txt) 			{return 0;}
         //! continue searching 
-        virtual int searchC(char* txt, int n){};
-        virtual int searchC(char* txt){};
-        virtual int searchGeneC(char* txt, int n){};
-        virtual int searchGeneC(char* txt){};
-        virtual int searchGene4C(char* txt, int n){};
-        virtual int searchGene4C(char* txt){};
-        int Tsearch(char* txt, int n)     {startTime(); search(txt,n);     endTime();}
-        int Tsearch(char* txt)            {startTime(); search(txt);       endTime();}
-        int TsearchGene(char* txt, int n) {startTime(); searchGene(txt,n); endTime();}
-        int TsearchGene(char* txt)        {startTime(); searchGene(txt);   endTime();}
-        int TsearchGene4(char* txt, int n){startTime(); searchGene4(txt,n);endTime();}
-        int TsearchGene4(char* txt)       {startTime(); searchGene4(txt);  endTime();}
+        virtual int searchC(char* txt, int n) 		{return 0;}
+        virtual int searchC(char* txt) 				{return 0;}
+        virtual int searchGeneC(char* txt, int n) 	{return 0;}
+        virtual int searchGeneC(char* txt) 			{return 0;}
+        virtual int searchGene4C(char* txt, int n) 	{return 0;}
+        virtual int searchGene4C(char* txt) 		{return 0;}
+        int Tsearch(char* txt, int n)     {startTime();int ret=search(txt,n);     endTime();return ret;}
+        int Tsearch(char* txt)            {startTime();int ret=search(txt);       endTime();return ret;}
+        int TsearchGene(char* txt, int n) {startTime();int ret=searchGene(txt,n); endTime();return ret;}
+        int TsearchGene(char* txt)        {startTime();int ret=searchGene(txt);   endTime();return ret;}
+        int TsearchGene4(char* txt, int n){startTime();int ret=searchGene4(txt,n);endTime();return ret;}
+        int TsearchGene4(char* txt)       {startTime();int ret=searchGene4(txt);  endTime();return ret;}
         void setReportFunc(reportFunc f){report = f;}
         void init(char** ,int n);
         ~mMatch(){ free(mPatLen);}

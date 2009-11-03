@@ -4,7 +4,8 @@
 
 namespace dmMatch{
 
-void mWm::compile()
+#define mWm_DEFINITION_HEADER( type ) template<int WM_BLOCK_WIDTH, wmHashFunc hash, int hashCompressRatio> type mWm<WM_BLOCK_WIDTH, hash, hashCompressRatio>
+mWm_DEFINITION_HEADER(void)::compile()
 {
 	mMinPatLen=	minPatLen();
 	matchList= (list<int>**) malloc( SHIFT_TABLE_SIZE* sizeof(list<int>*));
@@ -29,7 +30,7 @@ void mWm::compile()
     transList(matchList, matchArray, matchArrayMem, SHIFT_TABLE_SIZE);
 }
 
-void mWm::transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n)
+mWm_DEFINITION_HEADER(void)::transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n)
 {
     int memSize = 0;
     for(int i=0;i<n;i++)
@@ -42,7 +43,7 @@ void mWm::transList(list<int>**& matchList, int**& matchArray, int*& matchArrayM
         if(matchList[i] ==NULL) continue;
         int k=1;
         pstart[0] = matchList[i]->size();
-        for(list<int>::iterator it=matchList[i]->begin(); it!= matchList[i]->end(); it++,k++){ 
+        for(typename list<int>::iterator it=matchList[i]->begin(); it!= matchList[i]->end(); it++,k++){ 
             pstart[k] = *it;
         }
         //delete matchList[i];
@@ -55,7 +56,7 @@ void mWm::transList(list<int>**& matchList, int**& matchArray, int*& matchArrayM
     freeList(matchList, n);
 }
 
-void mWm::freeList(list<int>**& matchList,int n){
+mWm_DEFINITION_HEADER(void)::freeList(list<int>**& matchList,int n){
     for(int i=0;i<n;i++){
         delete matchList[i];
     }
@@ -63,14 +64,14 @@ void mWm::freeList(list<int>**& matchList,int n){
     matchList=0;
 }
 
-int mWm::search(char* txt)
+mWm_DEFINITION_HEADER(int)::search(char* txt)
 {
     int n = strlen(txt);
     return    mWm::search(txt,n);
 
 }
 
-int mWm::search(char* txt, int n)
+mWm_DEFINITION_HEADER(int)::search(char* txt, int n)
 {
     unsigned char* p = (Uchar*) txt + mMinPatLen;	
     unsigned char* pEnd = (Uchar*) txt + n;	
