@@ -12,7 +12,7 @@ mWm_DEFINITION_HEADER(void)::compile()
 	memset(matchList, 0, SHIFT_TABLE_SIZE* sizeof(list<int>*));
 	
 	for(int i=0;i<SHIFT_TABLE_SIZE;i++) mShift[i] = mMinPatLen-WM_BLOCK_WIDTH+1;
-	Uint tHash;
+	int tHash;
 	for(int i=0;i<mPatNum; i++){
 		int j=0;
 		for(char* p = mPatterns[i] + mMinPatLen; p>= mPatterns[i] + WM_BLOCK_WIDTH; p--, j++){
@@ -40,6 +40,7 @@ mWm_DEFINITION_HEADER(void)::transList(list<int>**& matchList, int**& matchArray
             memSize +=( matchList[i]->size() + 1) ;
     matchArrayMem = (int*) malloc(memSize * sizeof(int));        
     matchArray = (int**) malloc(n * sizeof(int*));
+	ASSERT(matchArrayMem && matchArray);
     int* pstart =matchArrayMem;
     for(int i=0; i<n;i++){
         if(matchList[i] ==NULL) continue;
@@ -77,12 +78,12 @@ mWm_DEFINITION_HEADER(int)::search(char* txt, int n)
 {
     unsigned char* p = (Uchar*) txt + mMinPatLen;	
     unsigned char* pEnd = (Uchar*) txt + n;	
-    Uint tHash;
+    int tHash;
     while(p < pEnd){
         tHash= hash(p);
+		if(tHash <0) { p+= (mMinPatLen-WM_BLOCK_WIDTH +1); continue;}
         if(mShift[tHash] > 0){
             p += mShift[tHash];
-        }else if(mShift[tHash]<0) { p+= (mMinPatLen-WM_BLOCK_WIDTH +1);
 		}else{
             //! compare candidate
             //reportwmList(matchList[tHash],(char*)p-txt-mMinPatLen, txt);
