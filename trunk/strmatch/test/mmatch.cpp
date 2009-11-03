@@ -70,7 +70,7 @@ int main(int argc,char *argv[])
     printf("\n%d ok\n",strlen(Text));
     /* µ÷ÓÃ´®Æ¥Åäº¯Êý */
     mAcBase<256> ac(Patts, ps);
-    mWm wm(Patts, ps);
+    mWm<> wm(Patts, ps);
 
 	
 	ac.setReportFunc(myreport);
