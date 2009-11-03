@@ -17,6 +17,7 @@ mWm_DEFINITION_HEADER(void)::compile()
 		int j=0;
 		for(char* p = mPatterns[i] + mMinPatLen; p>= mPatterns[i] + WM_BLOCK_WIDTH; p--, j++){
 			tHash = hash((Uchar*)p);
+			if(tHash<0 || tHash >SHIFT_TABLE_SIZE) printf("err\n");
 			if( mShift[tHash] > j) mShift[tHash] = j;			
 		}// end for p
 		{
@@ -28,6 +29,7 @@ mWm_DEFINITION_HEADER(void)::compile()
 		}
 	}//end for i
     transList(matchList, matchArray, matchArrayMem, SHIFT_TABLE_SIZE);
+	printf("build Wm complete WM_BLOCK_WIDTH:%d, SHIFT_TABLE_SIZE:%d\n", WM_BLOCK_WIDTH,SHIFT_TABLE_SIZE);
 }
 
 mWm_DEFINITION_HEADER(void)::transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n)
@@ -80,7 +82,8 @@ mWm_DEFINITION_HEADER(int)::search(char* txt, int n)
         tHash= hash(p);
         if(mShift[tHash] > 0){
             p += mShift[tHash];
-        }else{
+        }else if(mShift[tHash]<0) { p+= (mMinPatLen-WM_BLOCK_WIDTH +1);
+		}else{
             //! compare candidate
             //reportwmList(matchList[tHash],(char*)p-txt-mMinPatLen, txt);
             reportwmList(matchArray[tHash],(char*)p-txt-mMinPatLen, txt);

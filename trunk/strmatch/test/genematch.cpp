@@ -4,8 +4,9 @@
 #include "match.h"
 #include "global.h"
 #include<stdio.h>
-#include "mAc.h"
 #include "dmutil.h"
+#include "mAc.h"
+#include "mWm.h"
 #include "io.h"
 using namespace std;
 char** transList1(list<Pattern_fasta>* tList);
@@ -171,7 +172,9 @@ int main(int argc,char *argv[])
 	mAcD<4,unsigned int> acD(ac);
 	//mAcD<4,unsigned short> acD(ac);
 
+    mWm<8,geneHashWm8,4> wm(patts, ps);
 	ac.setReportFunc(myreport);
+	wm.setReportFunc(myreport);
 	gPatList=patts;
 	curText = Text;
 
@@ -186,6 +189,8 @@ int main(int argc,char *argv[])
 			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
 			ac.TsearchGene(Text);
 			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
+			wm.Tsearch(Text);
+			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], wm.getTime());
 		}
 	}
 	//fclose(fp);
