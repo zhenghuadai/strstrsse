@@ -108,7 +108,7 @@ unsigned int geneHash3(const unsigned char* bp){
 	unsigned char c0= agct2num(bp[0]);
 	unsigned char c1= agct2num(bp[1]);
 	unsigned char c2= agct2num(bp[2]);
-	if(c0+c1+c2 > 9) return -1;
+	if((c0|c1|c2 )& 4) return -1;
 	return (c2 |(c1<<2) | (c0<<4));
 }
 __INLINE__
@@ -122,14 +122,14 @@ unsigned int geneHash9(const unsigned char* bp){
 	unsigned char c6= agct2num(bp[6]);
 	unsigned char c7= agct2num(bp[7]);
 	unsigned char c8= agct2num(bp[8]);
-	if(c0+c1+c2+c3+c4+c5+c6+c7+c8 > 27) return -1;
+	if((c0|c1|c2|c3|c4|c5|c6|c7|c8) &4 ) return -1;
 	return ((c8    ) |(c7<<2 ) | (c6<<4 ) |
 			(c5<<6 ) |(c4<<8 ) | (c3<<10) |
 			(c2<<12) |(c1<<14) | (c0<<16) 
 		   );
 }
 __INLINE__
-unsigned int geneHash8(const unsigned char* bp){
+int geneHash8(const unsigned char* bp){
 	unsigned char c0= agct2num(bp[0]);
 	unsigned char c1= agct2num(bp[1]);
 	unsigned char c2= agct2num(bp[2]);
@@ -138,7 +138,7 @@ unsigned int geneHash8(const unsigned char* bp){
 	unsigned char c5= agct2num(bp[5]);
 	unsigned char c6= agct2num(bp[6]);
 	unsigned char c7= agct2num(bp[7]);
-	if(c0+c1+c2+c3+c4+c5+c6+c7 > 24) return -1;
+	if((c0|c1|c2|c3|c4|c5|c6|c7) &4 ) return -1;
 	return ((c7    ) |(c6<<2 ) | (c5<<4 ) |
 			(c4<<6 ) |(c3<<8 ) | (c2<<10) |
 			(c1<<12) |(c0<<14)  
@@ -146,7 +146,7 @@ unsigned int geneHash8(const unsigned char* bp){
 }
 
 __INLINE__
-unsigned int geneHashWm8(const unsigned char* bp){
+int geneHashWm8(const unsigned char* bp){
 	return geneHash8(bp-8);
 }
 
