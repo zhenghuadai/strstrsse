@@ -31,14 +31,14 @@
 
 namespace dmMatch{
 
-typedef Uint (*wmHashFunc)(Uchar* pc);
-inline Uint hash2bytes(Uchar* pc){ return ((U16*)pc)[-1];}
+typedef Uint (*wmHashFunc)(const Uchar* pc);
+inline Uint hash2bytes(const Uchar* pc){ return ((U16*)pc)[-1];}
 
 template<int WM_BLOCK_WIDTH=2, wmHashFunc hash=hash2bytes, int HashCompressRatio=1>
 class mWm :public mMatch
 {
 	private:
-		enum{SHIFT_WIDTH=WM_BLOCK_WIDTH, SHIFT_TABLE_SIZE=(1<< (SHIFT_WIDTH * 8))/HashCompressRatio};
+		enum{SHIFT_WIDTH=WM_BLOCK_WIDTH, SHIFT_TABLE_SIZE=(1<< ((SHIFT_WIDTH * 8)/HashCompressRatio))};
 	public:
 		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0){type=mAC; mWm::compile();}
 	public:
