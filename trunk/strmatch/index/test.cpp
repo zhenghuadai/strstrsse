@@ -7,9 +7,10 @@
 #include "dmutil.h"
 #include <list>
 #include "geneindex.h"
+#include "io.h"
 using namespace std;
-int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts);
-Pattern_fasta* loadGeneFasta(char *pfname);
+//int   loadGenePatternFasta(char *pfname, list<Pattern_fasta>* patts);
+//Pattern_fasta* loadGeneFasta(char *pfname);
 char** transList1(list<Pattern_fasta>* tList);
 int main(int argc,char *argv[])
 {

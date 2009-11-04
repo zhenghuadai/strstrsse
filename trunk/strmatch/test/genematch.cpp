@@ -189,8 +189,8 @@ int main(int argc,char *argv[])
 			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
 			ac.TsearchGene(Text);
 			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
-			wm.Tsearch(Text);
-			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], wm.getTime());
+			//wm.Tsearch(Text);
+			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], wm.getTime());
 		}
 	}
 	//fclose(fp);

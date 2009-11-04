@@ -31,8 +31,8 @@
 
 namespace dmMatch{
 
-typedef int (*wmHashFunc)(const Uchar* pc);
-inline int hash2bytes(const Uchar* pc){ return ((U16*)pc)[-1];}
+typedef Uint (*wmHashFunc)(const Uchar* pc);
+inline Uint hash2bytes(const Uchar* pc){ return ((U16*)pc)[-1];}
 
 template<int WM_BLOCK_WIDTH=2, wmHashFunc hash=hash2bytes, int HashCompressRatio=1>
 class mWm :public mMatch

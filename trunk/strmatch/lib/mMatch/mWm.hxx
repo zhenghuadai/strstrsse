@@ -16,7 +16,7 @@ mWm_DEFINITION_HEADER(void)::compile()
 	for(int i=0;i<mPatNum; i++){
 		int j=0;
 		for(char* p = mPatterns[i] + mMinPatLen; p>= mPatterns[i] + WM_BLOCK_WIDTH; p--, j++){
-			tHash = hash((Uchar*)p);
+			tHash =(int) hash((Uchar*)p);
 			if(tHash<0 || tHash >SHIFT_TABLE_SIZE) printf("err\n");
 			if( mShift[tHash] > j) mShift[tHash] = j;			
 		}// end for p
@@ -80,7 +80,7 @@ mWm_DEFINITION_HEADER(int)::search(char* txt, int n)
     unsigned char* pEnd = (Uchar*) txt + n;	
     int tHash;
     while(p < pEnd){
-        tHash= hash(p);
+        tHash= (int)hash(p);
 		if(tHash <0) { p+= (mMinPatLen-WM_BLOCK_WIDTH +1); continue;}
         if(mShift[tHash] > 0){
             p += mShift[tHash];

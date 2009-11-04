@@ -53,7 +53,7 @@ void iobuffer::fwrite(int fileNo)
     curIdx[fileNo] = 0;
 }
 
-void iobuffer::write(int h, size_t idx)
+void iobuffer::write(int h, Uint idx)
 {
     memBuffer[bufSize*h + curIdx[h]] = idx;
     curIdx[h] ++;
