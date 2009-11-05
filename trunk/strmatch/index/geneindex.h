@@ -38,6 +38,7 @@ class geneIndex:public index
         void build3(const char* genome, size_t startIdx, size_t len);
         void build3(const char* genome, size_t startIdx);
         void build9(const char* genome, size_t startIdx=0, size_t len=0);
+        void build11(const char* genome, size_t startIdx=0, size_t len=0);
     private:
 };
 #endif   /* ----- #ifndef GENEINDEX_HEADER__INC  ----- */
