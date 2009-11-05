@@ -25,12 +25,12 @@
 #include <stdlib.h>
 #include "buffer.h"
 #include <unistd.h>
-void iobuffer::init()
+void OutBuffer6b::init()
 {
     memBuffer = (Uint*) malloc(sizeof(Uint) * 64 * bufSize);    
 }
 
-void iobuffer::fwrite(int fileNo)
+void OutBuffer6b::fwrite(int fileNo)
 {
     FILE* fp;
     char fname[512];
@@ -53,7 +53,7 @@ void iobuffer::fwrite(int fileNo)
     curIdx[fileNo] = 0;
 }
 
-void iobuffer::write(int h, Uint idx)
+void OutBuffer6b::write(int h, Uint idx)
 {
     memBuffer[bufSize*h + curIdx[h]] = idx;
     curIdx[h] ++;
@@ -61,18 +61,18 @@ void iobuffer::write(int h, Uint idx)
         fwrite(h);
 }
 
-void iobuffer::fwriteHeader(char* fn)
-{
-    FILE* fp= fopen(fn, "w");
-    for(int i=0;i<128;i++)
-        fputc(0,fp);
-    fclose(fp);
-}
-
-void iobuffer::finish()
+void OutBuffer6b::finish()
 {
     for(int i=0;i< 64;i++){
         if(curIdx[i]>0) 
             fwrite(i);
     }
+}
+
+void OutBufferBase::fwriteHeader(char* fn)
+{
+    FILE* fp= fopen(fn, "w");
+    for(int i=0;i<128;i++)
+        fputc(0,fp);
+    fclose(fp);
 }

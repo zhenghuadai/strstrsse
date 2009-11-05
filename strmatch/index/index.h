@@ -29,11 +29,15 @@
 #include <stdlib.h>
 #include "dmutil.h"
 #include "buffer.h"
-class index:public iobuffer
+class index//:public OutBuffer6b
 {
     public:
         index(){}
-        index(char* fn):iobuffer(fn){}
+        //index(char* fn):OutBuffer6b(fn){}
+        index(char* fn){outBuffer.setFnInput(fn);}
     public:
+	protected:
+		OutBuffer6b outBuffer6b;
+		OutBuffer<> outBuffer;
 };
 #endif   /* ----- #ifndef INDEX_HEADER__INC  ----- */

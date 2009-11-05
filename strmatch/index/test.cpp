@@ -14,7 +14,6 @@ using namespace std;
 char** transList1(list<Pattern_fasta>* tList);
 int main(int argc,char *argv[])
 {
-    /*  读入目标串和模式串 初始化 */ 
     int i ;
     static int stats_flag=0;
     char *databasefname,*inputfname;
@@ -60,7 +59,7 @@ int main(int argc,char *argv[])
         {
             Mtime( &startrdt );
             //GI.build3(Text, 0, 1024);
-            GI.build3(Text, 0);
+            GI.build11(Text, 0);
             Mtime( &endrdt );
             elapsed_time= Mdifftime( startrdt, endrdt );
             printf("\nbuild takes\t %20.15f seconds.\n", elapsed_time );
