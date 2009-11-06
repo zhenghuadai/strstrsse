@@ -5,9 +5,9 @@ ifeq ($(CMPCOUNT),y)
 else
 	DFLAGS:=-c 
 endif
-Gflag= -O3 -fPIC 
+Gflag= -O3 -fPIC -msse2 
 #Gflag= -O0 -g
-sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o 
+sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o report.o 
 mobj:= Msbom.o Mwm.o Mshiftor.o Mac.o
 algobj:= ${sobj} ${mobj} 
 matchmulobj:=matchmul.o  output.o extract.o Mtime.o acsmx.o snortmwm.o
