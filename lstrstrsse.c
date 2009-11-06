@@ -46,6 +46,12 @@ char* lstrstrabsse(char* text, char* pattern);
 //		   );	
 //}
 
+static int report_all(int idx)
+{
+	printf("<%d>,", idx);
+	return SEARCH_CONTINUE;
+}
+
 static int report_default(int idx)
 {
 	printf("<%d> ", idx);
@@ -54,7 +60,16 @@ static int report_default(int idx)
 
 static reportFunc report_function = report_default;
 
-void setReportFunc(reportFunc rf){ report_function = rf;}
+void setReportFunc(reportFunc rf)
+{ 
+	if(rf == SEARCH_ALL){
+		report_function = report_all;
+	}else if(rf==SEARCH_THE_FIRST){
+		report_function = report_default;
+	} else {
+		report_function = rf;
+	}
+}
 
 //#define REPORT(i) return i;
 #define REPORT(i) {if( report_function(i-text)== SEARCH_STOP) return i;};
@@ -111,7 +126,7 @@ char* lstrstrsse(const char* text, const char* pattern)
 		preBytes &= 15;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
-		#if 0
+#if 0
 		switch(preBytes){
 			case 1:
 				if((text[0])&&(text[0] == chara)){
@@ -149,7 +164,7 @@ char* lstrstrsse(const char* text, const char* pattern)
 				break;
 
 		}
-		#endif
+#endif
 		for(j =0;j< preBytes; j++){
 			if(text[j] ==0) return NULL;
 			if(text[j] == chara){
