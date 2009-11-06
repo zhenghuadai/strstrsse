@@ -79,6 +79,7 @@ int  myreport(int patID, int idx)
 		fprintf(fpout, "\nno loop-stem\n");
 	}
 #endif
+return 0;
 }
 
 void reportInfo(char* patfn, char* dataBasefn)
@@ -92,7 +93,7 @@ int main(int argc,char *argv[])
 	/*  读入目标串和模式串 初始化 */ 
 	int i ;
 	static int stats_flag=0;
-	char *subjfname,*quryfname;
+	char *subjfname=0,*quryfname=0;
 	double elapsed_time;
 	void (* matchalg[5])(char * text,char * pat[],int num);
 	char * matchalgstr[5];

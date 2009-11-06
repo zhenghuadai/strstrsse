@@ -46,33 +46,8 @@ char* lstrstrabsse(char* text, char* pattern);
 //		   );	
 //}
 
-static int report_all(int idx)
-{
-	printf("<%d>,", idx);
-	return SEARCH_CONTINUE;
-}
-
-static int report_default(int idx)
-{
-	printf("<%d> ", idx);
-	return SEARCH_STOP;
-}
-
-static reportFunc report_function = report_default;
-
-void setReportFunc(reportFunc rf)
-{ 
-	if(rf == SEARCH_ALL){
-		report_function = report_all;
-	}else if(rf==SEARCH_THE_FIRST){
-		report_function = report_default;
-	} else {
-		report_function = rf;
-	}
-}
-
 //#define REPORT(i) return i;
-#define REPORT(i) {if( report_function(i-text)== SEARCH_STOP) return i;};
+#define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
 
 static inline unsigned int hasByteC(__m128i a0, __m128i a1, register __m128i sseic)
 {

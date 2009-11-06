@@ -5,7 +5,7 @@
 #include "match.h"
 int  output(char* text, int addr, char* pat)
 {
-//  printf("%d,",addr);
+  printf("%d,",addr);
   //occurrenceint[occurnum]=addr;
   //occurnum++;
   return CONTINUE;
