@@ -6,6 +6,7 @@
 #include "time.h"
 #include "stdio.h"
 #define ALLALG 20 
+#include "strstrsse.h"
 typedef struct matchtest_
 {
 	void (* matchalg)(char * text,char * pat);
@@ -74,8 +75,8 @@ int main(int argc,char *argv[])
 	match[12].matchalg		=Sbyh;
 	match[12].matchalg2		=Sbyh2;
 	match[12].matchalgstr	="Sbyh";
-	match[13].matchalg		=Sskip;
-	match[13].matchalg2		=Sskip2;
+	match[13].matchalg		=0;//Sskip;
+	match[13].matchalg2		=0 ;// Sskip2;
 	match[13].matchalgstr	="Sskip";
 	match[14].matchalg		=Skmpskip;
 	match[14].matchalg2		=Skmpskip2;
@@ -89,6 +90,9 @@ int main(int argc,char *argv[])
 	match[17].matchalg		=SshiftorW;
 	match[17].matchalg2		=SshiftorW2;
 	match[17].matchalgstr	="SshiftorW";
+	match[18].matchalg		=lstrstrsse;
+	match[18].matchalg2		=0;
+	match[18].matchalgstr	="lstrstrsse";
 	for(i=0;i<ALLALG;i++)
 	{
 		match[i].boolmatch=1;
