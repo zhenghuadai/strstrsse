@@ -107,6 +107,57 @@ class OutBuffer:public OutBufferBase
 
 };
 
+
+class  Value_Hash{
+	public:
+		Uint value;
+		Uint h;
+		void set(Uint v, Uint _h){ value=v; h=_h;}
+		static int compareValue( const void * node1, const void* node2){
+			return (((Value_Hash*)node1)-> value> ((Value_Hash*)node2)->value? 1:-1);
+		}
+		static int compareHash( const void * node1, const void* node2){
+			return (((Value_Hash*)node1)-> h> ((Value_Hash*)node2)->h? 1:-1);
+		}
+} ;
+
+template<int HashBit=22>
+class OutBuffer2:public OutBufferBase{
+	public:
+		enum{MAX_HASH_VALUE= (1<< HashBit) -1, HashTableSize= 1<< HashBit};
+	public:
+		OutBuffer2(){ memset(this, 0, sizeof(OutBuffer2));init();}
+		OutBuffer2(char* fnin){ memset(this, 0, sizeof(OutBuffer2));init(); setFnInput(fnin);}
+		~OutBuffer2(){free(pVH); pVH=0;}
+	public:
+		void write(int h, Uint idx);
+	public:
+		void setFnInput(char* fn){ fnInput = strdup(fn);}
+		void finish(){ write2file();}
+	private:
+		void init(){	mBufferFull = 1024 * 1024 * 16; pVH = (Value_Hash*) malloc(mBufferFull*sizeof(Value_Hash));}
+		void distroy();
+		void write2file();
+		void cleanBeforContinue();
+	protected:
+		char* fnInput;
+	private:
+		size_t curSize;
+		size_t mBufferFull;
+		int curFileNo;
+		union{
+			Value_Hash* pVH;
+			Uint* pInt;
+		};
+};
+
+
+
+
 #include "buffer.hxx"
+
+
+
+
 
 #endif   /* ----- #ifndef BUFFER_HEADER__INC  ----- */

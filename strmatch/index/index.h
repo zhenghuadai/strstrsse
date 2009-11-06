@@ -38,6 +38,6 @@ class index//:public OutBuffer6b
     public:
 	protected:
 		OutBuffer6b outBuffer6b;
-		OutBuffer<> outBuffer;
+		OutBuffer2<> outBuffer;
 };
 #endif   /* ----- #ifndef INDEX_HEADER__INC  ----- */
