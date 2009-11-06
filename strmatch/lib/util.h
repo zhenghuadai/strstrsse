@@ -2,11 +2,14 @@
 #define UTILL_match
 typedef struct 
 {
-	union{
+	union	
+	{
 		unsigned long long u64;
 		struct{
 			unsigned int low;
 			unsigned int high;
+			unsigned int low2;
+			unsigned int high2;
 		};
 	};
 } _U64;
