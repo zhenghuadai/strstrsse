@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "rdtsc.h"
+#include "strstrsse.h"
 size_t strlen_d(const char *str) ;
 size_t strlen_l(const char *str); 
 size_t rb_strlen(const char *str); 
@@ -356,6 +357,26 @@ int test3(int argc, char** argv)
 	test_strstr(lstrstrsse);
 }
 
+
+
+int test4(int argc, char** argv)
+{
+#include "defaultText.h"
+	char text0[] = TEXT; 
+	char* patterns[] = {"unnecessary","vulture","emente", "MArs","dog","Z","ABG","do","AGB"};				 
+	char* pattern=patterns[0];
+	char* findp;
+	char* textm;
+	char* text=text0;
+	double t3;
+	setReportFunc(SEARCH_ALL);
+	mdtime(0);
+	findp = lstrstrsse(text,pattern);
+	t3=	mdtime(1);
+	printf("\nsearch all time : %15f\n ", t3);
+}
+
+
 int main( int argc, char** argv)
 {
 	int len;
@@ -369,6 +390,9 @@ int main( int argc, char** argv)
 	test3(argc,argv);
 	printf("Performance test ................\n");
 	test2(argc,argv);
+	printf("search ratio test ................\n");
+	test4(argc,argv);
+
 	//test1(argc,argv);
 	return 1;
 }
