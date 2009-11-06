@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <emmintrin.h>
 #include <xmmintrin.h>
+#include "strstrsse.h"
 char* lstrchr(const char *str,char c);
 char* lstrstrabsse(char* text, char* pattern);
 //static const __m128i magic_bits = 0x7efefeffL;
@@ -45,6 +46,19 @@ char* lstrstrabsse(char* text, char* pattern);
 //		   );	
 //}
 
+static int report_default(int idx)
+{
+	printf("<%d> ", idx);
+	return SEARCH_STOP;
+}
+
+static reportFunc report_function = report_default;
+
+void setReportFunc(reportFunc rf){ report_function = rf;}
+
+//#define REPORT(i) return i;
+#define REPORT(i) {if( report_function(i-text)== SEARCH_STOP) return i;};
+
 static inline unsigned int hasByteC(__m128i a0, __m128i a1, register __m128i sseic)
 {
 	return ((_mm_movemask_epi8(_mm_cmpeq_epi8(a0,sseic))  )  | \
@@ -63,7 +77,7 @@ inline static int strcmpInline(char* str1,char* str2)
 }
 
 #    define bsf(x) __builtin_ctz(x) 
-char* lstrstrsse(char* text, char* pattern)
+char* lstrstrsse(const char* text, const char* pattern)
 {
 	__m128i * sseiPtr = (__m128i *) text;
 	unsigned char * chPtrAligned = (unsigned char*)text;
@@ -143,7 +157,7 @@ char* lstrstrsse(char* text, char* pattern)
 					int i=1;
 					bytePtr = & text[j];
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
 				}
 			}
@@ -186,7 +200,7 @@ findoutb:
 					bytePtr = bytePtr0 + idx ;
 					i = 3;
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);
 					//reta = reta & ( ~(1<<idx));
 					__asm__ ( "btr %1, %0"
 							:"=r"(reta)
@@ -205,7 +219,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 ;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 						if(bytePtr0[1] == chara)
 							//if(reta & 2)
@@ -213,7 +227,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 + 1;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 						if(bytePtr0[2] == chara)
 							//if(reta & 4)
@@ -221,7 +235,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 + 2;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 						if(bytePtr0[3] == chara)
 							//if(reta & 8)
@@ -229,7 +243,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 + 3;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 					}
 					reta = reta >> 4;
@@ -253,7 +267,7 @@ findoutb:
 						if(bytePtr[0] == chara){
 							int i=1;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 							if(bytePtr[i] == 0) return NULL;
 						}
 					}
@@ -264,7 +278,7 @@ findoutb:
 						if(bytePtr[0] == chara){
 							int i=1;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 							if(bytePtr[i] == 0) return NULL;
 						}
 					}
@@ -282,7 +296,7 @@ findoutb:
 								if(bytePtr[0] == chara){
 									int i=1;
 									while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-									if(pattern[i] == 0) return bytePtr;
+									if(pattern[i] == 0) REPORT(bytePtr);
 									if(bytePtr[i] == 0) return NULL;
 								}
 							}
@@ -302,13 +316,13 @@ findoutb:
 			if(bytePtr[0] == chara){
 				int i=1;
 				while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-				if(pattern[i] == 0) return bytePtr;
+				if(pattern[i] == 0) REPORT(bytePtr);
 			}
 			bytePtr --;
 			if(bytePtr[0] == chara){
 				int i=1;
 				while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-				if(pattern[i] == 0) return bytePtr;
+				if(pattern[i] == 0) REPORT(bytePtr);
 			}
 
 			goto prePareForEnd;
@@ -330,7 +344,7 @@ prePareForEnd:
 				if(*bytePtr == chara) {
 					int i=1;
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
 
 				}
@@ -375,7 +389,7 @@ char* lstrstrabsse(char* text, char* pattern)
 					int i=1;
 					bytePtr = & text[j];
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
 				}
 			}
@@ -413,25 +427,25 @@ findoutb:
 						if(reta & 1)
 						{
 							bytePtr = bytePtr0 ;
-							return bytePtr;
+							REPORT(bytePtr);
 						}
 						//if(bytePtr0[1] == chara)
 						if(reta & 2)
 						{
 							bytePtr = bytePtr0 + 1;
-							return bytePtr;
+							REPORT(bytePtr);
 						}
 						//if(bytePtr0[2] == chara)
 						if(reta & 4)
 						{
 							bytePtr = bytePtr0 + 2;
-							return bytePtr;
+							REPORT(bytePtr);
 						}
 						//if(bytePtr0[3] == chara)
 						if(reta & 8)
 						{
 							bytePtr = bytePtr0 + 3;
-							return bytePtr;
+							REPORT(bytePtr);
 						}
 					}
 					reta = reta >> 4;
@@ -453,7 +467,7 @@ findoutb:
 						if(bytePtr[0] == chara){
 							int i=1;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 							if(bytePtr[i] == 0) return NULL;
 						}
 
@@ -474,7 +488,7 @@ findoutb:
 			if(bytePtr[0] == chara){
 				int i=1;
 				while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-				if(pattern[i] == 0) return bytePtr;
+				if(pattern[i] == 0) REPORT(bytePtr);
 			}
 
 			goto prePareForEnd;
@@ -496,7 +510,7 @@ prePareForEnd:
 				if(*bytePtr == chara) {
 					int i=1;
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
 
 				}
@@ -583,7 +597,7 @@ char* lstrstrabxsse(char* text, char* pattern)
 					int i=1;
 					bytePtr = & text[j];
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
 				}
 			}
@@ -623,7 +637,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 ;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 						if(bytePtr0[1] == chara)
 							//if(reta & 2)
@@ -631,7 +645,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 + 1;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 						if(bytePtr0[2] == chara)
 							//if(reta & 4)
@@ -639,7 +653,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 + 2;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 						if(bytePtr0[3] == chara)
 							//if(reta & 8)
@@ -647,7 +661,7 @@ findoutb:
 							i =1;
 							bytePtr = bytePtr0 + 3;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 						}
 					}
 					reta = reta >> 4;
@@ -669,7 +683,7 @@ findoutb:
 						if(bytePtr[0] == chara){
 							int i=1;
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);
 							if(bytePtr[i] == 0) return NULL;
 						}
 
@@ -690,7 +704,7 @@ findoutb:
 			if(bytePtr[0] == chara){
 				int i=1;
 				while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-				if(pattern[i] == 0) return bytePtr;
+				if(pattern[i] == 0) REPORT(bytePtr);
 			}
 
 			goto prePareForEnd;
@@ -712,7 +726,7 @@ prePareForEnd:
 				if(*bytePtr == chara) {
 					int i=1;
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
 
 				}

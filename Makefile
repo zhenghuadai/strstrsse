@@ -1,5 +1,9 @@
 CC=gcc
-CXXFLAG=   -O3  
+ifeq ($(debug), yes)
+CXXFLAG= -g -O0 #-fPIC
+else
+CXXFLAG= -O3 #-fPIC
+endif
 
 ifeq  "${CC}"  "gcc"  
 CXXFLAG+=-msse2 
