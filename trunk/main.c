@@ -72,6 +72,7 @@ test_strstr (strstr_t strstr_alg)
 void printstr(char* s)
 {
 	int i =0;
+	if(s==0) return ;
 	printf(":");
 	for(i=0;(s[i]) &&(i<10);i++){
 		printf("%c",s[i]);
@@ -80,6 +81,7 @@ void printstr(char* s)
 void printstrn(char* s)
 {
 	int i =0;
+	if(s==0) return ;
 	printf(":");
 	for(i=0;(s[i]) &&(i<10);i++){
 		printf("%c",s[i]);
