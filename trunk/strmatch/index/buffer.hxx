@@ -155,6 +155,9 @@ OutBuffer2_DEFINITION_HEADER(void)::cleanBeforContinue()
 	curSize=0;
 }
 
+OutBuffer2_DEFINITION_HEADER(void)::mergeFile()
+{
+}
 
 
 

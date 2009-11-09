@@ -133,12 +133,13 @@ class OutBuffer2:public OutBufferBase{
 		void write(int h, Uint idx);
 	public:
 		void setFnInput(char* fn){ fnInput = strdup(fn);}
-		void finish(){ write2file();}
+		void finish(){ write2file(); mergeFile();}
 	private:
 		void init(){	mBufferFull = 1024 * 1024 * 16; pVH = (Value_Hash*) malloc(mBufferFull*sizeof(Value_Hash));}
 		void distroy();
 		void write2file();
 		void cleanBeforContinue();
+		void mergeFile();
 	protected:
 		char* fnInput;
 	private:
