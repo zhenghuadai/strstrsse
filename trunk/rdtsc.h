@@ -1,6 +1,5 @@
 #ifndef rdtsc
-//#define rdtscfreq 2.1280493e9
-#define rdtscfreq 1 
+#define rdtscfreq 2.1280493e9
 //#define rdtsc(low,high) \
 __asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high))
 #define rdtsc(low,high) \
@@ -26,7 +25,7 @@ static inline double mdtime(int id)
     static unsigned int high0,low0,high1,low1;
     if(id){
         rdtsc(low1,high1);
-        return rdtscdiff(low0,high0,low1,high1)/rdtscfreq;	
+        return rdtscdiff(low0,high0,low1,high1);	
     }
     else{
         rdtsc(low0,high0);
