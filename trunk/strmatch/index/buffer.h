@@ -124,7 +124,7 @@ class  Value_Hash{
 template<int HashBit=22>
 class OutBuffer2:public OutBufferBase{
 	public:
-		enum{MAX_HASH_VALUE= (1<< HashBit) -1, HashTableSize= 1<< HashBit};
+		enum{MAX_HASH_VALUE= (1<< HashBit) -1, HashTableSize= 1<< HashBit, HashTableBytes= HashTableSize*2};
 	public:
 		OutBuffer2(){ memset(this, 0, sizeof(OutBuffer2));init();}
 		OutBuffer2(char* fnin){ memset(this, 0, sizeof(OutBuffer2));init(); setFnInput(fnin);}
@@ -140,6 +140,7 @@ class OutBuffer2:public OutBufferBase{
 		void write2file();
 		void cleanBeforContinue();
 		void mergeFile();
+		void readHashTable(FILE* fp, Uint* dst){ fseek(fp, 128, SEEK_SET); fread(dst, HashTableSize*sizeof(Uint), 1, fp);};
 	protected:
 		char* fnInput;
 	private:
