@@ -67,7 +67,6 @@ OutBuffer_DEFINITION_HEADER(void):: write2file()
 	::fwrite((void*)tmpBuf,  curSize*sizeof(Uint), 1, fp);
 	//! update num
 	fclose(fp);	
-
 	delete tmpBuf;
 }
 
@@ -157,6 +156,28 @@ OutBuffer2_DEFINITION_HEADER(void)::cleanBeforContinue()
 
 OutBuffer2_DEFINITION_HEADER(void)::mergeFile()
 {
+	char fname[256];
+	Uint* tHashTable = pInt; 
+	Uint* tmpHashTable2 = pInt + HashTableSize; 
+	memset(tHashTable, 0, HashTableSize*sizeof(Uint));
+	FILE* fp;
+	for(int i=0;i< curFileNo; i++) {
+		sprintf(fname,".%s.index.%d.tmp", fnInput, i);
+		FILE* tfp = fopen(fname, "r");
+		readHashTable(tfp, tmpHashTable2);
+		fclose(tfp);
+		for(int k=0;k<HashTableSize;k++){
+			tHashTable[k] += tmpHashTable2[k];
+		}
+		remove(fname);
+	}
+
+	//! write the index file
+	sprintf(fname,".%s.index", fnInput);
+	fwriteHeader(fname);
+	fp = fopen(fname, "a");
+	fwrite((void*)tHashTable, HashTableSize*sizeof(Uint), 1, fp);
+	fclose(fp);
 }
 
 
