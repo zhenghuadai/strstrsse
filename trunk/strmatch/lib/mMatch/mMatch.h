@@ -51,6 +51,8 @@ class mMatch{
         virtual int search(char* txt) 			 	{return 0;}
         virtual int searchGene(char* txt, int n) 	{return 0;}
         virtual int searchGene(char* txt) 			{return 0;}
+        virtual int searchGene_(char* txt, int n) 	{return 0;}
+        virtual int searchGene_(char* txt) 			{return 0;}
         virtual int searchGene4(char* txt, int n) 	{return 0;}
         virtual int searchGene4(char* txt) 			{return 0;}
         //! continue searching 
@@ -64,6 +66,8 @@ class mMatch{
         int Tsearch(char* txt)            {startTime();int ret=search(txt);       endTime();return ret;}
         int TsearchGene(char* txt, int n) {startTime();int ret=searchGene(txt,n); endTime();return ret;}
         int TsearchGene(char* txt)        {startTime();int ret=searchGene(txt);   endTime();return ret;}
+        int TsearchGene_(char* txt, int n) {startTime();int ret=searchGene_(txt,n); endTime();return ret;}
+        int TsearchGene_(char* txt)        {startTime();int ret=searchGene_(txt);   endTime();return ret;}
         int TsearchGene4(char* txt, int n){startTime();int ret=searchGene4(txt,n);endTime();return ret;}
         int TsearchGene4(char* txt)       {startTime();int ret=searchGene4(txt);  endTime();return ret;}
         void setReportFunc(reportFunc f){report = f;}

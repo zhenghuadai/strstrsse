@@ -178,12 +178,13 @@ int ACsearchGene(acNodeT* acBase, matchListT** matchListBase, NodeT pRoot, repor
     return 0;
 }
 
-mAcBase_DEFINITION_HEADER(int)::searchGene(acNodeP& state, char* txt)
+mAcBase_DEFINITION_HEADER(template<geneCodeFunc geneCode> int)::searchGene(acNodeP& state, char* txt)
 {
 #if 1
     unsigned char* p = (Uchar*) txt;	
     for(;*p; p++){
-        Uchar c = agct2num(*p);
+        //Uchar c = agct2num(*p);
+        Uchar c = geneCode(*p);
         if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
         state = nextState(state, c); // state= state->go[*p]; 
         if(isMatched(state)) {
@@ -196,11 +197,12 @@ mAcBase_DEFINITION_HEADER(int)::searchGene(acNodeP& state, char* txt)
 #endif
 }
 
-mAcBase_DEFINITION_HEADER(int)::searchGene(acNodeP& state, char* txt, int n)
+mAcBase_DEFINITION_HEADER( template<geneCodeFunc geneCode> int)::searchGene(acNodeP& state, char* txt, int n)
 {
     unsigned char* p = (Uchar*) txt;	
     for(int i=0; i<n; p++,i++){
-        Uchar c = agct2num(*p);
+        //Uchar c = agct2num(*p);
+        Uchar c = geneCode(*p);
         if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
         state = nextState(state, c);// state= state->go[*p]; 
         if(state-> isMatched()) {
@@ -209,7 +211,41 @@ mAcBase_DEFINITION_HEADER(int)::searchGene(acNodeP& state, char* txt, int n)
     }
     return 0;
 }
-
+//
+//mAcBase_DEFINITION_HEADER(int)::searchGene_(acNodeP& state, char* txt)
+//{
+//#if 1
+//    unsigned char* p = (Uchar*) txt;	
+//    for(;*p; p++){
+//        Uchar c = agct2num(*p);
+//        if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
+//        state = nextState(state, c); // state= state->go[*p]; 
+//        if(isMatched(state)) {
+//            int ret = reportList(matchedList(state), (char*)p - txt);
+//        }
+//    }
+//    return 0;
+//#else
+//    return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, int, mAcBase<CHAR_SET,ST>::nextStateT, mAcBase<CHAR_SET,ST>::isMatchedT, mAcBase<CHAR_SET,ST>::reportMatchT>(NULL, NULL, pRoot(), report, txt);
+//#endif
+//}
+//
+//mAcBase_DEFINITION_HEADER(int)::searchGene_(acNodeP& state, char* txt, int n)
+//{
+//    unsigned char* p = (Uchar*) txt;	
+//    for(int i=0; i<n; p++,i++){
+//        Uchar c = agct2num(*p);
+//        if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
+//        state = nextState(state, c);// state= state->go[*p]; 
+//        if(state-> isMatched()) {
+//            int ret = reportList(matchedList(state), (char*)p - txt);
+//        }
+//    }
+//    return 0;
+//}
+//
+//
+//
 
 mAcBase_DEFINITION_HEADER(int)::searchGene4(acNodeP& state, char* txt)
 {
@@ -242,14 +278,27 @@ mAcBase_DEFINITION_HEADER(int)::searchGene4(acNodeP& state, char* txt, int n)
 mAcBase_DEFINITION_HEADER(int)::searchGene(char* txt)
 {
     acNodeP state=pRoot();
-    return searchGene(state, txt);
+    return searchGene<agct2num>(state, txt);
 }
 
 mAcBase_DEFINITION_HEADER(int)::searchGene(char* txt, int n)
 {
     acNodeP state=pRoot();
-    return searchGene(state, txt, n);
+    return searchGene<agct2num>(state, txt, n);
 }
+
+mAcBase_DEFINITION_HEADER(int)::searchGene_(char* txt)
+{
+    acNodeP state=pRoot();
+    return searchGene<agct2pairnum>(state, txt);
+}
+
+mAcBase_DEFINITION_HEADER(int)::searchGene_(char* txt, int n)
+{
+    acNodeP state=pRoot();
+    return searchGene<agct2pairnum>(state, txt, n);
+}
+
 
 
 mAcBase_DEFINITION_HEADER(int)::searchGene4(char* txt)
@@ -267,7 +316,7 @@ mAcBase_DEFINITION_HEADER(int)::searchGene4(char* txt, int n)
 mAcBase_DEFINITION_HEADER(int)::searchGeneC(char* txt)
 {
     acNodeP state=pCur();
-    int ret=searchGene(state, txt);
+    int ret=searchGene<agct2num>(state, txt);
     pCur()=state;
     return ret; 
 }
@@ -275,7 +324,7 @@ mAcBase_DEFINITION_HEADER(int)::searchGeneC(char* txt)
 mAcBase_DEFINITION_HEADER(int)::searchGeneC(char* txt, int n)
 {
     acNodeP state=pCur();
-    int ret=searchGene(state, txt, n);
+    int ret=searchGene<agct2num>(state, txt, n);
     pCur()=state;
     return  ret; 
 }

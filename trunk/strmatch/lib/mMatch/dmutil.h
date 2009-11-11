@@ -69,6 +69,8 @@ typedef struct Pattern_fasta Pattern_fasta;
 // g 71  0100 0111       11
 // N 78  0100 1110
 
+typedef Uchar (*geneCodeFunc)(Uchar);
+
 __INLINE__
 unsigned char agct2pair(unsigned char bp){
 	switch(bp){
@@ -76,6 +78,8 @@ unsigned char agct2pair(unsigned char bp){
 		case 'c': case'C': return 'G' ;
 		case 't': case'T': return 'A' ;
 		case 'g': case'G': return 'C' ;
+		default: return bp;
+		break;
 	}
 }
 
@@ -101,6 +105,12 @@ unsigned char agct2num(unsigned char bp){
 		default: return 4;
 	}
 #endif
+}
+
+__INLINE__ 
+unsigned char agct2pairnum(unsigned char bp)
+{
+	return agct2num(agct2pair(bp));
 }
 
 __INLINE__

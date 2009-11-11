@@ -254,6 +254,8 @@ class mAcBase:public mMatch
 		virtual int search(char* txt);
 		virtual int searchGene(char* txt, int n);
 		virtual int searchGene(char* txt);
+		virtual int searchGene_(char* txt, int n);
+		virtual int searchGene_(char* txt);
 		virtual int searchGene4(char* txt, int n);
 		virtual int searchGene4(char* txt);
 		virtual int searchGeneC(char* txt, int n);
@@ -283,8 +285,9 @@ class mAcBase:public mMatch
 		void buildTrie();
 		void buildFailure();
 		void convertDFA();
-		int searchGene(acNodeP&, char* txt, int n);
-		int searchGene(acNodeP&, char* txt);
+
+		template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt, int n);
+		template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt);
 		int searchGene4(acNodeP&, char* txt, int n);
 		int searchGene4(acNodeP&, char* txt);
 		int isBadChar(Uchar c) { return (c >= CHAR_SET);}
