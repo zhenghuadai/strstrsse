@@ -87,6 +87,11 @@ void reportInfo(char* patfn, char* dataBasefn)
 	fprintf(fpout, "quary:%s dataBase:%s\n",patfn, dataBasefn);
 }
 
+void closeReport()
+{
+	fclose(fpout);
+}
+
 using namespace dmMatch;
 int main(int argc,char *argv[])
 {
@@ -192,6 +197,10 @@ int main(int argc,char *argv[])
 			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
 			//wm.Tsearch(Text);
 			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], wm.getTime());
+			//! search complement 
+			fprintf(fpout, "\n\n The follow is complement\n");
+			ac.TsearchGene_(Text);
+			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
 		}
 	}
 	//fclose(fp);
@@ -201,4 +210,5 @@ int main(int argc,char *argv[])
 	for(i=0;i<occurnum;i++)
 		printf("%d,",occurrenceint[i]);
 
+	closeReport();
 }
