@@ -29,10 +29,15 @@
 #include <vector>
 #include "dmutil.h"
 
+
 class OutBufferBase
 {
     protected:
         void fwriteHeader(char* fn);
+		void printLog(char* logMsg){ printf("%s", logMsg);}
+		void* dmMalloc(size_t n){ void* ret = malloc(n); if(ret ==NULL) {printf("malloc err\n");} return ret; }
+		template<typename T>
+		void dmFree(T*& p){ free(p); p = 0;}
 };
 
 
@@ -128,14 +133,14 @@ class OutBuffer2:public OutBufferBase{
 	public:
 		OutBuffer2(){ memset(this, 0, sizeof(OutBuffer2));init();}
 		OutBuffer2(char* fnin){ memset(this, 0, sizeof(OutBuffer2));init(); setFnInput(fnin);}
-		~OutBuffer2(){free(pVH); pVH=0;}
+		~OutBuffer2(){dmFree(pVH); pVH=0;}
 	public:
 		void write(int h, Uint idx);
 	public:
 		void setFnInput(char* fn){ fnInput = strdup(fn);}
 		void finish(){ write2file(); mergeFile();}
 	private:
-		void init(){	mBufferFull = 1024 * 1024 * 16; pVH = (Value_Hash*) malloc(mBufferFull*sizeof(Value_Hash));}
+		void init(){	mBufferFull = 1024 * 1024 * 16; pVH = (Value_Hash*) dmMalloc(mBufferFull*sizeof(Value_Hash));}
 		void distroy();
 		void write2file();
 		void cleanBeforContinue();

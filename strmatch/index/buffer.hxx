@@ -101,6 +101,7 @@ OutBuffer2_DEFINITION_HEADER(void)::write(int h, Uint idx)
 OutBuffer2_DEFINITION_HEADER(void):: write2file()
 {
 	if(curSize ==0) return;
+	printLog("write to file...\n");
 	FILE* fp;
 	char fname[512];
 	Uint* tmpBuf;
@@ -156,6 +157,7 @@ OutBuffer2_DEFINITION_HEADER(void)::cleanBeforContinue()
 
 OutBuffer2_DEFINITION_HEADER(void)::mergeFile()
 {
+	printLog("Merge file...\n");
 	char fname[256];
 	Uint* tHashTable = pInt; 
 	Uint* tmpHashTable2 = pInt + HashTableSize; 
