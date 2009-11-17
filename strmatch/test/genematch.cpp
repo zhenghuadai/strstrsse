@@ -10,7 +10,7 @@
 #include "io.h"
 using namespace std;
 char** transList1(list<Pattern_fasta>* tList);
-
+const int maxLoopLen = 150;
 static char** gPatList=0;
 static char* curText = 0;
 FILE* fpout;
@@ -43,7 +43,7 @@ int  myreport(int patID, int idx)
 #if 1
 	char rPat[512];
 	reverse(rPat, gPatList[patID], m);
-	int endi1 = idx+200+1;
+	int endi1 = idx+maxLoopLen+1;
 	char oldChar = curText[endi1];
 	curText[endi1]= 0;
 	char* rPos = strstr(&curText[idx-m+1-150], rPat);
