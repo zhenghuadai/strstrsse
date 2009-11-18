@@ -14,6 +14,7 @@ char** rctransList1(list<Pattern_fasta>* tList);
 const int maxLoopLen = 150;
 static char** gPatList=0;
 static char* curText = 0;
+static int   curTextLen = 0;
 FILE* fpout;
 
 void reverse(char* dst, char* src, int m)
@@ -30,21 +31,32 @@ int  myreport(int patID, int idx)
 	fprintf(fpout, "\n-----------------------\n");
 	fprintf(fpout, "%s Pos:%d patID:%d\n", gPatList[patID],idx, patID);
 	//! expand
+	//!  starti1...starti2...idx+1
+	//!  preLen ...m      ... postLen
 	int m = strlen(gPatList[patID]);
     int starti1 =idx-m+1-150; 
 	int starti2 = idx-m+1;
-    char* start= &curText[starti1];
-    char* start2 = &curText[starti2];
-    fwrite(start, 150, 1, fpout);
+	char* start, *targetStart;
+	starti1 = (starti1>0?starti1:0);
+	int preLen = starti2-starti1; 
+	int postLen = (curTextLen-idx> 150 )?150:curTextLen-idx-1;
+    start= &curText[starti1];
+    targetStart = &curText[starti2];
+    fwrite(start, preLen, 1, fpout);
     fprintf(fpout,"...");
-    fwrite(start2, m, 1, fpout);
+    fwrite(targetStart, m, 1, fpout);
     fprintf(fpout,"...");
-    fwrite(&curText[idx+1], 150, 1, fpout);
+    fwrite(&curText[idx+1], postLen, 1, fpout);
 	//! loop-stem
 #if 1
+/*
+ * 
+ * */
 	char rPat[512];
-	reverse(rPat, gPatList[patID], m);
+	//reverse(rPat, gPatList[patID], m);
+	reverse(rPat, targetStart, m);
 	int endi1 = idx+maxLoopLen+1;
+	endi1 = endi1> curTextLen?curTextLen:endi1;
 	char oldChar = curText[endi1];
 	curText[endi1]= 0;
 	char* rPos = strstr(&curText[idx-m+1-150], rPat);
@@ -53,10 +65,13 @@ int  myreport(int patID, int idx)
 		fprintf(fpout, "\nloop-stem\n");
 		int rPosIdx = rPos - curText;
 		if(rPosIdx  > idx){ // pat ... rpat
+		//! start...targetStart...idx+1 ...rpos...rpos+m
+		//! 150  ...m     ...loopbp...m   ...60
 			int loopbp = rPosIdx - idx; 
-			fwrite(start, 150, 1, fpout);
+			fprintf(fpout,"loopbp %d\n", loopbp);
+			fwrite(start, preLen, 1, fpout);
 			fprintf(fpout,"...");
-			fwrite(start2, m, 1, fpout);
+			fwrite(targetStart, m, 1, fpout);
 			fprintf(fpout,"...");
 			fwrite(&curText[idx+1], loopbp, 1, fpout);
 			fprintf(fpout,"...");
@@ -66,6 +81,8 @@ int  myreport(int patID, int idx)
 
 		}else{//rpat ... pat
 			int loopbp = idx - rPosIdx -2*m +1;
+			if(loopbp <=0) {fprintf(fpout,"interleave\n"); return 0;}
+			fprintf(fpout,"loopbp %d\n", loopbp);
 			fwrite(rPos-60,60,1,fpout);
 			fprintf(fpout,"...");
 			fwrite(rPos,  m,1,fpout);
@@ -168,12 +185,13 @@ int main(int argc,char *argv[])
 	//Text=GetGenesubjectfromfile(subjfname);
 	Pattern_fasta* genome = loadGeneFastaU(subjfname);
 	Text = genome->str;
+	curTextLen=genome->len;
 
 	//printf("%s\n",Pat);
 	occurnum=0;
 	//printf("%s,",Text);
 	printf("\n");
-	printf("\n%d ok\n",strlen(Text));
+	//printf("\n%d ok\n",strlen(Text));
 	/* µ÷ÓÃ´®Æ¥Åäº¯Êý */
 	//mAcBase<4> ac(patts, ps, geneAC);
 	mAcBase<4> ac(patts, ps, geneACWid);
@@ -196,15 +214,15 @@ int main(int argc,char *argv[])
 			//ac.searchGene(Text);
 			//Mtime( &endrdt );
 			//elapsed_time= Mdifftime( startrdt, endrdt );
-			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
+			//printf("\nalgorithm %s takes\t %20.15f cycles.\n",matchalgstr[i], elapsed_time );
 			ac.TsearchGene(Text);
-			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
+			printf("\nalgorithm %s takes\t %20.15f cycles.\n",matchalgstr[i], ac.getTime());
 			//wm.Tsearch(Text);
-			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], wm.getTime());
+			//printf("\nalgorithm %s takes\t %20.15f cycles.\n",matchalgstr[i], wm.getTime());
 			//! search complement 
 			fprintf(fpout, "\n\n The follow is complement\n");
 			rac.TsearchGene(Text);
-			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
+			printf("\nalgorithm %s takes\t %20.15f cycles.\n",matchalgstr[i], ac.getTime());
 		}
 	}
 	//fclose(fp);
