@@ -218,7 +218,10 @@ int main(int argc,char *argv[])
 			//wm.Tsearch(Text);
 			//printf("\nalgorithm %s takes\t %20.15f cycles.\n",matchalgstr[i], wm.getTime());
 			//! search complement 
-			fprintf(fpout, "\n\n The follow is complement\n");
+			fprintf(fpout, "\n-----------------------\n");
+			fprintf(fpout, " The follow is complement\n");
+			fprintf(fpout, " The follow is complement\n");
+			fprintf(fpout, " The follow is complement\n");
 			rac.TsearchGene(Text);
 			printf("\nalgorithm %s takes\t %20.15f cycles.\n",matchalgstr[i], ac.getTime());
 		}
