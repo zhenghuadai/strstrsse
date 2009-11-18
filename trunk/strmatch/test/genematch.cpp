@@ -10,6 +10,7 @@
 #include "io.h"
 using namespace std;
 char** transList1(list<Pattern_fasta>* tList);
+char** rctransList1(list<Pattern_fasta>* tList);
 const int maxLoopLen = 150;
 static char** gPatList=0;
 static char* curText = 0;
@@ -158,6 +159,7 @@ int main(int argc,char *argv[])
 	list<Pattern_fasta>* pattsList= new list<Pattern_fasta>;
 	ps=loadGenePatternFasta(quryfname,  pattsList);
 	char** patts = transList1(pattsList);
+	char** rcpatts = rctransList1(pattsList);
 	//ps=GetGenepatternfromfile(quryfname,Patts);
 	//char** patts = Patts;
 	//for(int j=0;j<ps;j++) printf("%s\n",patts[j]);
@@ -175,12 +177,14 @@ int main(int argc,char *argv[])
 	/* µ÷ÓÃ´®Æ¥Åäº¯Êý */
 	//mAcBase<4> ac(patts, ps, geneAC);
 	mAcBase<4> ac(patts, ps, geneACWid);
-	mAcD<4,unsigned int> acD(ac);
+	mAcBase<4> rac(rcpatts, ps, geneACWid);
+	//mAcD<4,unsigned int> acD(ac);
 	//mAcD<4,unsigned short> acD(ac);
+    //mWm<8,geneHashWm8,4> wm(patts, ps);
 
-    mWm<8,geneHashWm8,4> wm(patts, ps);
 	ac.setReportFunc(myreport);
-	wm.setReportFunc(myreport);
+	rac.setReportFunc(myreport);
+	//wm.setReportFunc(myreport);
 	gPatList=patts;
 	curText = Text;
 
@@ -199,7 +203,7 @@ int main(int argc,char *argv[])
 			//printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], wm.getTime());
 			//! search complement 
 			fprintf(fpout, "\n\n The follow is complement\n");
-			ac.TsearchGene_(Text);
+			rac.TsearchGene(Text);
 			printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], ac.getTime());
 		}
 	}

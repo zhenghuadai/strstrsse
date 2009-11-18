@@ -163,6 +163,31 @@ char** transList1(list<Pattern_fasta>* tList)
     return patternList;
 }
 
+void rcgene(char* dst, const char* src, int m)
+{
+	if(m==0) m = strlen(src);	
+	char* pdst= dst; 
+	const char* psrc= src+m-1;
+	for(;pdst< dst+m; pdst++, psrc--){
+		*pdst = agct2pair(*psrc);	
+	}
+}
+
+char** rctransList1(list<Pattern_fasta>* tList)
+{
+    int len = tList->size();
+    char** patternList = (char**) malloc(len *sizeof(char*));
+    int i;
+    list<Pattern_fasta>::iterator it;
+    for(it=tList->begin(), i=0; it!=tList->end(); it++, i++){
+		char* s = (*it).str;
+		int m = strlen(s);
+        patternList[i] = (char*)malloc(m+1);
+		rcgene(patternList[i], s, m);
+    }
+    return patternList;
+}
+
 Pattern_fasta* transList2(list<Pattern_fasta>* tList)
 {
     int len = tList->size();
