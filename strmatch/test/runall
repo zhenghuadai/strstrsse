@@ -1,0 +1,15 @@
+#!/bin/bash
+genomeList="chr10.fa chr11.fa chr12.fa chr13.fa chr14.fa chr15.fa chr16.fa chr17.fa chr18.fa chr19.fa chr1.fa chr20.fa chr21.fa chr22.fa chr2.fa chr3.fa chr4.fa chr5.fa chr6.fa chr7.fa chr8.fa chr9.fa chrM.fa chrX.fa chrY.fa" 
+
+#siRnaList="CD4-pf-reads.txt clean-C1.fa clean-D1.fa plasm-pf-reads.txt q_mapped.txt "
+siRnaList="clean-C1-pf.fa clean-D1-pf.fa hEB-pf.fa hESC-pf.fa q1_pf.fa q4_pf.fa q5_pf.fa q6_pf.fa s5_pf.fa s6_pf.fa"
+
+for si in $siRnaList; do
+	for gn in $genomeList; do
+		./genematch -a data/$si -D genome/$gn -o res/res.$si.$gn  &> run.log.tmp
+		tar zcvf res/res.$si.$gn.tgz res/res.$si.$gn
+		rm -f res/res.$si.$gn
+		cat run.log.tmp >> run.log
+	done;
+done;
+
