@@ -7,7 +7,7 @@ siRnaList="clean-C1-pf.fa clean-D1-pf.fa hEB-pf.fa hESC-pf.fa q1_pf.fa q4_pf.fa 
 for si in $siRnaList; do
 	for gn in $genomeList; do
 		./genematch -a data/$si -D genome/$gn -o res/res.$si.$gn  &> run.log.tmp
-		tar zcvf res/res.$si.$gn.tgz res/res.$si.$gn
+		tar  zcvf res/res.$si.$gn.tgz res/res.$si.$gn
 		rm -f res/res.$si.$gn
 		cat run.log.tmp >> run.log
 	done;
