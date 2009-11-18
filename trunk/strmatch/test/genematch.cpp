@@ -68,7 +68,6 @@ int  myreport(int patID, int idx)
 		//! start...targetStart...idx+1 ...rpos...rpos+m
 		//! 150  ...m     ...loopbp...m   ...60
 			int loopbp = rPosIdx - idx; 
-			fprintf(fpout,"loopbp %d\n", loopbp);
 			fwrite(start, preLen, 1, fpout);
 			fprintf(fpout,"...");
 			fwrite(targetStart, m, 1, fpout);
@@ -82,7 +81,6 @@ int  myreport(int patID, int idx)
 		}else{//rpat ... pat
 			int loopbp = idx - rPosIdx -2*m +1;
 			if(loopbp <=0) {fprintf(fpout,"interleave\n"); return 0;}
-			fprintf(fpout,"loopbp %d\n", loopbp);
 			fwrite(rPos-60,60,1,fpout);
 			fprintf(fpout,"...");
 			fwrite(rPos,  m,1,fpout);
