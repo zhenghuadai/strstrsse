@@ -22,12 +22,13 @@ int main(int argc,char *argv[])
 	char *subjfname=0,*quryfname=0;
 	time_t   start, finish;
 	double elapsed_time;
-			int n, m;
+	int n, m;
 	//void (* matchalg[20])(char * text,char * pat);
 	//void (* matchalg2[20])(char * text,char * pat,int n, int m);
 	//char * matchalgstr[20]={0};
 	//int boolmatch[20];
 	matchTest match[20];
+	double time_used[20];
 	FILE *fp;
 	int verbose = 0;
 	//FILE *fp;
@@ -146,10 +147,10 @@ int main(int argc,char *argv[])
 	}
 
 
-if(verbose ==0)
-	setReportFunc(SEARCH_SILENT);
-else 
-	setReportFunc(SEARCH_ALL);
+	if(verbose ==0)
+		setReportFunc(SEARCH_SILENT);
+	else 
+		setReportFunc(SEARCH_ALL);
 
 	if(quryfname !=NULL)
 		Pat=Getsubjectfromfile(quryfname);
@@ -226,6 +227,7 @@ else
 			//Mtime(&endrdt);
 			//elapsed_time =Mdifftime(startrdt,endrdt);
 			elapsed_time=mdtime(1);
+			time_used[i] = elapsed_time;
 			printf("algorithm %10s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
 			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
 
@@ -246,14 +248,18 @@ else
 			//Mtime(&endrdt);
 			//elapsed_time =Mdifftime(startrdt,endrdt);
 			elapsed_time=mdtime(1);
+			if(i>16)
+			time_used[i] = elapsed_time;
 			printf("algorithm %10s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
 			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
-
 		}
 
 	}//end for
 
 	fclose(fp);
+
+	printf("speedup to bfStr:%f\n", time_used[0] / time_used[18]);
+	printf("speedup to bmStr:%f\n", time_used[1] / time_used[18]);
 
 	/* Êä³ö½á¹û */ 
 
