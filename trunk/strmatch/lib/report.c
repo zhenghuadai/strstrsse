@@ -39,7 +39,7 @@ static int report_default(char* text, int idx, char* pat)
 
 static int report_silent(char* text, int idx, char* pat)
 {
-	return SEARCH_STOP;
+	return SEARCH_CONTINUE;
 }
 
 

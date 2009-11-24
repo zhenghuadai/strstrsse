@@ -8,14 +8,15 @@ else
 endif
 ifeq ($(debug), yes)
 Gflag= -g -O0 #-fPIC 
+LIB= -lstrmatchd
 else 
 Gflag= -O3 #-fPIC 
+LIB= -lstrmatch
 endif
 
 #Gflag+= -Wall
 
 INC_PATH= -I../lib -I../others -I../lib/mMatch
-LIB= -lstrmatch
 LIBPATH= -L../lib -L../lib/mMatch
 #Gflag= -O0 -g
 #algobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o 

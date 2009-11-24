@@ -181,7 +181,7 @@ findoutb:
 				char * bytePtr0 = (char*) ( sseiPtr );
 				int j;
 				//printf("test::%0x,%d\n",reta ,bytePtr0 -text);
-				bytePtr = (char*) ( sseiPtr );
+				//bytePtr = (char*) ( sseiPtr );
 				//if(0)
 #if 1
 				while(reta){
@@ -194,7 +194,7 @@ findoutb:
 					//reta = reta & ( ~(1<<idx));
 					__asm__ ( "btr %1, %0"
 							:"=r"(reta)
-							:"r"(idx),"0"(idx)
+							:"r"(idx),"0"(reta)
 							);
 
 				}

@@ -53,9 +53,10 @@ void preBmGs(char *pat, int m, int bmGs[]) {
 }
  
  
-char* Sbm2(char *text, char *pat,int n, int m) {
+char* Sbm2(char *texts, char *pat,int n, int m) {
 	int i, j, bmGs[XSIZE], bmBc[ASIZE];
 	//   printf("n lenth of bm:%d,m:%d,",n,m);
+	unsigned char* text= (unsigned char*) texts;
 
 	/* Preprocessing */
 	preBmGs(pat, m, bmGs);
@@ -68,8 +69,12 @@ char* Sbm2(char *text, char *pat,int n, int m) {
 			OUTPUT(j);
 			j += bmGs[0];
 		}
-		else
-			j += MAX(bmGs[i], bmBc[text[i + j]] - m + 1 + i);
+		else{
+			int skipn = MAX(bmGs[i], bmBc[text[i + j]] - m + 1 + i);
+			//if(skipn> m) 
+				//printf("err\n");
+			j += skipn; 
+		}
 	}
 	SRET(j);
 }
@@ -82,17 +87,17 @@ char* Sbm(char *text, char *pat) {
 }
 
 typedef struct{
-    structHeader header;
-    int limit;
-    int bmGs[XSIZE];
-    int bmBc[ASIZE];
+	structHeader header;
+	int limit;
+	int bmGs[XSIZE];
+	int bmBc[ASIZE];
 }structSbm;
 
 void* preSbm(char* pat, int m)
 {
-    if(m == 0) m = strlen(pat);
-    structSbm* s= (structSbm*)malloc(sizeof(structSbm));;
+	if(m == 0) m = strlen(pat);
+	structSbm* s= (structSbm*)malloc(sizeof(structSbm));;
 	preBmGs(pat, m, s->bmGs);
 	preBmBc(pat, m, s->bmBc);
-    return (void*) s;
+	return (void*) s;
 }
