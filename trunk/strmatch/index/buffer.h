@@ -33,7 +33,9 @@
 class OutBufferBase
 {
     protected:
+		enum{IndexFileHeaderSize=128};
         void fwriteHeader(char* fn);
+        void fwriteHeader(FILE* fp);
 		void printLog(char* logMsg){ printf("%s", logMsg);}
 		void* dmMalloc(size_t n){ void* ret = malloc(n); if(ret ==NULL) {printf("malloc err\n");} return ret; }
 		template<typename T>
@@ -145,7 +147,8 @@ class OutBuffer2:public OutBufferBase{
 		void write2file();
 		void cleanBeforContinue();
 		void mergeFile();
-		void readHashTable(FILE* fp, Uint* dst){ fseek(fp, 128, SEEK_SET); fread(dst, HashTableSize*sizeof(Uint), 1, fp);};
+		void merge2File(FILE* dst, FILE* src1, FILE* src2);
+		void readHashTable(FILE* fp, Uint* dst){ fseek(fp, IndexFileHeaderSize, SEEK_SET); fread(dst, HashTableSize*sizeof(Uint), 1, fp);};
 	protected:
 		char* fnInput;
 	private:
@@ -153,7 +156,7 @@ class OutBuffer2:public OutBufferBase{
 		size_t mBufferFull;
 		int curFileNo;
 		union{
-			Value_Hash* pVH;
+			Value_Hash* pVH; //! Size== mBufferFull
 			Uint* pInt;
 		};
 };
