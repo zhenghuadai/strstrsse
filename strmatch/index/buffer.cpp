@@ -72,7 +72,13 @@ void OutBuffer6b::finish()
 void OutBufferBase::fwriteHeader(char* fn)
 {
     FILE* fp= fopen(fn, "w");
-    for(int i=0;i<128;i++)
-        fputc(0,fp);
+	fwriteHeader(fp);
     fclose(fp);
+}
+
+void OutBufferBase::fwriteHeader(FILE* fp)
+{
+	rewind(fp);	
+    for(int i=0;i<IndexFileHeaderSize;i++)
+        fputc(0,fp);
 }
