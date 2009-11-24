@@ -247,6 +247,8 @@ OutBuffer2_DEFINITION_HEADER(void)::mergeFile()
 		fclose(dstfp);
 		fclose(src1fp);
 		fclose(src2fp);
+		remove(fname);
+		remove(fnameSrc1);
 	}
 
 }
