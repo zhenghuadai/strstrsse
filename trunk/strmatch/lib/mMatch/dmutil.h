@@ -92,6 +92,11 @@ unsigned char num2agct(unsigned char n){
 }
 
 __INLINE__
+unsigned char agct2num4(unsigned char bp){
+	return ((bp>>1) & 3);
+}
+
+__INLINE__
 unsigned char agct2num(unsigned char bp){
 #if 1
     if(bp == 'N' || bp == 'n') return 4;
