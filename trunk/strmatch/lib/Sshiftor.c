@@ -2,25 +2,24 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-//Shift or algorithm
 #include"match.h"
-int preSo(char *x, int m, unsigned int S[]) { 
-    unsigned int j, lim; 
+typedef unsigned int Uword;
+int preSo(char *x, int m, Uword S[]) { 
+    Uword j, lim; 
     int i; 
 	for (i = 0; i < ASIZE; ++i) 
 		S[i] = ~0; 
 	for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) { 
 		S[x[i]] &= ~j; 
-		lim |= j; 
-		//                    printf("S[%c]:%u  lim:%d\n",x[i],S[x[i]],lim); 
 	} 
+    lim = (1<<m) -1;
 	lim = ~(lim>>1); 
 	return(lim); 
 } 
 
 char* Sshiftor2(char *text,char *pat,int n, int m) { 
-	unsigned int lim, state; 
-	unsigned int S[ASIZE];
+	Uword lim, state; 
+	Uword S[ASIZE];
 	int j; 
 	if (m > WORD_SIZE) 
 		error("SO: Use pattern size <= word size"); 
@@ -47,7 +46,7 @@ char* Sshiftor(char *text,char *pat) {
 typedef struct{
     structHeader header;
     int limit;
-    unsigned int S[256];
+    Uword S[256];
 }structSshiftor;
 
 void* preSshiftor(char* pat, int m)
