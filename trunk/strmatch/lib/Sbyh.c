@@ -32,14 +32,16 @@ char* Sbyh(char *textt,char *patt)
 
 char* SbyhSearch(unsigned char *text,int m,int n,int ch[]){
 	int j,pos;
-	int  count[2*m],yu;
+    const int yu = 64;//(2*m>32?(2*m>64?128:64):32);
+	int  count[yu];
+	//int yu=2*m; 
+	//int  count[2*m],yu;
 
 	for(j=0;j<2*m;j++) {
 		count[j]=0;
 	}
-	yu=2*m; 
 	for(j=0;j<m;j++)
-		if((ch[text[j]]!=-1)&&(j-ch[text[j]]>0) )
+		if((ch[text[j]]!=-1)&&(j-ch[text[j]]>=0) )
 			count[j-ch[text[j]]]++;
 	for(j=m;j<n;j++){
 		if(ch[text[j]]!=-1)	
