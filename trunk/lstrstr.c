@@ -17,6 +17,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include "report.h"
 char* lstrchr(const char *str,char c);
 static const unsigned int magic_bits = 0x7efefeffL;
 
@@ -207,6 +208,7 @@ prePareForEnd:
 		return NULL;
 	}
 
+#define REPORT(i) return i 
 	char* lstrchr(const char *str,char c) 
 	{
 
@@ -224,7 +226,7 @@ prePareForEnd:
 				++char_ptr) {
 			if (*char_ptr == '\0')return NULL;
 			if (*char_ptr == c)
-				return (char*)char_ptr;
+				REPORT(char_ptr);
 		}
 
 		longword_ptr = (unsigned int*)char_ptr;
@@ -242,13 +244,13 @@ prePareForEnd:
 			char *cp = (char*)(longword_ptr );
 
 			if (cp[0] == c)
-				return cp ;
+				REPORT(cp) ;
 			if (cp[1] == c)
-				return cp + 1;
+				REPORT(cp + 1);
 			if (cp[2] == c)
-				return cp + 2;
+				REPORT(cp + 2);
 			if (cp[3] == c)
-				return cp + 3;
+				REPORT(cp + 3);
 		}
 		return NULL;
 	}
