@@ -1,5 +1,5 @@
 #CMPCOUNT:=
-CC=gcc
+Compiler?=gcc
 CXX=g++ 
 ifeq ($(CMPCOUNT),y)
 	DFLAGS:=-c -DCMPCOUNT
@@ -28,22 +28,22 @@ matchasmobj:=matchasm.o Ady.o extract.o output.o Mtime.o
 all: match matchmul 
 
 match: ${matchobj}
-	${CC} ${Gflag} ${INC_PATH} -static  -o match ${matchobj} ${LIB} ${LIBPATH}
+	${Compiler} ${Gflag} ${INC_PATH} -static  -o match ${matchobj} ${LIB} ${LIBPATH}
 matchgene: ${matchgeneobj}
-	${CC} ${Gflag} -o matchgene ${matchgeneobj}
+	${Compiler} ${Gflag} -o matchgene ${matchgeneobj}
 matcho3: ${matchobj}
-	${CC} ${Gflag}  -o matcho3 ${matchobj}
+	${Compiler} ${Gflag}  -o matcho3 ${matchobj}
 matchmul:${matchmulobj} 
-	${CC} ${Gflag}  ${INC_PATH} -static -o matchmul ${matchmulobj}  ${LIB} ${LIBPATH}
+	${Compiler} ${Gflag}  ${INC_PATH} -static -o matchmul ${matchmulobj}  ${LIB} ${LIBPATH}
 matchasm:${matchasmobj}
-	${CC} ${Gflag} -o matchasm ${matchasmobj}
+	${Compiler} ${Gflag} -o matchasm ${matchasmobj}
 mmatch:mmatch.o ${utilobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 genematch:genematch.o ${utilobj} io.o
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
 %.o:%.c
-	${CC} ${Gflag} ${INC_PATH} -c $< -o $@ 
+	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ 
 %.o:%.cpp
 	${CXX} ${Gflag} ${INC_PATH} -c $< -o $@ 
 clean:
