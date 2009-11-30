@@ -1,0 +1,6 @@
+1. to build lib:
+	cd strmatch/lib 
+    make
+2. to test the lib 
+    cd strmatch/test 
+	make 
