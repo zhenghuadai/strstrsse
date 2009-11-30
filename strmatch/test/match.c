@@ -7,7 +7,7 @@
 #include "stdio.h"
 #define ALLALG 20 
 #include "strstrsse.h"
-#include "../../rdtsc.h"
+#include "rdtsc.h"
 typedef struct matchtest_
 {
 	void (* matchalg)(char * text,char * pat);
