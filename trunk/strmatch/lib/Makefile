@@ -1,5 +1,5 @@
 #CMPCOUNT:=
-CC=gcc
+Compiler=gcc
 ifeq ($(CMPCOUNT),y)
 	DFLAGS:=-c -DCMPCOUNT
 else
@@ -24,17 +24,17 @@ matchmulobj:=matchmul.o  output.o extract.o Mtime.o acsmx.o snortmwm.o
 matchasmobj:=matchasm.o Ady.o extract.o output.o Mtime.o
 lib:${algobj}
 	ar cur  $(libstrmatch) $^
-	gcc -shared -fPIC -o $(libstrmatchso) $^
+	${Compiler} -shared -fPIC -o $(libstrmatchso) $^
 matchgene: ${matchgeneobj}
-	${CC} ${Gflag} -o matchgene ${matchgeneobj}
+	${Compiler} ${Gflag} -o matchgene ${matchgeneobj}
 matcho3: ${matchobj}
-	${CC} ${Gflag} -O3 -o matcho3 ${matchobj}
+	${Compiler} ${Gflag} -O3 -o matcho3 ${matchobj}
 matchmul:${matchmulobj} 
-	${CC} ${Gflag} -O3 -o matchmul ${matchmulobj} 
+	${Compiler} ${Gflag} -O3 -o matchmul ${matchmulobj} 
 matchasm:${matchasmobj}
-	${CC} ${Gflag} -o matchasm ${matchasmobj}
+	${Compiler} ${Gflag} -o matchasm ${matchasmobj}
 %.o:%.c
-	${CC} ${Gflag} -c $< 
+	${Compiler} ${Gflag} -c $< 
 	
 clean:
 	rm -f *.o

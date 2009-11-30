@@ -258,8 +258,9 @@ int main(int argc,char *argv[])
 
 	fclose(fp);
 
-	printf("speedup to bfStr:%f\n", time_used[0] / time_used[18]);
-	printf("speedup to bmStr:%f\n", time_used[1] / time_used[18]);
+	printf("speedup to bfStr :%f\n", time_used[0] / time_used[18]);
+	printf("speedup to bmStr :%f\n", time_used[1] / time_used[18]);
+	printf("speedup to bmhStr:%f\n", time_used[2] / time_used[18]);
 
 	/* Êä³ö½á¹û */ 
 
