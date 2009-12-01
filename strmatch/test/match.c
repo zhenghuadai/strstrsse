@@ -8,6 +8,7 @@
 #define ALLALG 20 
 #include "strstrsse.h"
 #include "rdtsc.h"
+char* lstrstrsseLong(const char* text, const char* pat);// gcc 
 typedef struct matchtest_
 {
 	void (* matchalg)(char * text,char * pat);
@@ -97,6 +98,9 @@ int main(int argc,char *argv[])
 	match[18].matchalg		=lstrstrsse;
 	match[18].matchalg2		=0;
 	match[18].matchalgstr	="lstrstrsse";
+	match[19].matchalg		=lstrstrsseLong;
+	match[19].matchalg2		=0;
+	match[19].matchalgstr	="lstrstrsse2";
 	for(i=0;i<ALLALG;i++)
 	{
 		match[i].boolmatch=1;
@@ -228,7 +232,7 @@ int main(int argc,char *argv[])
 			//elapsed_time =Mdifftime(startrdt,endrdt);
 			elapsed_time=mdtime(1);
 			time_used[i] = elapsed_time;
-			printf("algorithm %10s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
+			printf("algorithm %15s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
 			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
 
 		}
@@ -250,7 +254,7 @@ int main(int argc,char *argv[])
 			elapsed_time=mdtime(1);
 			if(i>16)
 			time_used[i] = elapsed_time;
-			printf("algorithm %10s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
+			printf("algorithm %15s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
 			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
 		}
 

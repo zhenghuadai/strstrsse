@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include"match.h"
-typedef unsigned int Uword;
-int preSa(char *x, int m, Uword S[]) { 
+Uword preSa(char *x, int m, Uword S[]) { 
 	Uword j, lim; 
 	int i; 
 	for (i = 0; i < ASIZE; ++i) 
@@ -12,8 +11,7 @@ int preSa(char *x, int m, Uword S[]) {
 	for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) { 
 		S[x[i]] |= j; 
 	} 
-    lim = (1<<m) -1; 
-    lim = lim>>1;
+    lim = (1<<(m-1)) -1; 
 	return(lim); 
 } 
 

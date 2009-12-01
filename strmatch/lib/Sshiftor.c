@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
-#include"match.h"
-typedef unsigned int Uword;
+#include "match.h"
 int preSo(char *x, int m, Uword S[]) { 
     Uword j, lim; 
     int i; 
@@ -12,8 +11,8 @@ int preSo(char *x, int m, Uword S[]) {
 	for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) { 
 		S[x[i]] &= ~j; 
 	} 
-    lim = (1<<m) -1;
-	lim = ~(lim>>1); 
+    lim = (1<<(m-1)) -1;
+	lim = ~(lim); 
 	return(lim); 
 } 
 
