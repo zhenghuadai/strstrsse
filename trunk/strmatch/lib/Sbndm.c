@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <stdio.h>
 #include "mem.h"
-#define ASIZE 256
-#define WORD_SIZE 16
+#include "match.h"
+//#define ASIZE 256
+//#define WORD_SIZE 32
 char*  Sbndm2(char * text,char *pat,int n, int m) //Backward Nondeterministic Dawg Matching algorithm
 {
 	int B[ASIZE];
