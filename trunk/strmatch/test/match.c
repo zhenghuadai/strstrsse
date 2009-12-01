@@ -5,7 +5,7 @@
 #include "global.h"
 #include "time.h"
 #include "stdio.h"
-#define ALLALG 20 
+#define ALLALG 30 
 #include "strstrsse.h"
 #include "rdtsc.h"
 char* lstrstrsseLong(const char* text, const char* pat);// gcc 
@@ -28,13 +28,13 @@ int main(int argc,char *argv[])
 	//void (* matchalg2[20])(char * text,char * pat,int n, int m);
 	//char * matchalgstr[20]={0};
 	//int boolmatch[20];
-	matchTest match[20];
-	double time_used[20];
+	matchTest match[ALLALG ];
+	double time_used[ALLALG ];
 	FILE *fp;
 	int verbose = 0;
 	//FILE *fp;
 	_U64 startrdt,endrdt;
-	for(i=0;i<20;i++)
+	for(i=0;i<ALLALG ;i++)
 	{
 		//matchalg[i]=NULL;
 		//matchalg2[i]=NULL;
@@ -101,6 +101,9 @@ int main(int argc,char *argv[])
 	match[19].matchalg		=lstrstrsseLong;
 	match[19].matchalg2		=0;
 	match[19].matchalgstr	="lstrstrsse2";
+	match[20].matchalg		=strstrsse42;
+	match[20].matchalg2		=0;
+	match[20].matchalgstr	="strstrsse42";
 	for(i=0;i<ALLALG;i++)
 	{
 		match[i].boolmatch=1;
