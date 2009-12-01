@@ -47,7 +47,8 @@ inline static int strcmpInline(char* str1,char* str2)
 	return 1;
 }
 
-char* lstrstr(char* text, char* pattern)
+#define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
+char* lstrstr(const char* text, const char* pattern)
 {
 	unsigned int * intPtr = (unsigned int *) text;
 	unsigned char * chPtrAligned = (unsigned char*)text;
@@ -82,15 +83,15 @@ char* lstrstr(char* text, char* pattern)
 		switch(preBytes){
 			case 1:
 				if((text[0])&&(text[0] == chara)){
-					if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
+					if(strcmpInline(text+1,pattern +1) == 0) REPORT(text); //return text + 0;
 				}
 				break;
 			case 2:
 				if((text[0])&&(text[0] == chara)){
-					if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
+					if(strcmpInline(text+1,pattern +1) == 0) REPORT(text);//return text + 0;
 				}
 				if((text[1])&&(text[1] == chara)){
-					if(strcmpInline(text+2,pattern +1) == 0) return text + 1;
+					if(strcmpInline(text+2,pattern +1) == 0) REPORT(text+1);//return text + 1;
 				}
 				break;
 			case 3:
@@ -100,13 +101,13 @@ char* lstrstr(char* text, char* pattern)
 					unsigned int retb = haszerobyte(intWord ^ byte4b);
 					if(((reta | retb)&((reta| retb)>>8)/*ab|ba|aa|bb*/ )){
 						if((text[0])&&(text[0] == chara)){
-							if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
+							if(strcmpInline(text+1,pattern +1) == 0) REPORT(text);//return text + 0;
 						}
 						if((text[1])&&(text[1] == chara)){
-							if(strcmpInline(text+2,pattern +2) == 0) return text + 1;
+							if(strcmpInline(text+2,pattern +2) == 0) REPORT(text+1);//return text + 1;
 						}
 						if((text[2])&&(text[2] == chara)){
-							if(strcmpInline(text+3,pattern +3) == 0) return text + 2;
+							if(strcmpInline(text+3,pattern +3) == 0) REPORT(text+1);//return text + 2;
 						}
 					}
 				}
@@ -141,19 +142,19 @@ findoutb:
 				bytePtr = (char*) ( intPtr );
 				if(bytePtr0[0] == chara){
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);//return bytePtr;
 				}
 				if(bytePtr0[1] == chara){
 					i =1;
 					bytePtr = bytePtr0 + 1;
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);//return bytePtr;
 				}
 				if(bytePtr0[2] == chara){
 					i =1;
 					bytePtr = bytePtr0 + 2;
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-					if(pattern[i] == 0) return bytePtr;
+					if(pattern[i] == 0) REPORT(bytePtr);//return bytePtr;
 				}
 			}
 			// search b
@@ -170,7 +171,7 @@ findoutb:
 						char * bytePtr = ((char*) ( intPtr )) -1;
 						if(bytePtr[0] == chara){
 							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) return bytePtr;
+							if(pattern[i] == 0) REPORT(bytePtr);//return bytePtr;
 							if(bytePtr[i] == 0) return NULL;
 						}
 
@@ -198,7 +199,7 @@ prePareForEnd:
 			if(*bytePtr == chara) {
 				int i=1;
 				while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-				if(pattern[i] == 0) return bytePtr;
+				if(pattern[i] == 0) REPORT(bytePtr);//return bytePtr;
 				if(bytePtr[i] == 0) return NULL;
 
 			}
@@ -207,7 +208,7 @@ prePareForEnd:
 
 		return NULL;
 	}
-
+#undef REPORT(i)
 #define REPORT(i) return i 
 	char* lstrchr(const char *str,char c) 
 	{

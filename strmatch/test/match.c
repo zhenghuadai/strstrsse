@@ -101,9 +101,14 @@ int main(int argc,char *argv[])
 	match[19].matchalg		=lstrstrsseLong;
 	match[19].matchalg2		=0;
 	match[19].matchalgstr	="lstrstrsse2";
-	match[20].matchalg		=strstrsse42;
+	match[20].matchalg		=lstrstr;
 	match[20].matchalg2		=0;
-	match[20].matchalgstr	="strstrsse42";
+	match[20].matchalgstr	="lstrstr";
+    #ifdef SSE4
+	match[21].matchalg		=strstrsse42;
+	match[21].matchalg2		=0;
+	match[21].matchalgstr	="strstrsse42";
+    #endif
 	for(i=0;i<ALLALG;i++)
 	{
 		match[i].boolmatch=1;

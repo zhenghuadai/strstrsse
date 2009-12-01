@@ -17,7 +17,10 @@ Gflag= -O3
 endif
 Gflag+= -fPIC -msse2 
 
-sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o report.o strstrsse42.o 
+sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o report.o 
+ifeq ($(SSE4.2), yes)
+sobj+=strstrsse42.o 
+endif
 mobj:= Msbom.o Mwm.o Mshiftor.o Mac.o
 algobj:= ${sobj} ${mobj} 
 matchmulobj:=matchmul.o  output.o extract.o Mtime.o acsmx.o snortmwm.o

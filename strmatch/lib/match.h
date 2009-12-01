@@ -63,6 +63,7 @@ char* Sbyh       (char* text, char* pat);//计数算法
 char* Sskip      (char* text, char* pat);//跳跃算法 
 char* Skmpskip   (char* text, char* pat);// kmp跳跃算法 
 char* bfstr      (char* text, char* pat);// gcc 
+char* lstrstr    (const char* text, const char* pat);// gcc 
 char* lstrstrsse (const char* text, const char* pat);// gcc 
 char* strstrsse42(const char* text, const char* pat);// gcc 
 
