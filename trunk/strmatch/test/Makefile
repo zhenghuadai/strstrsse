@@ -6,6 +6,7 @@ ifeq ($(CMPCOUNT),y)
 else
 	DFLAGS:=-c 
 endif
+
 ifeq ($(debug), yes)
 Gflag= -g -O0 #-fPIC 
 LIB= -lstrmatchd
@@ -46,6 +47,8 @@ genematch:genematch.o ${utilobj} io.o
 	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ 
 %.o:%.cpp
 	${CXX} ${Gflag} ${INC_PATH} -c $< -o $@ 
+../lib/strstrsse2.o:../lib/strstrsse2.c
+	${Compiler} ${Gflag} ${INC_PATH} -msse2  -c $< -o $@ 
 clean:
 	rm -f *.o
 	rm -f match
