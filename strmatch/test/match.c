@@ -98,12 +98,14 @@ int main(int argc,char *argv[])
 	match[18].matchalg		=lstrstrsse;
 	match[18].matchalg2		=0;
 	match[18].matchalgstr	="lstrstrsse";
+	#ifdef TEST_2
 	match[19].matchalg		=lstrstrsseLong;
 	match[19].matchalg2		=0;
 	match[19].matchalgstr	="lstrstrsse2";
 	match[20].matchalg		=lstrstr;
 	match[20].matchalg2		=0;
 	match[20].matchalgstr	="lstrstr";
+	#endif
     #ifdef SSE4
 	match[21].matchalg		=strstrsse42;
 	match[21].matchalg2		=0;
@@ -158,11 +160,6 @@ int main(int argc,char *argv[])
 		}
 	}
 
-
-	if(verbose ==0)
-		setReportFunc(SEARCH_SILENT);
-	else 
-		setReportFunc(SEARCH_ALL);
 
 	if(quryfname !=NULL)
 		Pat=Getsubjectfromfile(quryfname);
@@ -226,6 +223,20 @@ int main(int argc,char *argv[])
 	fprintf(fp,"***********************************************\n");
 	fprintf(fp,"length of Text:%d\nlength of pattern:%d\n ",strlen(Text),strlen(Pat));
 	fprintf(stdout,"length of Text:%d\nlength of pattern:%d %s\n ",strlen(Text),strlen(Pat),Pat);
+
+	setReportFunc(SEARCH_SILENT);
+	for(i=0;i<ALLALG;i++)
+	{   
+		if(match[i].matchalg2 && match[i].boolmatch)
+			match[i].matchalg2(Text,Pat, n, m);
+		if(match[i].matchalg && match[i].boolmatch)
+			match[i].matchalg(Text,Pat);
+	}
+
+	if(verbose ==0)
+		setReportFunc(SEARCH_SILENT);
+	else 
+		setReportFunc(SEARCH_ALL);
 	printf("alg2\n");
 	for(i=0;i<ALLALG;i++)
 	{   
@@ -261,7 +272,7 @@ int main(int argc,char *argv[])
 			//elapsed_time =Mdifftime(startrdt,endrdt);
 			elapsed_time=mdtime(1);
 			if(i>16)
-			time_used[i] = elapsed_time;
+				time_used[i] = elapsed_time;
 			printf("algorithm %15s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
 			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
 		}
