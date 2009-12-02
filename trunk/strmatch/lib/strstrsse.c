@@ -250,26 +250,28 @@ findoutb:
 			while( haszeroByte(sseiWord0,sseiWord1,sseiZero) ==0){ 
 				retc = hasByteC(sseiWord0,sseiWord1,  byte16c);
 				if(retc !=0){
-					// findout b
-					if((*((char*) sseiPtr)) == charb){
-						//b000
-						char * bytePtr = ((char*) ( sseiPtr )) -1;
-						if(bytePtr[0] == chara){
-							int i=1;
-							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) REPORT(bytePtr);
-							if(bytePtr[i] == 0) return NULL;
+					//! this line will decrease the performance, I am a little amazed. if(retc& (3<<30)) 
+					{
+						if((*((char*) sseiPtr)) == charb){
+							//a|||b000
+							char * bytePtr = ((char*) ( sseiPtr )) -1;
+							if(bytePtr[0] == chara){
+								int i=1;
+								while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+								if(pattern[i] == 0) REPORT(bytePtr);
+								if(bytePtr[i] == 0) return NULL;
+							}
 						}
-					}
 #if 1
-					if((*((char*) sseiPtr)) == charc){
-						//b000
-						char * bytePtr = ((char*) ( sseiPtr )) -2;
-						if(bytePtr[0] == chara){
-							int i=1;
-							while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-							if(pattern[i] == 0) REPORT(bytePtr);
-							if(bytePtr[i] == 0) return NULL;
+						if((*((char*) sseiPtr)) == charc){
+							//ab||||c000
+							char * bytePtr = ((char*) ( sseiPtr )) -2;
+							if(bytePtr[0] == chara){
+								int i=1;
+								while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+								if(pattern[i] == 0) REPORT(bytePtr);
+								if(bytePtr[i] == 0) return NULL;
+							}
 						}
 					}
 #endif
