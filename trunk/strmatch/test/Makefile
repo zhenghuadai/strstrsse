@@ -1,4 +1,5 @@
 #CMPCOUNT:=
+include ../lib/config.mk
 Compiler?=gcc
 CXX=g++ 
 ifeq ($(CMPCOUNT),y)
@@ -15,6 +16,9 @@ Gflag= -O3 #-fPIC
 LIB= -lstrmatch
 endif
 
+ifeq ($(SSE42), yes)
+Gflag+= -DSSE4 
+endif
 #Gflag+= -Wall
 
 INC_PATH= -I../lib -I../others -I../lib/mMatch
