@@ -199,3 +199,11 @@ Pattern_fasta* transList2(list<Pattern_fasta>* tList)
     }
     return patternList;
 }
+
+extern "C" 
+{
+char * GetgenefromfileU(char *pfname)
+{
+	return 	loadGeneFastaU(pfname)->str;
+}
+}
