@@ -9,6 +9,7 @@
 #include "strstrsse.h"
 #include "rdtsc.h"
 char* lstrstrsseLong(const char* text, const char* pat);// gcc 
+char * GetgenefromfileU(char *pfname);
 typedef struct matchtest_
 {
 	void (* matchalg)(char * text,char * pat);
@@ -286,7 +287,7 @@ int main(int argc,char *argv[])
 	printf("speedup to bmhStr:%f\n", time_used[2] / time_used[18]);
 
 	/* Êä³ö½á¹û */ 
-
+	printf("%f\n%f\n%f\n%f\n%f\n%f\n",time_used[18], time_used[1], time_used[2], time_used[0],time_used[6],time_used[15]);
 	for(i=0;i<occurnum;i++)
 		printf("%d,",occurrenceint[i]);
 	//printf("\nalgorithm takes %6.2f seconds.\n", elapsed_time );
