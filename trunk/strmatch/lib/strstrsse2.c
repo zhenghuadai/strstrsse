@@ -60,7 +60,7 @@ char* lstrstrsseLong(const char* text, const char* pattern)
 	__m128i sseiZero = _mm_set1_epi8(0);
 	char chara = pattern[0];
 	char charb = pattern[1];
-	char charc = pattern[2];
+	char charc = pattern[4];
 	unsigned int reta=0;
 	unsigned int retb=0;
 	unsigned int retc=0;
@@ -69,7 +69,7 @@ char* lstrstrsseLong(const char* text, const char* pattern)
 	register __m128i byte16c;
 	char* bytePtr =text;
 	int m =strlen(pattern);
-	if(m < 4) 
+	if(m < 5) 
 		return lstrstrsse(text, pattern);
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
@@ -115,7 +115,7 @@ alignStart:
 			reta = (reta) | haszeroByte1(sseiWord1, byte16a);
 			retb = (retb) | haszeroByte1(sseiWord1, byte16b);
 			retc = (retc) | haszeroByte1(sseiWord1, byte16c);
-			retabc = (retc>>2) & (retb >>1) & reta & 65535;
+			retabc = (retc>>4) & (retb >>1) & reta & 65535;
 			if(retabc){ 
 				int i=1;
 				char * bytePtr0 = (char*) ( sseiPtr-1 );

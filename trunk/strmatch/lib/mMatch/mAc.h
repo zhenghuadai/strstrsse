@@ -305,6 +305,7 @@ class acNodeShort
 		idxT go[CHAR_SET];
 	public:
 		acNodeShort(){memset(this, 0, sizeof(acNodeShort)); }
+		idxT get(Uchar c){ return go[c];}
 		//int isMatched(){ return patID != -1;}
 };
 
@@ -337,10 +338,10 @@ class mAcD:public mMatch
 		void freeMem(){}
 		void rewind(){ m_pCur = pRoot();}
 	private:
-		acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].go[c];}
+		acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].get(c);}
 		int isMatched(acNodeP state){return (patIDList[state]!=NULL);} 
 		int* matchedList(acNodeP s){ return patIDList[s];}
-		static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].go[c];}
+		static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].get(c);}
 		static int isMatchedT(int** base, acNodeP state){return (base[state] !=NULL);} 
 		static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return reportList(base[s],rf,idx);}
 		acNodeP& pRoot(){return m_pRoot;}
