@@ -24,8 +24,13 @@
 
 #ifndef  REPORT_INC
 #define  REPORT_INC
-
+/*
+ *text: the pointer of text 
+ *idx : the offset of position that is matched
+ *pat : the pattern
+ */
 typedef int (*reportFunc)(char* text, int idx, char* pat);
+
 void setReportFunc(reportFunc rf);
 #define SEARCH_STOP 1
 #define SEARCH_CONTINUE 0

@@ -35,6 +35,41 @@ int main(int argc,char *argv[])
 	int verbose = 0;
 	//FILE *fp;
 	_U64 startrdt,endrdt;
+	if(argc==1)
+	{
+		printf("match -t text -a pattern -v n\n");
+		printf("search pattern in text\n");
+		printf("-v n  \n");
+		printf("   n is 0: the reporter does nothing  \n");
+		printf("   n is 1: the reporter print the matching position\n");
+		exit(0);
+		//subjfname="sub";
+		//quryfname="pattern";
+	}
+	else
+	{
+		int i;
+		for(i=0;i<argc;i++){
+			if(argv[i][0] == '-'){
+				switch(argv[i][1]){
+					case 't':
+						subjfname=argv[i+1];
+						break;
+					case 'q':
+						quryfname=argv[i+1];
+						break;
+					case 'a':
+						Pat=argv[i+1];
+						break;
+					case 'v':
+						verbose = atoi(argv[i+1]);
+						break;
+				}
+			}
+		}
+	}
+
+
 	for(i=0;i<ALLALG ;i++)
 	{
 		//matchalg[i]=NULL;
@@ -132,35 +167,6 @@ int main(int argc,char *argv[])
 	}
 	fclose(fp);
 	//Pat="Natasha";
-	if(argc==1)
-	{
-		printf("match subj qury\n");
-		subjfname="sub";
-		quryfname="pattern";
-	}
-	else
-	{
-		int i;
-		for(i=0;i<argc;i++){
-			if(argv[i][0] == '-'){
-				switch(argv[i][1]){
-					case 't':
-						subjfname=argv[i+1];
-						break;
-					case 'q':
-						quryfname=argv[i+1];
-						break;
-					case 'a':
-						Pat=argv[i+1];
-						break;
-					case 'v':
-						verbose = atoi(argv[i+1]);
-						break;
-				}
-			}
-		}
-	}
-
 
 	if(quryfname !=NULL)
 		Pat=Getsubjectfromfile(quryfname);
