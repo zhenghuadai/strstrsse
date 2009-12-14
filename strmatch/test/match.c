@@ -113,8 +113,8 @@ int main(int argc,char *argv[])
 	match[11].matchalg		=Skr;
 	match[11].matchalg2		=Skr2;
 	match[11].matchalgstr	="Skr";
-	match[12].matchalg		=Sbyh;
-	match[12].matchalg2		=Sbyh2;
+	match[12].matchalg		=0;//Sbyh;
+	match[12].matchalg2		=0;//Sbyh2;
 	match[12].matchalgstr	="Sbyh";
 	match[13].matchalg		=0;//Sskip;
 	match[13].matchalg2		=0 ;// Sskip2;
