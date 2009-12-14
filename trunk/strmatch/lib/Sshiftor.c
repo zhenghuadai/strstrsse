@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include "match.h"
-int preSo(char *x, int m, Uword S[]) { 
+Uword preSo(char *x, int m, Uword S[]) { 
     Uword j, lim; 
     int i; 
 	for (i = 0; i < ASIZE; ++i) 
@@ -11,7 +11,7 @@ int preSo(char *x, int m, Uword S[]) {
 	for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) { 
 		S[x[i]] &= ~j; 
 	} 
-    lim = (1<<(m-1)) -1;
+    lim = (((Uword)1)<<(m-1)) -1;
 	lim = ~(lim); 
 	return(lim); 
 } 
@@ -27,7 +27,7 @@ char* Sshiftor2(char *text,char *pat,int n, int m) {
 	lim = preSo(pat, m, S); 
 
 	/* Searching */ 
-	for (state = ~0, j = 0; j < n; ++j) { 
+	for (state = ~(Uword)0, j = 0; j < n; ++j) { 
 		state = (state<<1) | S[text[j]]; 
 		if (state < lim) 
 			OUTPUT(j - m + 1); 
@@ -44,7 +44,7 @@ char* Sshiftor(char *text,char *pat) {
 
 typedef struct{
     structHeader header;
-    int limit;
+    Uword limit;
     Uword S[256];
 }structSshiftor;
 

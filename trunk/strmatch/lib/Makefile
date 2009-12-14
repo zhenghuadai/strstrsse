@@ -16,7 +16,15 @@ libstrmatch=libstrmatch.a
 libstrmatchso=libstrmatch.so
 Gflag= -O3 
 endif
-Gflag+= -fPIC -msse2 
+Gflag+= -fPIC -msse2
+
+ifeq ($(arch), x86)
+Gflag+= -m32
+endif
+
+ifeq ($(arch), x64)
+Gflag+= -m64
+endif
 
 sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o report.o 
 ifeq ($(SSE42), yes)
@@ -28,7 +36,7 @@ matchmulobj:=matchmul.o  output.o extract.o Mtime.o acsmx.o snortmwm.o
 matchasmobj:=matchasm.o Ady.o extract.o output.o Mtime.o
 lib:${algobj}
 	ar cur  $(libstrmatch) $^
-	${Compiler} -shared -fPIC -o $(libstrmatchso) $^
+	${Compiler} ${Gflag} -shared -fPIC -o $(libstrmatchso) $^
 matchgene: ${matchgeneobj}
 	${Compiler} ${Gflag} -o matchgene ${matchgeneobj}
 matcho3: ${matchobj}
