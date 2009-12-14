@@ -12,7 +12,7 @@ ifeq ($(debug), yes)
 Gflag= -g -O0 #-fPIC 
 LIB= -lstrmatchd
 else 
-Gflag=-m32 -O3 #-fPIC 
+Gflag=-O3 #-fPIC 
 LIB= -lstrmatch
 endif
 
