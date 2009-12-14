@@ -4,8 +4,14 @@
 
 #define CHARACTERS 256 //the length of   set of character  
 #define ASIZE 256
+#if __WORDSIZE == 32 
 #define WORD_SIZE 32
 typedef unsigned int Uword;
+#else
+#define WORD_SIZE 64
+typedef unsigned long long Uword;
+#endif
+
 #define MAXINT2 2147483648 
 #include "stdio.h"
 #include "stdlib.h"

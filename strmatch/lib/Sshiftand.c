@@ -11,7 +11,7 @@ Uword preSa(char *x, int m, Uword S[]) {
 	for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) { 
 		S[x[i]] |= j; 
 	} 
-    lim = (1<<(m-1)) -1; 
+    lim = (((Uword)1)<<(m-1)) -1; 
 	return(lim); 
 } 
 
@@ -44,7 +44,7 @@ char* Sshiftand(char *text,char *pat)
 
 typedef struct{
     structHeader header;
-    int limit;
+    Uword limit;
     Uword S[256];
 }structSshiftand;
 

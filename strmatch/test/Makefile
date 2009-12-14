@@ -12,7 +12,7 @@ ifeq ($(debug), yes)
 Gflag= -g -O0 #-fPIC 
 LIB= -lstrmatchd
 else 
-Gflag= -O3 #-fPIC 
+Gflag=-m32 -O3 #-fPIC 
 LIB= -lstrmatch
 endif
 
@@ -20,6 +20,15 @@ ifeq ($(SSE42), yes)
 Gflag+= -DSSE4 
 endif
 #Gflag+= -Wall
+
+ifeq ($(arch), x86)
+Gflag+= -m32
+endif
+
+ifeq ($(arch), x64)
+Gflag+= -m64
+endif
+
 
 INC_PATH= -I../lib -I../others -I../lib/mMatch
 LIBPATH= -L../lib -L../lib/mMatch
