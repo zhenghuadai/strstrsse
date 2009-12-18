@@ -156,6 +156,7 @@ OutBuffer2_DEFINITION_HEADER(void)::cleanBeforContinue()
 
 OutBuffer2_DEFINITION_HEADER(void)::merge2File( FILE* dst, FILE* src1, FILE* src2)
 {
+	const int tBufSize = 1024;
 	Uint* dstHashTable = pInt; 
 	Uint* srcHashTable1 = pInt + HashTableSize; 
 	memset(dstHashTable, 0, HashTableSize*sizeof(Uint));

@@ -41,34 +41,6 @@ class OutBufferBase
 		template<typename T>
 		void dmFree(T*& p){ free(p); p = 0;}
 };
-
-
-class OutBuffer6b:public OutBufferBase
-{
-    public:
-        enum{ bufSize = 1024*64};
-    public:
-        OutBuffer6b(){ memset(this, 0, sizeof(OutBuffer6b));init();}
-        OutBuffer6b(char* fnin){ memset(this, 0, sizeof(OutBuffer6b));init(); setFnInput(fnin);}
-    public:
-        void write(int h, Uint idx);
-    public:
-        void setFnInput(char* fn){ fnInput = strdup(fn);}
-        void init();
-        void distroy();
-        void fwrite(int fileNo);
-        void finish();
-    protected:
-        FILE* fpin;
-        FILE* fpDataBase;
-        FILE* fpLog;
-        Uint* memBuffer; 
-        int* buffer[64];
-        int curIdx[64];
-        char* fnInput;
-
-};
-
 class PosList
 {
 	private:
@@ -84,6 +56,10 @@ class PosList
 
 };
 
+/*
+ *Use buffer to create temporary file
+ *
+ */
 template<int HashBit=22>
 class OutBuffer:public OutBufferBase 
 {
@@ -128,6 +104,9 @@ class  Value_Hash{
 		}
 } ;
 
+/*
+ *Use sort  to create temporary file
+ */
 template<int HashBit=22>
 class OutBuffer2:public OutBufferBase{
 	public:
@@ -165,6 +144,35 @@ class OutBuffer2:public OutBufferBase{
 
 
 #include "buffer.hxx"
+
+
+/*
+ *HashBit = 6
+ */
+class OutBuffer6b:public OutBufferBase
+{
+    public:
+        enum{ bufSize = 1024*64};
+    public:
+        OutBuffer6b(){ memset(this, 0, sizeof(OutBuffer6b));init();}
+        OutBuffer6b(char* fnin){ memset(this, 0, sizeof(OutBuffer6b));init(); setFnInput(fnin);}
+    public:
+        void write(int h, Uint idx);
+    public:
+        void setFnInput(char* fn){ fnInput = strdup(fn);}
+        void init();
+        void distroy();
+        void fwrite(int fileNo);
+        void finish();
+    protected:
+        FILE* fpin;
+        FILE* fpDataBase;
+        FILE* fpLog;
+        Uint* memBuffer; 
+        int* buffer[64];
+        int curIdx[64];
+        char* fnInput;
+};
 
 
 
