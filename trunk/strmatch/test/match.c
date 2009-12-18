@@ -10,6 +10,7 @@
 #include "rdtsc.h"
 char* lstrstrsseLong(const char* text, const char* pat);// gcc 
 char * GetgenefromfileU(char *pfname);
+int isFastaFile(char* fn);
 typedef struct matchtest_
 {
 	void (* matchalg)(char * text,char * pat);
@@ -25,6 +26,7 @@ int main(int argc,char *argv[])
 	time_t   start, finish;
 	double elapsed_time;
 	int n, m;
+	int isGene = 0;
 	//void (* matchalg[20])(char * text,char * pat);
 	//void (* matchalg2[20])(char * text,char * pat,int n, int m);
 	//char * matchalgstr[20]={0};
@@ -54,6 +56,7 @@ int main(int argc,char *argv[])
 				switch(argv[i][1]){
 					case 't':
 						subjfname=argv[i+1];
+						isGene = isFastaFile(subjfname);
 						break;
 					case 'q':
 						quryfname=argv[i+1];
@@ -170,7 +173,11 @@ int main(int argc,char *argv[])
 
 	if(quryfname !=NULL)
 		Pat=Getsubjectfromfile(quryfname);
-	Text=Getsubjectfromfile(subjfname);
+	if(isGene){
+		Text=GetgenefromfileU(subjfname);
+	}else{
+		Text=Getsubjectfromfile(subjfname);
+	}
 	n = strlen(Text);
 	m = strlen(Pat);
 
@@ -301,3 +308,11 @@ int main(int argc,char *argv[])
 	//printf("\nalgorithm takes %20.15f seconds.\n", elapsed_time );
 
 }
+
+int isFastaFile(char* fn){
+	if(fn ==NULL) return 0;
+	int m = strlen(fn);
+	if((fn[m-3]=='.')&&(fn[m-2]=='f')&&(fn[m-1]=='a')) return 1;
+	return 0;
+}
+
