@@ -30,9 +30,10 @@ echo "" > testmatch.res
 
 
 
+./match -t genome/chr1.fa -a AGGCAGTGTGGTTAGCTGGT >> testmatch.res #mir-34
 ./match -t genome/chr1.fa -a TGGAATGTAAAGAAGTATGTA >> testmatch.res #mir-1
+./match -t genome/chr1.fa -a TCACCGGGTGTACATCAGCTAA >> testmatch.res #mir-40
 ./match -t genome/chr1.fa -a TGAGGTAGTAGGTTGTATAGTT >> testmatch.res #let-7
 ./match -t genome/chr1.fa -a TATCACAGCCAGCTTTGATGTGC >> testmatch.res #mir-2
-
 
 

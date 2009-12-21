@@ -126,9 +126,10 @@ int main(int argc,char *argv[])
 	fpout = stdout;
 	if(argc==1)
 	{
-		quryfname="q1_mapped.txt";
-		subjfname="chrM.fa";
-		//return 0;
+		//quryfname="q1_mapped.txt";
+		//subjfname="chrM.fa";
+		printf("genematch -a quryfile -D dataBasefile -o output\n");
+		return 0;
 	} else{ 
 		for(i=1;i<argc;i++)
 		{
