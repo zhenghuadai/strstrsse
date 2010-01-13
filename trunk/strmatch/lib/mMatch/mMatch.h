@@ -104,26 +104,28 @@ class mMatch{
         static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
         static int reportSilent(int patid, int idx){}
     protected:
-        int type;
-        char** mPatterns;
-        int* mPatLen;
-        int mPatNum;
-        reportFunc report;
-        list<Pattern_t>* pPatList;
-		union{
-			unsigned long long mTimeStart;
-			struct{
-				unsigned int mTimeStartLow;
-				unsigned int mTimeStartHigh;
-			};
+        int type; //! algorithm type
+        char** mPatterns; //! array of patterns' pointer
+        int* mPatLen;     //! array of patterns' length
+        int mPatNum;      //! number of patterns
+        reportFunc report;//! report call back function
+	list<Pattern_t>* pPatList; //! list of patterns
+	//! the following is member for performance tuning
+	union{
+		unsigned long long mTimeStart;
+		struct{
+			unsigned int mTimeStartLow;
+			unsigned int mTimeStartHigh;
 		};
-		union{
-			unsigned long long mTimeEnd;
-			struct{
-				unsigned int mTimeEndLow;
-				unsigned int mTimeEndHigh;
-			};
+	};
+	union{
+		unsigned long long mTimeEnd;
+		struct{
+			unsigned int mTimeEndLow;
+			unsigned int mTimeEndHigh;
 		};
+	};
+	int bytesUsed;
 
 };
 }
