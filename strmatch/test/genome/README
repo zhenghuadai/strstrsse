@@ -1,0 +1,8 @@
+How to get genome sequence
+1. the genome could download from :
+ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes/
+
+2. or using the command like this 
+rsync -avzp rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes/chrM.fa.gz .
+
+3. execute the script DOWNLOADGENOME
