@@ -1,16 +1,16 @@
 There is two library, one is for single pattern string matching which is located at strmatch/lib, another is for multipattern which is located at strmatch/lib/mMatch
 1. To build single-pattern string matching lib:
-	cd strmatch/lib 
+    cd strmatch/lib 
     make
 2. To build multi-pattern string matching lib:	
-	cd strmatch/lib/mMatch 
-	make
+    cd strmatch/lib/mMatch 
+    make
 3. To test the single-pattern string matching lib 
     cd strmatch/test 
-	make 
+    make 
 4. To test the multi-pattern  string matching lib 
     cd strmatch/test 
-	make mmatch 
+    make mmatch 
 5. About the report function
 	when finding an occurence, a callback function will be called. the report function is defined as follow:
 	typedef int (*reportFunc)(char* text, int idx, char* pat);
