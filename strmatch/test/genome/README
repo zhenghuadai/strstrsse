@@ -1,5 +1,5 @@
 How to get genome sequence
-1. the genome could download from :
+1. download the genome from :
 ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes/
 
 2. or using the command like this 
