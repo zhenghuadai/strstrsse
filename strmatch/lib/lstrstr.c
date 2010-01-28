@@ -47,7 +47,10 @@ inline static int strcmpInline(char* str1,char* str2)
 	return 1;
 }
 
+//#define REPORT(i) return i 
+#ifndef REPORT
 #define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
+#endif
 char* lstrstr(const char* text, const char* pattern)
 {
 	unsigned int * intPtr = (unsigned int *) text;
@@ -207,38 +210,35 @@ prePareForEnd:
 		}
 
 		return NULL;
+}
+
+char* lstrchr(const char *text,char c) 
+{
+
+	const char *char_ptr=text;
+	const unsigned int *longword_ptr;
+	register unsigned int longword;
+	register unsigned int byte4c;
+	unsigned int byte4c0;
+	char* p =(char*) &byte4c0;
+	char pattern[2] ={c,0};
+	p[0] =p[1] = p[2]=p[3] = c;
+	byte4c = byte4c0;
+
+	for (char_ptr = text; ((unsigned int)char_ptr 
+				& (sizeof(unsigned int) - 1)) != 0;
+			++char_ptr) {
+		if (*char_ptr == '\0')return NULL;
+		if (*char_ptr == c)
+			REPORT(char_ptr);
 	}
-#undef REPORT(i)
-#define REPORT(i) return i 
-	char* lstrchr(const char *str,char c) 
-	{
 
-		const char *char_ptr=str;
-		const unsigned int *longword_ptr;
-		register unsigned int longword;
-		register unsigned int byte4c;
-		unsigned int byte4c0;
-		char* p =(char*) &byte4c0;
-		p[0] =p[1] = p[2]=p[3] = c;
-		byte4c = byte4c0;
-
-		for (char_ptr = str; ((unsigned int)char_ptr 
-					& (sizeof(unsigned int) - 1)) != 0;
-				++char_ptr) {
-			if (*char_ptr == '\0')return NULL;
-			if (*char_ptr == c)
-				REPORT(char_ptr);
-		}
-
-		longword_ptr = (unsigned int*)char_ptr;
+	longword_ptr = (unsigned int*)char_ptr;
 
 
-		longword = *longword_ptr;
-		while ((haszerobyte(longword) ==0)&&(haszerobyte(longword^byte4c) ==0)) {
+	longword = *longword_ptr;
+	while ((haszerobyte(longword) ==0)) {
 
-			longword_ptr++;
-			longword = *longword_ptr;
-		}
 
 		if (haszerobytel(longword^byte4c)  != 0) {
 
@@ -253,361 +253,364 @@ prePareForEnd:
 			if (cp[3] == c)
 				REPORT(cp + 3);
 		}
-		return NULL;
+		longword_ptr++;
+		longword = *longword_ptr;
 	}
+	return NULL;
+}
 #if 0
-	size_t strlen_d(const char *str) 
-	{
+size_t strlen_d(const char *str) 
+{
 
-		const char *char_ptr=str;
-		const unsigned int *longword_ptr;
-		register unsigned int longword, himagic, lomagic;
+	const char *char_ptr=str;
+	const unsigned int *longword_ptr;
+	register unsigned int longword, himagic, lomagic;
 
-		for (char_ptr = str; ((unsigned int)char_ptr 
-					& (sizeof(unsigned int) - 1)) != 0;
-				++char_ptr) {
-			if (*char_ptr == '\0')
-				return char_ptr - str;
-		}
-
-		longword_ptr = (unsigned int*)char_ptr;
-
-		himagic = 0x80808080L;
-		lomagic = 0x01010101L;
-
-		while (1) {
-
-			longword = *longword_ptr++;
-
-			if (((longword - lomagic) & himagic) != 0) {
-
-				const char *cp = (const char*)(longword_ptr - 1);
-
-				if (cp[0] == 0)
-					return cp - str;
-				if (cp[1] == 0)
-					return cp - str + 1;
-				if (cp[2] == 0)
-					return cp - str + 2;
-				if (cp[3] == 0)
-					return cp - str + 3;
-			}
-		}
+	for (char_ptr = str; ((unsigned int)char_ptr 
+				& (sizeof(unsigned int) - 1)) != 0;
+			++char_ptr) {
+		if (*char_ptr == '\0')
+			return char_ptr - str;
 	}
 
-	size_t strlen_l(const char *str) 
-	{
+	longword_ptr = (unsigned int*)char_ptr;
 
-		const char *char_ptr=str;
-		const unsigned long long *longword_ptr;
-		register unsigned long long longword, himagic, lomagic;
+	himagic = 0x80808080L;
+	lomagic = 0x01010101L;
 
-		for (char_ptr = str; ((unsigned long long)char_ptr 
-					& (sizeof(unsigned long long) - 1)) != 0;
-				++char_ptr) {
-			if (*char_ptr == '\0')
-				return char_ptr - str;
-		}
+	while (1) {
 
-		longword_ptr = (unsigned long long*)char_ptr;
+		longword = *longword_ptr++;
 
-		//himagic = 0x80808080L;
-		//lomagic = 0x01010101L;
+		if (((longword - lomagic) & himagic) != 0) {
 
-		while (1) {
+			const char *cp = (const char*)(longword_ptr - 1);
 
-			longword = *longword_ptr++;
-
-			if (haszerobytel(longword) != 0) {
-
-				const char *cp = (const char*)(longword_ptr - 1);
-
-				if (cp[0] == 0)
-					return cp - str;
-				if (cp[1] == 0)
-					return cp - str + 1;
-				if (cp[2] == 0)
-					return cp - str + 2;
-				if (cp[3] == 0)
-					return cp - str + 3;
-				if (cp[4] == 0)
-					return cp - str + 4;
-				if (cp[5] == 0)
-					return cp - str + 5;
-				if (cp[6] == 0)
-					return cp - str + 6;
-				if (cp[7] == 0)
-					return cp - str + 7;
-			}
+			if (cp[0] == 0)
+				return cp - str;
+			if (cp[1] == 0)
+				return cp - str + 1;
+			if (cp[2] == 0)
+				return cp - str + 2;
+			if (cp[3] == 0)
+				return cp - str + 3;
 		}
 	}
+}
+
+size_t strlen_l(const char *str) 
+{
+
+	const char *char_ptr=str;
+	const unsigned long long *longword_ptr;
+	register unsigned long long longword, himagic, lomagic;
+
+	for (char_ptr = str; ((unsigned long long)char_ptr 
+				& (sizeof(unsigned long long) - 1)) != 0;
+			++char_ptr) {
+		if (*char_ptr == '\0')
+			return char_ptr - str;
+	}
+
+	longword_ptr = (unsigned long long*)char_ptr;
+
+	//himagic = 0x80808080L;
+	//lomagic = 0x01010101L;
+
+	while (1) {
+
+		longword = *longword_ptr++;
+
+		if (haszerobytel(longword) != 0) {
+
+			const char *cp = (const char*)(longword_ptr - 1);
+
+			if (cp[0] == 0)
+				return cp - str;
+			if (cp[1] == 0)
+				return cp - str + 1;
+			if (cp[2] == 0)
+				return cp - str + 2;
+			if (cp[3] == 0)
+				return cp - str + 3;
+			if (cp[4] == 0)
+				return cp - str + 4;
+			if (cp[5] == 0)
+				return cp - str + 5;
+			if (cp[6] == 0)
+				return cp - str + 6;
+			if (cp[7] == 0)
+				return cp - str + 7;
+		}
+	}
+}
 #endif
 #if 0 
-	/* test version*/
-	char* lstrstr(char* text, char* pattern)
+/* test version*/
+char* lstrstr(char* text, char* pattern)
+{
+	unsigned int * intPtr = (unsigned int *) text;
+	unsigned int intWord = *intPtr;
+	char chara = pattern[0];
+	int byte4a0;
+	int byte4b0;
+	register int byte4a;
+	register int byte4b;
+	char* bytePtr = (char*) &byte4a0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
+	bytePtr = (char*) &byte4b0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[4];
+	byte4a = byte4a0;
+	byte4b = byte4b0;
+	while( haszerobyte(intWord) ==0) 
 	{
-		unsigned int * intPtr = (unsigned int *) text;
-		unsigned int intWord = *intPtr;
-		char chara = pattern[0];
-		int byte4a0;
-		int byte4b0;
-		register int byte4a;
-		register int byte4b;
-		char* bytePtr = (char*) &byte4a0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
-		bytePtr = (char*) &byte4b0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[4];
-		byte4a = byte4a0;
-		byte4b = byte4b0;
-		while( haszerobyte(intWord) ==0) 
-		{
-			if(haszerobyte(intWord ^ byte4a) !=0 ) {
-				unsigned int nextWord = *(intPtr+1);
+		if(haszerobyte(intWord ^ byte4a) !=0 ) {
+			unsigned int nextWord = *(intPtr+1);
 
-				if(	haszerobyte(nextWord ^ byte4b) != 0){
-					// check it ;	
-					int i=1;
-					char * bytePtr0 = (char*) ( intPtr );
-					bytePtr = (char*) ( intPtr );
-					if(bytePtr0[0] == chara){
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[1] == chara){
-						i =1;
-						bytePtr = bytePtr0 + 1;
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[2] == chara){
-						i =1;
-						bytePtr = bytePtr0 + 2;
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[3] == chara){
-						i =1;
-						bytePtr = bytePtr0 + 3;
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
+			if(	haszerobyte(nextWord ^ byte4b) != 0){
+				// check it ;	
+				int i=1;
+				char * bytePtr0 = (char*) ( intPtr );
+				bytePtr = (char*) ( intPtr );
+				if(bytePtr0[0] == chara){
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
 				}
-				intPtr++;
-				intWord = nextWord;
-				continue;
-			}
-
-			intPtr++;
-			intWord = *intPtr;
-		}
-		return NULL;
-	}
-
-#define checkComplete() \
-	i=1;\
-	while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;\
-	if(pattern[i] == 0) return bytePtr;
-
-#if 0
-	char* lstrstr2(char* text, char* pattern)
-	{
-		unsigned int * intPtr = (unsigned int *) text;
-		unsigned int intWord = *intPtr;
-		char chara = pattern[0];
-		int byte4a0;
-		int byte4b0;
-		register int byte4a;
-		register int byte4b;
-		char* bytePtr = (char*) &byte4a0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
-		bytePtr = (char*) &byte4b0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[4];
-		byte4a = byte4a0;
-		byte4b = byte4b0;
-		while( haszerobyte(intWord) ==0) 
-		{
-			if(haszerobyte(intWord ^ byte4a) !=0 ) {
-				unsigned int nextWord = *(intPtr+1);
-				if(haszerobyte(intWord ^ byte4b) !=0 ){
-					//check	
-					//(a*b)
-				} else if( haszerobyte(nextWord ^ byte4b) !=0 ){
-					if(){
-						// 000a *b
-						check
-					} 
-
-				} else {
-					if(haszerobyte(nextWord ^ byte4a) !=0 ) {
-
-					} else {
-						a [^b^a]
-					}
+				if(bytePtr0[1] == chara){
+					i =1;
+					bytePtr = bytePtr0 + 1;
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
 				}
-
-				if(	haszerobyte(nextWord ^ byte4b) != 0){
-					int i=1;
-					char * bytePtr0 = (char*) ( intPtr );
-					bytePtr = (char*) ( intPtr );
-					if(bytePtr0[0] == chara){
-						checkComplete();
-					}
-					if(bytePtr0[1] == chara){
-						bytePtr = bytePtr0 + 1;
-						checkComplete();
-					}
-					if(bytePtr0[2] == chara){
-						bytePtr = bytePtr0 + 2;
-						checkComplete();
-					}
-					if(bytePtr0[3] == chara){
-						bytePtr = bytePtr0 + 3;
-						checkComplete();
-					}
+				if(bytePtr0[2] == chara){
+					i =1;
+					bytePtr = bytePtr0 + 2;
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
 				}
-				intPtr++;
-				intWord = nextWord;
-				continue;
-			}
-
-			intPtr++;
-			intWord = *intPtr;
-		}
-		return NULL;
-	}
-#endif 
-	char* lstrstr3(char* text, char* pattern)
-	{
-		unsigned int * intPtr = (unsigned int *) text;
-		unsigned int intWord = *intPtr;
-		char chara = pattern[0];
-		int byte4a0;
-		int byte4b0;
-		register int byte4a;
-		register int byte4b;
-		char* bytePtr = (char*) &byte4a0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
-		bytePtr = (char*) &byte4b0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[1];
-		byte4a = byte4a0;
-		byte4b = byte4b0;
-		while( haszerobyte(intWord) ==0) 
-		{
-finda:
-			unsigned int reta = haszerobyte(intWord ^ byte4a);
-			if(reta!=0 ) {
-				//unsigned int nextWord = *(intPtr+1);
-				unsigned int retb = haszerobyte(intWord ^ byte4b) ;
-
-				if(((reta | retb)&((reta| retb)>>8)/*ab|ba*/ )){
-					// have ab|ba
-					int i=1;
-					char * bytePtr0 = (char*) ( intPtr );
-					bytePtr = (char*) ( intPtr );
-					if(bytePtr0[0] == chara){
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[1] == chara){
-						i =1;
-						bytePtr = bytePtr0 + 1;
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[2] == chara){
-						i =1;
-						bytePtr = bytePtr0 + 2;
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-				}
-				// check if 000a****
-				if(((char*)intPtr)[3] == chara){
-					int i =1;
-					char* bytePtr = ((char*)intPtr) + 3;
+				if(bytePtr0[3] == chara){
+					i =1;
+					bytePtr = bytePtr0 + 3;
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
 					if(pattern[i] == 0) return bytePtr;
 				}
 			}
 			intPtr++;
-			intWord = *intPtr;
+			intWord = nextWord;
+			continue;
 		}
-		return NULL;
+
+		intPtr++;
+		intWord = *intPtr;
 	}
+	return NULL;
+}
 
-	char* lstrstr4(char* text, char* pattern)
+#define checkComplete() \
+	i=1;\
+while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;\
+if(pattern[i] == 0) return bytePtr;
+
+#if 0
+char* lstrstr2(char* text, char* pattern)
+{
+	unsigned int * intPtr = (unsigned int *) text;
+	unsigned int intWord = *intPtr;
+	char chara = pattern[0];
+	int byte4a0;
+	int byte4b0;
+	register int byte4a;
+	register int byte4b;
+	char* bytePtr = (char*) &byte4a0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
+	bytePtr = (char*) &byte4b0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[4];
+	byte4a = byte4a0;
+	byte4b = byte4b0;
+	while( haszerobyte(intWord) ==0) 
 	{
-		unsigned long long * intPtr = (unsigned long long *) text;
-		unsigned long long  intWord = *intPtr;
-		char chara = pattern[0];
-		unsigned long long byte4a0;
-		unsigned long long byte4b0;
-		register unsigned long long byte4a;
-		register unsigned long long byte4b;
-		char* bytePtr = (char*) &byte4a0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=bytePtr[4]=bytePtr[5]=bytePtr[6]=bytePtr[7]=pattern[0];
-		bytePtr = (char*) &byte4b0;
-		bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=bytePtr[4]=bytePtr[5]=bytePtr[6]=bytePtr[7]=pattern[1];
-		byte4a = byte4a0;
-		byte4b = byte4b0;
-		while( haszerobytel(intWord) ==0) 
-		{
-finda:
-			unsigned long long reta = haszerobyte(intWord ^ byte4a);
-			if(reta!=0 ) {
-				//unsigned int nextWord = *(intPtr+1);
-				unsigned long long retb = haszerobyte(intWord ^ byte4b) ;
+		if(haszerobyte(intWord ^ byte4a) !=0 ) {
+			unsigned int nextWord = *(intPtr+1);
+			if(haszerobyte(intWord ^ byte4b) !=0 ){
+				//check	
+				//(a*b)
+			} else if( haszerobyte(nextWord ^ byte4b) !=0 ){
+				if(){
+					// 000a *b
+					check
+				} 
 
-				if(((reta | retb)&((reta| retb)>>8)/*ab|ba*/ )){
-					// have ab|ba
-					int i=1;
-					char * bytePtr0 = (char*) ( intPtr );
-					bytePtr = (char*) ( intPtr );
-					if(bytePtr0[0] == chara){
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[1] == chara){
-						i =1;
-						bytePtr = bytePtr0 + 1;
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[2] == chara){
-						i =1;
-						bytePtr = bytePtr0 + 2;
-						while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-						if(pattern[i] == 0) return bytePtr;
-					}
-					if(bytePtr0[3] == chara){
-						bytePtr = bytePtr0 + 3;
-						checkComplete();
-					}
-					if(bytePtr0[4] == chara){
-						bytePtr = bytePtr0 + 4;
-						checkComplete();
-					}
-					if(bytePtr0[5] == chara){
-						bytePtr = bytePtr0 + 5;
-						checkComplete();
-					}
-					if(bytePtr0[6] == chara){
-						bytePtr = bytePtr0 + 6;
-						checkComplete();
-					}
+			} else {
+				if(haszerobyte(nextWord ^ byte4a) !=0 ) {
+
+				} else {
+					a [^b^a]
 				}
-				// check if 000a****
-				//if(((char*)intPtr)[7] == chara){
-				//	int i =1;
-				//	char* bytePtr = ((char*)intPtr) + 7;
-				//	while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
-				//	if(pattern[i] == 0) return bytePtr;
-				//}
+			}
+
+			if(	haszerobyte(nextWord ^ byte4b) != 0){
+				int i=1;
+				char * bytePtr0 = (char*) ( intPtr );
+				bytePtr = (char*) ( intPtr );
+				if(bytePtr0[0] == chara){
+					checkComplete();
+				}
+				if(bytePtr0[1] == chara){
+					bytePtr = bytePtr0 + 1;
+					checkComplete();
+				}
+				if(bytePtr0[2] == chara){
+					bytePtr = bytePtr0 + 2;
+					checkComplete();
+				}
+				if(bytePtr0[3] == chara){
+					bytePtr = bytePtr0 + 3;
+					checkComplete();
+				}
 			}
 			intPtr++;
-			intWord = *intPtr;
+			intWord = nextWord;
+			continue;
 		}
-		return NULL;
+
+		intPtr++;
+		intWord = *intPtr;
 	}
+	return NULL;
+}
+#endif 
+char* lstrstr3(char* text, char* pattern)
+{
+	unsigned int * intPtr = (unsigned int *) text;
+	unsigned int intWord = *intPtr;
+	char chara = pattern[0];
+	int byte4a0;
+	int byte4b0;
+	register int byte4a;
+	register int byte4b;
+	char* bytePtr = (char*) &byte4a0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
+	bytePtr = (char*) &byte4b0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[1];
+	byte4a = byte4a0;
+	byte4b = byte4b0;
+	while( haszerobyte(intWord) ==0) 
+	{
+finda:
+		unsigned int reta = haszerobyte(intWord ^ byte4a);
+		if(reta!=0 ) {
+			//unsigned int nextWord = *(intPtr+1);
+			unsigned int retb = haszerobyte(intWord ^ byte4b) ;
+
+			if(((reta | retb)&((reta| retb)>>8)/*ab|ba*/ )){
+				// have ab|ba
+				int i=1;
+				char * bytePtr0 = (char*) ( intPtr );
+				bytePtr = (char*) ( intPtr );
+				if(bytePtr0[0] == chara){
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
+				}
+				if(bytePtr0[1] == chara){
+					i =1;
+					bytePtr = bytePtr0 + 1;
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
+				}
+				if(bytePtr0[2] == chara){
+					i =1;
+					bytePtr = bytePtr0 + 2;
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
+				}
+			}
+			// check if 000a****
+			if(((char*)intPtr)[3] == chara){
+				int i =1;
+				char* bytePtr = ((char*)intPtr) + 3;
+				while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+				if(pattern[i] == 0) return bytePtr;
+			}
+		}
+		intPtr++;
+		intWord = *intPtr;
+	}
+	return NULL;
+}
+
+char* lstrstr4(char* text, char* pattern)
+{
+	unsigned long long * intPtr = (unsigned long long *) text;
+	unsigned long long  intWord = *intPtr;
+	char chara = pattern[0];
+	unsigned long long byte4a0;
+	unsigned long long byte4b0;
+	register unsigned long long byte4a;
+	register unsigned long long byte4b;
+	char* bytePtr = (char*) &byte4a0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=bytePtr[4]=bytePtr[5]=bytePtr[6]=bytePtr[7]=pattern[0];
+	bytePtr = (char*) &byte4b0;
+	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=bytePtr[4]=bytePtr[5]=bytePtr[6]=bytePtr[7]=pattern[1];
+	byte4a = byte4a0;
+	byte4b = byte4b0;
+	while( haszerobytel(intWord) ==0) 
+	{
+finda:
+		unsigned long long reta = haszerobyte(intWord ^ byte4a);
+		if(reta!=0 ) {
+			//unsigned int nextWord = *(intPtr+1);
+			unsigned long long retb = haszerobyte(intWord ^ byte4b) ;
+
+			if(((reta | retb)&((reta| retb)>>8)/*ab|ba*/ )){
+				// have ab|ba
+				int i=1;
+				char * bytePtr0 = (char*) ( intPtr );
+				bytePtr = (char*) ( intPtr );
+				if(bytePtr0[0] == chara){
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
+				}
+				if(bytePtr0[1] == chara){
+					i =1;
+					bytePtr = bytePtr0 + 1;
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
+				}
+				if(bytePtr0[2] == chara){
+					i =1;
+					bytePtr = bytePtr0 + 2;
+					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+					if(pattern[i] == 0) return bytePtr;
+				}
+				if(bytePtr0[3] == chara){
+					bytePtr = bytePtr0 + 3;
+					checkComplete();
+				}
+				if(bytePtr0[4] == chara){
+					bytePtr = bytePtr0 + 4;
+					checkComplete();
+				}
+				if(bytePtr0[5] == chara){
+					bytePtr = bytePtr0 + 5;
+					checkComplete();
+				}
+				if(bytePtr0[6] == chara){
+					bytePtr = bytePtr0 + 6;
+					checkComplete();
+				}
+			}
+			// check if 000a****
+			//if(((char*)intPtr)[7] == chara){
+			//	int i =1;
+			//	char* bytePtr = ((char*)intPtr) + 7;
+			//	while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+			//	if(pattern[i] == 0) return bytePtr;
+			//}
+		}
+		intPtr++;
+		intWord = *intPtr;
+	}
+	return NULL;
+}
 
 #endif

@@ -47,7 +47,9 @@ char* lstrstrabsse(char* text, char* pattern);
 //}
 
 //#define REPORT(i) return i;
+#ifndef REPORT
 #define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
+#endif
 
 static inline unsigned int hasByteC(__m128i a0, __m128i a1, register __m128i sseic)
 {
