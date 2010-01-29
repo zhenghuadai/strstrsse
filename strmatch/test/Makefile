@@ -10,11 +10,13 @@ endif
 
 ifeq ($(debug), yes)
 Gflag= -g -O0 #-fPIC 
-LIB= -lstrmatchd
+LIBSTRMATCH= -lstrmatchd
 else 
 Gflag=-O3 #-fPIC 
-LIB= -lstrmatch
+LIBSTRMATCH= -lstrmatch
 endif
+
+LIB=$(LIBSTRMATCH)
 
 ifeq ($(SSE42), yes)
 Gflag+= -DSSE4 
@@ -72,4 +74,8 @@ clean:
 
 mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx
 genematch.o: genematch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx
+ifeq ($(debug), yes)
+match.o:match.c ../lib/match.h ../lib/libstrmatchd.a 
+else
 match.o:match.c ../lib/match.h ../lib/libstrmatch.a 
+endif
