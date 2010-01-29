@@ -20,7 +20,7 @@
 #include <emmintrin.h>
 #include <xmmintrin.h>
 #include "strstrsse.h"
-char* lstrchr(const char *str,char c);
+char* lstrchrSSE(const char *str,char c);
 char* lstrstrabsse(char* text, char* pattern);
 //static const __m128i magic_bits = 0x7efefeffL;
 //static inline int haszeroByte(__m128i a)
@@ -50,6 +50,12 @@ char* lstrstrabsse(char* text, char* pattern);
 #ifndef REPORT
 #define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
 #endif
+
+static inline unsigned int hasByteC16(__m128i a0, register __m128i sseic)
+{
+	return ((_mm_movemask_epi8(_mm_cmpeq_epi8(a0,sseic))  )   );	
+
+}
 
 static inline unsigned int hasByteC(__m128i a0, __m128i a1, register __m128i sseic)
 {
@@ -89,7 +95,7 @@ char* lstrstrsse(const char* text, const char* pattern)
 	}
 	if(pattern ==NULL) return NULL;
 	if(pattern[0] == 0) return text;
-	if(pattern[1] == 0) return lstrchr(text,pattern[0]); 
+	if(pattern[1] == 0) return lstrchrSSE(text,pattern[0]); 
 	if(pattern[2] == 0) return lstrstrabsse(text,pattern); 
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
@@ -364,7 +370,7 @@ char* lstrstrabsse(char* text, char* pattern)
 	char* bytePtr =text;
 	if(pattern ==NULL) return NULL;
 	if(pattern[0] == 0) return NULL;
-	if(pattern[1] == 0) return lstrchr(text,pattern[0]); 
+	if(pattern[1] == 0) return lstrchrSSE(text,pattern[0]); 
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
 #if 1
@@ -515,8 +521,41 @@ prePareForEnd:
 	return NULL;
 }
 
-char* lstrchrSSE(const char *str,char c) 
+char* lstrchrSSE(const char *text,char c) 
 {
+	const char *char_ptr=text;
+	const __m128i* m128_ptr;
+	char pattern[2] ={c,0};
+	__m128i byte16c= _mm_set1_epi8(c);
+	__m128i sseiZero = _mm_set1_epi8(0);
+	__m128i m128word;
+	for (char_ptr = text; ((unsigned int)char_ptr 
+				& (sizeof(__m128) - 1)) != 0;
+			++char_ptr) {
+		if (*char_ptr == '\0')return NULL;
+		if (*char_ptr == c)
+			REPORT(char_ptr);
+	}
+
+	m128_ptr = (__m128*)char_ptr;
+
+
+	m128word= *m128_ptr;
+	while ((hasByteC16(m128word, sseiZero))==0) {
+		if (hasByteC16(m128word, byte16c)  != 0) {
+			int i;
+			const char *cp = (const char*)(m128_ptr);
+			//const char* endcp = cp + 16;
+			for(i=0;i<16;i++){
+				if(*cp == c) REPORT(cp)
+				if(*cp==0) return NULL;
+					cp++;
+			}
+		}
+		m128_ptr++;
+		m128word= *m128_ptr;
+	}
+	return NULL;
 }
 
 char* lstrstrabxsse(char* text, char* pattern)
@@ -533,7 +572,7 @@ char* lstrstrabxsse(char* text, char* pattern)
 	char* bytePtr =text;
 	if(pattern ==NULL) return NULL;
 	if(pattern[0] == 0) return NULL;
-	if(pattern[1] == 0) return lstrchr(text,pattern[0]); 
+	if(pattern[1] == 0) return lstrchrSSE(text,pattern[0]); 
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
 #if 1
