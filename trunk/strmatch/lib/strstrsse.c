@@ -555,6 +555,13 @@ char* lstrchrSSE(const char *text,char c)
 		m128_ptr++;
 		m128word= *m128_ptr;
 	}
+	{
+		const char* cp = (const char*) m128_ptr;
+		while(*cp){
+				if(*cp == c) REPORT(cp)
+				cp++;
+		}
+	}
 	return NULL;
 }
 
