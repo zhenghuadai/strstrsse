@@ -310,7 +310,7 @@ public:
 	//int isMatched(){ return patID != -1;}
 };
 
-//! Depth-Storage 
+//! 
 template<int CHAR_SET=256, typename idxT=U16>
 class mAcD:public mMatch
 {
@@ -328,6 +328,7 @@ public:
 	virtual int searchGene4(char* txt, int n);
 	virtual int searchGene4(char* txt);
 private:
+	//! for building DFA (transfer from mAcBase)
 	void transDepthFrom(mAcBase<CHAR_SET>& ac);
 	void transWidthFrom(mAcBase<CHAR_SET>& ac);
 	void mallocMem(int n){ 
@@ -339,9 +340,11 @@ private:
 	void freeMem(){}
 	void rewind(){ m_pCur = pRoot();}
 private:
+	//! for searching 
 	acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].get(c);}
 	int isMatched(acNodeP state){return (patIDList[state]!=NULL);} 
 	int* matchedList(acNodeP s){ return patIDList[s];}
+	//! for template
 	static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].get(c);}
 	static int isMatchedT(int** base, acNodeP state){return (base[state] !=NULL);} 
 	static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return reportList(base[s],rf,idx);}
