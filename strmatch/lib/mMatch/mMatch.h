@@ -95,6 +95,8 @@ class mMatch{
             reportList(patIDList, report, idx);
         }
         unsigned int minPatLen(){unsigned int n=patLen(0); for(int i=1;i<mPatNum;i++) n=(n < patLen(i)? n:patLen(i)); return n; }
+		void* acMalloc(size_t n){ void*p; bytesUsed += n; p = (void*) malloc(n); return p;}
+		void acFree(void* p, size_t n) { bytesUsed -= n; free(p);}
     private:
         void clean();
         void startTime(){ rdtsc(mTimeStartLow, mTimeStartHigh);};

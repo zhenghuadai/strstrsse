@@ -495,7 +495,7 @@ void mAcD<CHAR_SET,idxT>::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
-    patMatchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
+    patMatchList = (int*) acMalloc( ac. patMatchListLen()* sizeof(int));
     transNode2Short<CHAR_SET, idxT, queue<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
     pRoot() = 0;
 }
@@ -505,7 +505,7 @@ void mAcD<CHAR_SET,idxT>::transDepthFrom(mAcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
-    patMatchList = (int*) malloc( ac. patMatchListLen()* sizeof(int));
+    patMatchList = (int*) acMalloc( ac. patMatchListLen()* sizeof(int));
     transNode2Short<CHAR_SET,idxT, stack<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
     pRoot() = 0;
 }
