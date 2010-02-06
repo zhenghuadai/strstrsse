@@ -89,45 +89,6 @@ char* strstrsse(const char* text, const char* pattern)
 		preBytes &= 15;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
-#if 0
-		switch(preBytes){
-			case 1:
-				if((text[0])&&(text[0] == chara)){
-					if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
-				}
-				break;
-			case 2:
-				if((text[0])&&(text[0] == chara)){
-					if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
-				}
-				if((text[1])&&(text[1] == chara)){
-					if(strcmpInline(text+2,pattern +1) == 0) return text + 1;
-				}
-				break;
-			case 3:
-				{
-					sseiWord = *(__m128i*) text;
-					__m128i reta = haszeroByte(sseiWord ^ byte16a);
-					__m128i retb = haszeroByte(sseiWord ^ byte16b);
-					if(((reta | retb)&((reta| retb)>>8)/*ab|ba|aa|bb*/ )){
-						if((text[0])&&(text[0] == chara)){
-							if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
-						}
-						if((text[1])&&(text[1] == chara)){
-							if(strcmpInline(text+2,pattern +2) == 0) return text + 1;
-						}
-						if((text[2])&&(text[2] == chara)){
-							if(strcmpInline(text+3,pattern +3) == 0) return text + 2;
-						}
-					}
-				}
-				break;
-			default:
-				printf("err\n");
-				break;
-
-		}
-#endif
 		for(j =0;j< preBytes; j++){
 			if(text[j] ==0) return NULL;
 			if(text[j] == chara){
@@ -567,45 +528,6 @@ char* strstrabxsse(char* text, char* pattern)
 		preBytes &= 15;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
-#if 0
-		switch(preBytes){
-			case 1:
-				if((text[0])&&(text[0] == chara)){
-					if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
-				}
-				break;
-			case 2:
-				if((text[0])&&(text[0] == chara)){
-					if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
-				}
-				if((text[1])&&(text[1] == chara)){
-					if(strcmpInline(text+2,pattern +1) == 0) return text + 1;
-				}
-				break;
-			case 3:
-				{
-					sseiWord = *(__m128i*) text;
-					__m128i reta = haszeroByte(sseiWord ^ byte16a);
-					__m128i retb = haszeroByte(sseiWord ^ byte16b);
-					if(((reta | retb)&((reta| retb)>>8)/*ab|ba|aa|bb*/ )){
-						if((text[0])&&(text[0] == chara)){
-							if(strcmpInline(text+1,pattern +1) == 0) return text + 0;
-						}
-						if((text[1])&&(text[1] == chara)){
-							if(strcmpInline(text+2,pattern +2) == 0) return text + 1;
-						}
-						if((text[2])&&(text[2] == chara)){
-							if(strcmpInline(text+3,pattern +3) == 0) return text + 2;
-						}
-					}
-				}
-				break;
-			default:
-				printf("err\n");
-				break;
-
-		}
-#endif
 		for(j =0;j< preBytes; j++){
 			if(text[j] ==0) return NULL;
 			if(text[j] == chara){
