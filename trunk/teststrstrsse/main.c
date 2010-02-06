@@ -27,7 +27,7 @@ size_t rb_strlen(const char *str);
 char *strstrBerg (const char* phaystack, const char* pneedle);
 char *strstrToy (const char* phaystack, const char* pneedle);
 char *lstrstr (const char* , const char* );
-char *lstrstrsse (const char* , const char* );
+char *strstrsse (const char* , const char* );
 char *lstrstr5 (const char* , const char* );
 char *qsearch(const char* , const char* );
 char* strstra(const char *str,char c);
@@ -133,7 +133,7 @@ void test1(int argc,char** argv)
 
 			mdtime(0);
 			for(i=0;i<LOOPS;i++)
-				findp = lstrstrsse(text,pattern);
+				findp = strstrsse(text,pattern);
 			t3=	mdtime(1);
 			printf("lstrsse   time:%15f :%d", t3,findp - text);
 			printstrn(findp);
@@ -157,7 +157,7 @@ static void cmpPerf(const char* text, const char* pattern)
 	int i;
 	int slen, plen;
 	findp = strstr(text,pattern);
-	findp = lstrstrsse(text,pattern);
+	findp = strstrsse(text,pattern);
 	findp = lstrstr(text,pattern);
 	findp = strstr(text,pattern);
 	findp = strstrBerg(text,pattern);
@@ -172,10 +172,10 @@ static void cmpPerf(const char* text, const char* pattern)
 	printf("lstrstr   time:%15f :%d", t3,findp - text);
 	printstrn(findp);
 
-	findp = lstrstrsse(text,pattern);
+	findp = strstrsse(text,pattern);
 	mdtime(0);
 	for(i=0;i<LOOPS;i++)
-		findp = lstrstrsse(text,pattern);
+		findp = strstrsse(text,pattern);
 	t3=	mdtime(1);
 	printf("lstrsse   time:%15f :%d", t3,findp - text);
 	printstrn(findp);
@@ -308,7 +308,7 @@ void testBoundary()
 	char* pat= "est";
 	char* findp;
 	printf("test boundary.............................\n");
-	findp= lstrstrsse(text,pat);
+	findp= strstrsse(text,pat);
 	printstrn(findp);
 
 
@@ -342,7 +342,7 @@ int test3(int argc, char** argv)
 		for(j=0;j<i;j++) text[i] = 'a';
 		strcpy(text+i,text0);
 		mdtime(0);
-		findp = lstrstrsse(text,pattern);
+		findp = strstrsse(text,pattern);
 		t3=	mdtime(1);
 		printf("(%15f :%d:", t3,findp - text);
 		printstr(findp);
@@ -354,7 +354,7 @@ int test3(int argc, char** argv)
 
 	printf("\n");
 	testBoundary();
-	test_strstr(lstrstrsse);
+	test_strstr(strstrsse);
 }
 
 
@@ -371,7 +371,7 @@ int test4(int argc, char** argv)
 	double t3;
 	setReportFunc(SEARCH_ALL);
 	mdtime(0);
-	findp = lstrstrsse(text,pattern);
+	findp = strstrsse(text,pattern);
 	t3=	mdtime(1);
 	printf("\nsearch all time : %15f\n ", t3);
 }

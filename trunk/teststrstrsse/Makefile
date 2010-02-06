@@ -9,7 +9,7 @@ ifeq  "${CC}"  "gcc"
 CXXFLAG+=-msse2 
 endif
 
-test: strstr.o main.o lstrstr.o lstrlen.o lstrstrsse.o bmstrstr.o report.o
+test: strstr.o main.o lstrstr.o lstrlen.o strstrsse.o bmstrstr.o report.o
 	${CC}  ${CXXFLAG}   -o teststrstr $^ 
 run:
 	./teststrstr
