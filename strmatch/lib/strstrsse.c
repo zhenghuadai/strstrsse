@@ -20,6 +20,7 @@
 #include <emmintrin.h>
 #include <xmmintrin.h>
 #include "strstrsse.h"
+#define USE_BTR 
 char* strchrsse(const char *str,char c);
 char* strstrabsse(char* text, char* pattern);
 //#define REPORT(i) return i;
@@ -167,10 +168,7 @@ findoutb:
 				int i=1;
 				char * bytePtr0 = (char*) ( sseiPtr );
 				int j;
-				//printf("test::%0x,%d\n",reta ,bytePtr0 -text);
-				//bytePtr = (char*) ( sseiPtr );
-				//if(0)
-#if 1
+#ifdef USE_BTR
 				while(reta){
 					int idx ;
 					idx = bsf(reta);
@@ -185,8 +183,7 @@ findoutb:
 							);
 
 				}
-#endif
-#if 0
+#else
 				//search completely : version no bsf instruction 
 				for(j =0;j<8;j++){
 					if(reta & 0xff) {
