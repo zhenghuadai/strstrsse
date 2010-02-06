@@ -20,8 +20,8 @@
 #include <emmintrin.h>
 #include <xmmintrin.h>
 #include "strstrsse.h"
-char* lstrchrSSE(const char *str,char c);
-char* lstrstrabsse(char* text, char* pattern);
+char* strchrsse(const char *str,char c);
+char* strstrabsse(char* text, char* pattern);
 //#define REPORT(i) return i;
 #ifndef REPORT
 #define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
@@ -71,8 +71,8 @@ char* strstrsse(const char* text, const char* pattern)
 	}
 	if(pattern ==NULL) return NULL;
 	if(pattern[0] == 0) return text;
-	if(pattern[1] == 0) return lstrchrSSE(text,pattern[0]); 
-	if(pattern[2] == 0) return lstrstrabsse(text,pattern); 
+	if(pattern[1] == 0) return strchrsse(text,pattern[0]); 
+	if(pattern[2] == 0) return strstrabsse(text,pattern); 
 	chara = pattern[0];
 	charb = pattern[1];
 	charc = pattern[2];
@@ -335,7 +335,7 @@ prePareForEnd:
 }
 
 
-char* lstrstrabsse(char* text, char* pattern)
+char* strstrabsse(char* text, char* pattern)
 {
 	__m128i * sseiPtr = (__m128i *) text;
 	unsigned char * chPtrAligned = (unsigned char*)text;
@@ -349,7 +349,7 @@ char* lstrstrabsse(char* text, char* pattern)
 	char* bytePtr =text;
 	if(pattern ==NULL) return NULL;
 	if(pattern[0] == 0) return NULL;
-	if(pattern[1] == 0) return lstrchrSSE(text,pattern[0]); 
+	if(pattern[1] == 0) return strchrsse(text,pattern[0]); 
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
 #if 1
@@ -500,7 +500,7 @@ prePareForEnd:
 	return NULL;
 }
 
-char* lstrchrSSE(const char *text,char c) 
+char* strchrsse(const char *text,char c) 
 {
 	const char *char_ptr=text;
 	const __m128i* m128_ptr;
@@ -544,7 +544,7 @@ char* lstrchrSSE(const char *text,char c)
 	return NULL;
 }
 
-char* lstrstrabxsse(char* text, char* pattern)
+char* strstrabxsse(char* text, char* pattern)
 {
 	__m128i * sseiPtr = (__m128i *) text;
 	unsigned char * chPtrAligned = (unsigned char*)text;
@@ -558,7 +558,7 @@ char* lstrstrabxsse(char* text, char* pattern)
 	char* bytePtr =text;
 	if(pattern ==NULL) return NULL;
 	if(pattern[0] == 0) return NULL;
-	if(pattern[1] == 0) return lstrchrSSE(text,pattern[0]); 
+	if(pattern[1] == 0) return strchrsse(text,pattern[0]); 
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
 #if 1
