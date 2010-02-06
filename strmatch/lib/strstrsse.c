@@ -22,30 +22,6 @@
 #include "strstrsse.h"
 char* lstrchrSSE(const char *str,char c);
 char* lstrstrabsse(char* text, char* pattern);
-//static const __m128i magic_bits = 0x7efefeffL;
-//static inline int haszeroByte(__m128i a)
-//{
-//register unsigned long himagic = 0x80808080L;
-//register unsigned long lomagic = 0x01010101L;
-//	//return ((((a+ magic_bits) ^ ~a) & ~magic_bits));
-//	return ((a- lomagic) & himagic);
-//}
-//
-//static inline long long haszeroBytel(unsigned long long a)
-//{
-//register unsigned long long himagic = 0x8080808080808080L;
-//register unsigned long long lomagic = 0x0101010101010101L;
-//	//return ((((a+ magic_bits) ^ ~a) & ~magic_bits));
-//	return ((a- lomagic) & himagic);
-//}
-
-//static inline unsigned int haszeroByte(__m128i a0, __m128i a1)
-//{
-//	retrun ((_mm_movemask_epi8(_mm_cmpeq_epi8(a0,sseiZero))  )  | \
-//			(_mm_movemask_epi8(_mm_cmpeq_epi8(a1,sseiZero)) << 16) \
-//		   );	
-//}
-
 //#define REPORT(i) return i;
 #ifndef REPORT
 #define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
@@ -75,16 +51,16 @@ inline static int strcmpInline(char* str1,char* str2)
 }
 
 #    define bsf(x) __builtin_ctz(x) 
-char* lstrstrsse(const char* text, const char* pattern)
+char* strstrsse(const char* text, const char* pattern)
 {
 	__m128i * sseiPtr = (__m128i *) text;
 	unsigned char * chPtrAligned = (unsigned char*)text;
 	__m128i sseiWord0 ;//= *sseiPtr ;
 	__m128i sseiWord1 ;//= *sseiPtr ;
 	__m128i sseiZero = _mm_set1_epi8(0);
-	char chara = pattern[0];
-	char charb = pattern[1];
-	char charc = pattern[2];
+	char chara;
+	char charb;
+	char charc;
 	register __m128i byte16a;
 	register __m128i byte16b;
 	register __m128i byte16c;
@@ -97,6 +73,9 @@ char* lstrstrsse(const char* text, const char* pattern)
 	if(pattern[0] == 0) return text;
 	if(pattern[1] == 0) return lstrchrSSE(text,pattern[0]); 
 	if(pattern[2] == 0) return lstrstrabsse(text,pattern); 
+	chara = pattern[0];
+	charb = pattern[1];
+	charc = pattern[2];
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
 	byte16c = _mm_set1_epi8(charc);
@@ -547,7 +526,7 @@ char* lstrchrSSE(const char *text,char c)
 			const char *cp = (const char*)(m128_ptr);
 			//const char* endcp = cp + 16;
 			for(i=0;i<16;i++){
-				if(*cp == c) REPORT(cp)
+				if(*cp == c) REPORT(cp);
 				if(*cp==0) return NULL;
 					cp++;
 			}
@@ -558,7 +537,7 @@ char* lstrchrSSE(const char *text,char c)
 	{
 		const char* cp = (const char*) m128_ptr;
 		while(*cp){
-				if(*cp == c) REPORT(cp)
+				if(*cp == c) REPORT(cp);
 				cp++;
 		}
 	}

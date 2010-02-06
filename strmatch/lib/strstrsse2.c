@@ -70,7 +70,7 @@ char* lstrstrsseLong(const char* text, const char* pattern)
 	char* bytePtr =text;
 	int m =strlen(pattern);
 	if(m < 5) 
-		return lstrstrsse(text, pattern);
+		return strstrsse(text, pattern);
 	byte16a = _mm_set1_epi8(chara);
 	byte16b = _mm_set1_epi8(charb);
 	byte16c = _mm_set1_epi8(charc);

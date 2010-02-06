@@ -67,7 +67,8 @@ int main(int argc,char *argv[])
                     case 's': Text = argv[i+1];
                         break;
                     case 'v':
-                        verbose = atoi(argv[i+1]);
+						if (i+1 < argc)
+							verbose = atoi(argv[i+1]);
                         break;
                 }
             }
@@ -136,9 +137,9 @@ int main(int argc,char *argv[])
     match[17].matchalg        =SshiftorW;
     match[17].matchalg2        =SshiftorW2;
     match[17].matchalgstr    ="SshiftorW";
-    match[18].matchalg        =lstrstrsse;
+    match[18].matchalg        =strstrsse;
     match[18].matchalg2        =0;
-    match[18].matchalgstr    ="lstrstrsse";
+    match[18].matchalgstr    ="strstrsse";
     #ifdef TEST_2
     match[19].matchalg        =lstrstrsseLong;
     match[19].matchalg2        =0;

@@ -3,6 +3,6 @@
 #define  STRSTRSSE_INC
 #include "report.h"
 char *lstrstr (const char* , const char* );
-char *lstrstrsse (const char* , const char* );
+char *strstrsse (const char* , const char* );
 
 #endif   /* ----- #ifndef STRSTRSSE_INC  ----- */

@@ -70,7 +70,7 @@ char* Sskip      (char* text, char* pat);//跳跃算法
 char* Skmpskip   (char* text, char* pat);// kmp跳跃算法 
 char* bfstr      (char* text, char* pat);// gcc 
 char* lstrstr    (const char* text, const char* pat);// gcc 
-char* lstrstrsse (const char* text, const char* pat);// gcc 
+char* strstrsse (const char* text, const char* pat);// gcc 
 char* strstrsse42(const char* text, const char* pat);// gcc 
 
 /*  下面为单模式串精确匹配算法 ，函数名以S开头，第一个参数为目标串，第二个参数为模式串*/
