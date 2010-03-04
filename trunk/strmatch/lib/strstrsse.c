@@ -1,14 +1,14 @@
 /*
  * =====================================================================================
  *
- *       Filename:  lstrstr.c
+ *       Filename:  strstr.c
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  10/22/2008 12:27:45 PM
- *       Revision:  none
- *       Compiler:  gcc
+ *        Created:  10/22/2008 
+ *       Revision:   
+ *       Compiler:   
  *
  *         Author:  Zhenghua Dai (Zhenghua Dai), djx.zhenghua@gamil.com
  *        Company:  dzh
