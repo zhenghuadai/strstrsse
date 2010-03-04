@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  .c
+ *
+ *    Description:  
+ *
+ *        Version:  
+ *        Created:  
+ *       Revision:   
+ *       Compiler:   
+ *
+ *         Author:  Zhenghua Dai (Zhenghua Dai), djx.zhenghua@gamil.com
+ *        Company:  dzh
+ *
+ * =====================================================================================
+ */
+#include <stdio.h>
 #ifndef STRINGMATCH_HEADER__
 #define STRINGMATCH_HEADER__
 #define MAXPAT 256 //the maximal length of Pattern

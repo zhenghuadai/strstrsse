@@ -39,11 +39,17 @@ int main(int argc,char *argv[])
     _U64 startrdt,endrdt;
     if(argc==1)
     {
-        printf("match -t text -a pattern -v n\n");
-        printf("search pattern in text\n");
+        printf("match [-t text_file|-s text] [-a pattern| -q pattern_file] -v n\n");
+        printf("search pattern in text_file or text\n");
+        printf("-t text_file       :text_file is the text file in which you want to search  \n");
+        printf("-s text            :text is the text in which you want to search  \n");
+        printf("-q pattern_file    :pattern_file contains the pattern  which you want to search  \n");
+        printf("-s pattern         :pattern is which you want to search  \n");
         printf("-v n  \n");
         printf("   n is 0: the reporter does nothing  \n");
         printf("   n is 1: the reporter print the matching position\n");
+		printf("for example: match -s helloworld -a llo -v 1\n");
+		printf("for example: match -t helloworld.txt -a llo -v 1\n");
         exit(0);
         //subjfname="sub";
         //quryfname="pattern";
