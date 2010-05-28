@@ -44,7 +44,7 @@ int main(int argc,char *argv[])
         printf("-t text_file       :text_file is the text file in which you want to search  \n");
         printf("-s text            :text is the text in which you want to search  \n");
         printf("-q pattern_file    :pattern_file contains the pattern  which you want to search  \n");
-        printf("-s pattern         :pattern is which you want to search  \n");
+        printf("-a pattern         :pattern is which you want to search  \n");
         printf("-v n  \n");
         printf("   n is 0: the reporter does nothing  \n");
         printf("   n is 1: the reporter print the matching position\n");
