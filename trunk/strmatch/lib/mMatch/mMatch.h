@@ -28,6 +28,9 @@
 
 #if defined(__GNUC__)
 # 	define nasm0(op) __asm__( #op)
+inline size_t _msize(void* p){
+    return p?((size_t*)p)[-1]:0;
+}
 #else      /* -----  not  defined(__GNUC__)----- */
 # 	define nasm0(op) __asm op 
 #endif     /* -----  not  defined(__GNUC__)----- */
@@ -50,6 +53,7 @@ class mMatch{
     public:
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent; report=reportDefault;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
+        ~mMatch(){ free(mPatLen); ASSERT( bytesUsed ==0);}
     public:
 		//!----------------------------------------------------------------------------
 		// 
@@ -94,8 +98,14 @@ class mMatch{
 		//  
 		//!----------------------------------------------------------------------------
         void setPatterns(char** pats,int n);
-        ~mMatch(){ free(mPatLen);}
+
+		//!----------------------------------------------------------------------------
+		//  
+		//!----------------------------------------------------------------------------
         double getTime(){return (double)(mTimeEnd - mTimeStart);}
+    public:
+        static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
+        static int reportSilent(int patid, int idx){}
     protected:
         virtual void compile(){};
         unsigned int charNum(){unsigned int n=0; for(int i=0;i<mPatNum;i++) n += strlen(mPatterns[i]); return n; }
@@ -118,15 +128,12 @@ class mMatch{
         }
         unsigned int minPatLen(){unsigned int n=patLen(0); for(int i=1;i<mPatNum;i++) n=(n < patLen(i)? n:patLen(i)); return n; }
 		void* acMalloc(size_t n){ void*p; bytesUsed += n; p = (void*) malloc(n); return p;}
-		void acFree(void* p, size_t n) { bytesUsed -= n; free(p);}
+		void acFree(void*& p) {if(p==NULL)return; bytesUsed -= _msize(p); free(p); p=NULL;}
     private:
         void clean();
         void startTime(){ mTimeStart = getrdtsc();};
         void endTime()  { mTimeEnd = getrdtsc();};
 		unsigned int patLen(unsigned idx) { return strlen( mPatterns[idx]);}
-    public:
-        static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
-        static int reportSilent(int patid, int idx){}
 	protected:
 		int type; 		  //! algorithm type
 		char** mPatterns; //! array of patterns' pointer
