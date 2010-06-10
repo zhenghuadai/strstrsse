@@ -26,11 +26,15 @@
 #include <assert.h>
 #include "dmutil.h"
 
-#ifndef rdtsc 
-#define rdtsc(low,high) \
-    __asm__ __volatile__("xorl %%eax, %%eax; cpuid; rdtsc" : "=a" (low), "=d" (high)::"%ecx","%ebx");
-#endif
+#if defined(__GNUC__)
+# 	define nasm0(op) __asm__( #op)
+#else      /* -----  not  defined(__GNUC__)----- */
+# 	define nasm0(op) __asm op 
+#endif     /* -----  not  defined(__GNUC__)----- */
 
+static inline unsigned long long getrdtsc(){
+	nasm0(rdtsc);
+}
 //#define ASSERT(a, ...) {if(! (a)){ err(__VA_ARGS__##__LINE__);}}
 #define ASSERT(a, ...) {assert(a);}
 
@@ -44,9 +48,12 @@ typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 typedef int (* reportFunc)(int patID, int idx);
 class mMatch{
     public:
-        mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); init(pat, patNum); report=reportSilent; report=reportDefault;};
+        mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent; report=reportDefault;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
     public:
+		//!----------------------------------------------------------------------------
+		// 
+		//!----------------------------------------------------------------------------
         virtual int search(char* txt, int n) 		{return 0;}
         virtual int search(char* txt) 			 	{return 0;}
         virtual int searchGene(char* txt, int n) 	{return 0;}
@@ -55,23 +62,38 @@ class mMatch{
         virtual int searchGene_(char* txt) 			{return 0;}
         virtual int searchGene4(char* txt, int n) 	{return 0;}
         virtual int searchGene4(char* txt) 			{return 0;}
+
+		//!----------------------------------------------------------------------------
         //! continue searching 
+		//!----------------------------------------------------------------------------
         virtual int searchC(char* txt, int n) 		{return 0;}
         virtual int searchC(char* txt) 				{return 0;}
         virtual int searchGeneC(char* txt, int n) 	{return 0;}
         virtual int searchGeneC(char* txt) 			{return 0;}
         virtual int searchGene4C(char* txt, int n) 	{return 0;}
         virtual int searchGene4C(char* txt) 		{return 0;}
+
+		//!----------------------------------------------------------------------------
+		// 
+		//!----------------------------------------------------------------------------
         int Tsearch(char* txt, int n)     {startTime();int ret=search(txt,n);     endTime();return ret;}
         int Tsearch(char* txt)            {startTime();int ret=search(txt);       endTime();return ret;}
         int TsearchGene(char* txt, int n) {startTime();int ret=searchGene(txt,n); endTime();return ret;}
         int TsearchGene(char* txt)        {startTime();int ret=searchGene(txt);   endTime();return ret;}
-        int TsearchGene_(char* txt, int n) {startTime();int ret=searchGene_(txt,n); endTime();return ret;}
-        int TsearchGene_(char* txt)        {startTime();int ret=searchGene_(txt);   endTime();return ret;}
+        int TsearchGene_(char* txt, int n){startTime();int ret=searchGene_(txt,n);endTime();return ret;}
+        int TsearchGene_(char* txt)       {startTime();int ret=searchGene_(txt);  endTime();return ret;}
         int TsearchGene4(char* txt, int n){startTime();int ret=searchGene4(txt,n);endTime();return ret;}
         int TsearchGene4(char* txt)       {startTime();int ret=searchGene4(txt);  endTime();return ret;}
+
+		//!----------------------------------------------------------------------------
+		// 
+		//!----------------------------------------------------------------------------
         void setReportFunc(reportFunc f){report = f;}
-        void init(char** ,int n);
+
+		//!----------------------------------------------------------------------------
+		//  
+		//!----------------------------------------------------------------------------
+        void setPatterns(char** pats,int n);
         ~mMatch(){ free(mPatLen);}
         double getTime(){return (double)(mTimeEnd - mTimeStart);}
     protected:
@@ -99,35 +121,23 @@ class mMatch{
 		void acFree(void* p, size_t n) { bytesUsed -= n; free(p);}
     private:
         void clean();
-        void startTime(){ rdtsc(mTimeStartLow, mTimeStartHigh);};
-        void endTime(){ rdtsc(mTimeEndLow, mTimeEndHigh) ;};
+        void startTime(){ mTimeStart = getrdtsc();};
+        void endTime()  { mTimeEnd = getrdtsc();};
 		unsigned int patLen(unsigned idx) { return strlen( mPatterns[idx]);}
     public:
         static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
         static int reportSilent(int patid, int idx){}
-    protected:
-        int type; //! algorithm type
-        char** mPatterns; //! array of patterns' pointer
-        int* mPatLen;     //! array of patterns' length
-        int mPatNum;      //! number of patterns
-        reportFunc report;//! report call back function
-	list<Pattern_t>* pPatList; //! list of patterns
-	//! the following is member for performance tuning
-	union{
+	protected:
+		int type; 		  //! algorithm type
+		char** mPatterns; //! array of patterns' pointer
+		int* mPatLen;     //! array of patterns' length
+		int mPatNum;      //! number of patterns
+		reportFunc report;//! report call back function
+		list<Pattern_t>* pPatList; //! list of patterns
+		//! the following is member for performance tuning
 		unsigned long long mTimeStart;
-		struct{
-			unsigned int mTimeStartLow;
-			unsigned int mTimeStartHigh;
-		};
-	};
-	union{
 		unsigned long long mTimeEnd;
-		struct{
-			unsigned int mTimeEndLow;
-			unsigned int mTimeEndHigh;
-		};
-	};
-	int bytesUsed;
+		int bytesUsed;
 
 };
 }
