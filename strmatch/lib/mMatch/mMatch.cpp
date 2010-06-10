@@ -1,13 +1,10 @@
 /*
  * =====================================================================================
- *Copyright(C) by Zhenghua Dai. All rights reserved.
+ *     Copyright(C) by Zhenghua Dai. All rights reserved.
  *
  *
  *
- * =====================================================================================
- */
-/*
- * =====================================================================================
+ * -------------------------------------------------------------------------------------
  *
  *       Filename:  mMatch.cpp
  *
@@ -28,7 +25,7 @@
 #include "mMatch.h"
 namespace dmMatch{
 
-void mMatch::init(char** pat, int n)
+void mMatch::setPatterns(char** pat, int n)
 {
     this->mPatterns = pat;
     this->mPatNum = n;
