@@ -29,7 +29,7 @@ void mMatch::setPatterns(char** pat, int n)
 {
     this->mPatterns = pat;
     this->mPatNum = n;
-	mPatLen =(int*) malloc( n* sizeof(int)) ;
+	mPatLen =(int*) mMalloc( n* sizeof(int)) ;
 	for(int i=0;i<n;i++) mPatLen[i] = strlen(pat[i]);
 }
 

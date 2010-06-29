@@ -49,11 +49,27 @@ typedef enum{
 typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 
 typedef int (* reportFunc)(int patID, int idx);
-class mMatch{
+
+class memBase
+{
+    public:
+        memBase(){bytesUsed =0;}
+        ~memBase(){ASSERT( bytesUsed ==0);}
+		void* mMalloc(size_t n){ void*p; bytesUsed += n; p = (void*) malloc(n); return p;}
+        template<typename T>
+		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); free(p); p=NULL;}
+        void mDecrease(size_t n){bytesUsed -=n;}
+    protected:
+		int bytesUsed;
+};
+
+
+class mMatch:public memBase
+{
     public:
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent; report=reportDefault;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
-        ~mMatch(){ free(mPatLen); ASSERT( bytesUsed ==0);}
+        ~mMatch(){ mFree(mPatLen); }
     public:
 		//!----------------------------------------------------------------------------
 		// 
@@ -127,8 +143,6 @@ class mMatch{
             reportList(patIDList, report, idx);
         }
         unsigned int minPatLen(){unsigned int n=patLen(0); for(int i=1;i<mPatNum;i++) n=(n < patLen(i)? n:patLen(i)); return n; }
-		void* acMalloc(size_t n){ void*p; bytesUsed += n; p = (void*) malloc(n); return p;}
-		void acFree(void*& p) {if(p==NULL)return; bytesUsed -= _msize(p); free(p); p=NULL;}
     private:
         void clean();
         void startTime(){ mTimeStart = getrdtsc();};
@@ -144,7 +158,6 @@ class mMatch{
 		//! the following is member for performance tuning
 		unsigned long long mTimeStart;
 		unsigned long long mTimeEnd;
-		int bytesUsed;
 
 };
 }

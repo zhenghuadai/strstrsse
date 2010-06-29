@@ -23,7 +23,6 @@ int  myreport(int patID, int idx)
 
 int main(int argc,char *argv[])
 {
-    /*  读入目标串和模式串 初始化 */ 
     int i ;
     static int stats_flag=0;
     char *subjfname,*quryfname;
@@ -68,7 +67,6 @@ int main(int argc,char *argv[])
     //printf("%s,",Text);
     printf("\n");
     printf("\n%d ok\n",strlen(Text));
-    /* 调用串匹配函数 */
     mAcBase<256> ac(Patts, ps);
     mWm<> wm(Patts, ps);
 

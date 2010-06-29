@@ -27,6 +27,12 @@ namespace dmMatch{
 
 typedef list<int> listID_t;
 
+/*
+ * =====================================================================================
+ *        Class:  acNode
+ *  Description:  
+ * =====================================================================================
+ */
 template<int CHAR_SET>
 class acNode
 {
@@ -41,7 +47,12 @@ public:
 	int mMatchNum;
 public:
 	acNode(){memset(this, 0, sizeof(acNode*)*CHAR_SET); }
-	void adjust(SSize bytes){ for(int i=0;i<CHAR_SET;i++){if(go[i]!=0) go[i] =(acNode*) ( ((char*)go[i]) + bytes); }  if(failure!= NULL) failure = (acNode*)(((char*)failure)+bytes);}
+	void adjust(SSize bytes){ 
+        for(int i=0;i<CHAR_SET;i++){
+            if(go[i]!=0) go[i] =(acNode*) ( ((char*)go[i]) + bytes); 
+        }  
+        if(failure!= NULL) failure = (acNode*)(((char*)failure)+bytes);
+    }
 	~acNode(){}
 	//int isMatched(){ return patIDList != NULL;}
 	int isMatched(){return patMatchNum()!= 0;}
@@ -78,7 +89,14 @@ typedef enum {
 	StoreList, StoreArray
 }StoreType;
 
-//! this is abstract class, there is two specialized class: StoreList and StoreArray
+/*
+ * =====================================================================================
+ *        Class:  AcNodeStore
+ *  Description:  
+ *              this is abstract class, 
+ *              there is two specialized class: StoreList and StoreArray
+ * =====================================================================================
+ */
 template<int CHAR_SET, StoreType ST>
 class AcNodeStore
 {
@@ -97,6 +115,12 @@ public:
 	acNodeP makeNode();
 };
 
+/*
+ * =====================================================================================
+ *        Class:  AcNodeStore<.., StoreList>
+ *  Description:  
+ * =====================================================================================
+ */
 template<int CHAR_SET>
 class AcNodeStore<CHAR_SET, StoreList>
 {
@@ -161,8 +185,14 @@ public:
 
 };
 
+/*
+ * =====================================================================================
+ *        Class:  AcNodeStore<.., StoreArray>
+ *  Description:  
+ * =====================================================================================
+ */
 template<int CHAR_SET>
-class AcNodeStore<CHAR_SET, StoreArray>
+class AcNodeStore<CHAR_SET, StoreArray>:public memBase
 {
 public:
 	typedef acNode<CHAR_SET>* acNodeP;
@@ -189,10 +219,10 @@ public:
 		for(int i=0;i< mStateNum; i++){
 			tNodeList[i].~acNodeT();
 		} 
-		free(tNodeList);
+		mFree(tNodeList);
 	}
 	acNodeP makeNode() {
-		if(pRoot()==0) nodeList = (acNodeP)malloc(mMaxStateNum * sizeof(acNodeT)); 
+		if(pRoot()==0) nodeList = (acNodeP)mMalloc(mMaxStateNum * sizeof(acNodeT)); 
 		mStateNum++;  acNodeP newNode= new(&nodeList[mStateNum-1]) acNodeT;
 		return newNode;
 	}
@@ -217,10 +247,10 @@ public:
 		patMatchListLen = pcur - patMatchList;
 	}
 	void reLocate(){
-		acNodeP tmpNodeList = (acNodeP)malloc(mStateNum* sizeof(acNodeT)); 
+		acNodeP tmpNodeList = (acNodeP)mMalloc(mStateNum* sizeof(acNodeT)); 
 		memcpy(tmpNodeList, nodeList, mStateNum*sizeof(acNodeT)); 
 		for(int i=0;i< mStateNum;i++){ tmpNodeList[i].adjust((SSize)tmpNodeList - (SSize)nodeList);}
-		free(nodeList); 
+		mFree(nodeList); 
 		nodeList = tmpNodeList;
 		pRoot()=nodeList;
 		if((mType == mACWid) ||(mType == geneACWid))
@@ -233,6 +263,12 @@ typedef enum {
 	notUseBadChar=0, 	UseBadChar=1
 }UseBadChar_T ;
 
+/*
+ * =====================================================================================
+ *        Class:  mAcBase
+ *  Description:  The graph is implemented with tree
+ * =====================================================================================
+ */
 template<int CHAR_SET=256, StoreType ST=StoreArray, UseBadChar_T USE_BAD_CHAR= UseBadChar>
 class mAcBase:public mMatch
 {
@@ -310,7 +346,12 @@ public:
 	//int isMatched(){ return patID != -1;}
 };
 
-//! 
+/*
+ * =====================================================================================
+ *        Class:  mAcD
+ *  Description: The graph is implemented with array  
+ * =====================================================================================
+ */
 template<int CHAR_SET=256, typename idxT=U16>
 class mAcD:public mMatch
 {
@@ -332,8 +373,8 @@ private:
 	void transDepthFrom(mAcBase<CHAR_SET>& ac);
 	void transWidthFrom(mAcBase<CHAR_SET>& ac);
 	void mallocMem(int n){ 
-		nodes= (acNodeT*)malloc(n * sizeof(acNodeT));
-		patIDList = (int**)malloc( n* sizeof(int*));
+		nodes= (acNodeT*)mMalloc(n * sizeof(acNodeT));
+		patIDList = (int**)mMalloc( n* sizeof(int*));
 		memset(patIDList, 0 , n* sizeof(int*));
 	}
 
