@@ -30,7 +30,6 @@ int main(int argc,char *argv[])
     void (* matchalg[5])(char * text,char * pat[],int num);
     char * matchalgstr[5];
     int boolmatch[5];
-    FILE *fp;
 
     _U64 startrdt,endrdt;
 
@@ -62,34 +61,36 @@ int main(int argc,char *argv[])
     ps=Getpatternfromfile(quryfname,Patts);
     Text=Getsubjectfromfile(subjfname);
 
-    //printf("%s\n",Pat);
     occurnum=0;
-    //printf("%s,",Text);
     printf("\n");
     printf("\n%d ok\n",strlen(Text));
-    mAcBase<256> ac(Patts, ps);
-    mWm<> wm(Patts, ps);
 
 	
-	ac.setReportFunc(myreport);
-	wm.setReportFunc(myreport);
 	gPatList=Patts;
-	curText = Text;
+    curText = Text;
 
     i = 0;
-    //for(i=0;i<5;i++)
     {
-
-        {
-            Mtime( &startrdt );
-            ac.search(Text);
-			printf("\n\n");
-            wm.search(Text);
-            Mtime( &endrdt );
-            elapsed_time= Mdifftime( startrdt, endrdt );
-            printf("\nalgorithm %s takes\t %20.15f seconds.\n",matchalgstr[i], elapsed_time );
-            //  fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, matchalgstr[i]);
-        }
+        mAcBase<256> ac(Patts, ps);
+//        ac.setReportFunc(myreport);
+        printf("mem:%d\n", ac.memUsed());
+        Mtime( &startrdt );
+        ac.search(Text);
+        Mtime( &endrdt );
+        printf("\n\n");
+        elapsed_time= Mdifftime( startrdt, endrdt );
+        printf("\nalgorithm %s takes\t %20.15f seconds.\n","AC", elapsed_time );
     }
-    //fclose(fp);
+
+    {
+        mWm<> wm(Patts, ps);
+//        wm.setReportFunc(myreport);
+        printf("mem:%d\n", wm.memUsed());
+        Mtime( &startrdt );
+        wm.search(Text);
+        Mtime( &endrdt );
+        printf("\n\n");
+        elapsed_time= Mdifftime( startrdt, endrdt );
+        printf("\nalgorithm %s takes\t %20.15f seconds.\n","WM", elapsed_time );
+    }
 }

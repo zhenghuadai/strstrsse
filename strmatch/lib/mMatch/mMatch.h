@@ -55,10 +55,11 @@ class memBase
     public:
         memBase(){bytesUsed =0;}
         ~memBase(){ASSERT( bytesUsed ==0);}
-		void* mMalloc(size_t n){ void*p; bytesUsed += n; p = (void*) malloc(n); return p;}
+		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); return p;}
         template<typename T>
 		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); free(p); p=NULL;}
         void mDecrease(size_t n){bytesUsed -=n;}
+        size_t memUsed(){return bytesUsed;}
     protected:
 		int bytesUsed;
 };
