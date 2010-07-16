@@ -279,9 +279,6 @@ public:
 
 	template<int m, typename T, UseBadChar_T b>
 		friend class mAcD;
-private:
-	AcNodeStore<CHAR_SET, ST> acNodesPool;
-	acNodeP m_pCur;
 public:
 	mAcBase();
 	mAcBase(char** pat, int n);
@@ -289,16 +286,14 @@ public:
 	~mAcBase(){}
 	virtual int search(char* txt, int n);
 	virtual int search(char* txt);
+	virtual int searchC(char* txt, int n);
+	virtual int searchC(char* txt);
 	virtual int searchGene(char* txt, int n);
 	virtual int searchGene(char* txt);
 	virtual int searchGene_(char* txt, int n);
 	virtual int searchGene_(char* txt);
-	virtual int searchGene4(char* txt, int n);
-	virtual int searchGene4(char* txt);
 	virtual int searchGeneC(char* txt, int n);
 	virtual int searchGeneC(char* txt);
-	virtual int searchGene4C(char* txt, int n);
-	virtual int searchGene4C(char* txt);
 
     virtual size_t memUsed(){ return memMalloced() + acNodesPool.memMalloced();}
 public:
@@ -327,12 +322,16 @@ private:
 
 	template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt, int n);
 	template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt);
-	int searchGene4(acNodeP&, char* txt, int n);
-	int searchGene4(acNodeP&, char* txt);
+	int search(acNodeP&, char* txt, int n);
+	int search(acNodeP&, char* txt);
+
 	int isBadChar(Uchar c) { return (c >= CHAR_SET);}
 private:
 	acNodeP makeNode() {return acNodesPool.makeNode(); }
 	void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
+private:
+	AcNodeStore<CHAR_SET, ST> acNodesPool;
+	acNodeP m_pCur;
 
 };
 
@@ -368,8 +367,6 @@ public:
 	virtual int search(char* txt);
 	virtual int searchGene(char* txt, int n);
 	virtual int searchGene(char* txt);
-	virtual int searchGene4(char* txt, int n);
-	virtual int searchGene4(char* txt);
 private:
 	//! for building DFA (transfer from mAcBase)
 	void transDepthFrom(mAcBase<CHAR_SET>& ac);
