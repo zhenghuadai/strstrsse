@@ -71,7 +71,7 @@ int main(int argc,char *argv[])
 
     i = 0;
     {
-        mAcBase<256> ac(Patts, ps);
+        mAcBase<256> ac(Patts, ps, mACWid);
 //        ac.setReportFunc(myreport);
         printf("mem:%d\n", ac.memUsed());
         Mtime( &startrdt );

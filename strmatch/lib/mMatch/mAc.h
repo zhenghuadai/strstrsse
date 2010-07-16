@@ -277,7 +277,7 @@ public:
 	typedef acNode<CHAR_SET>  acNodeT;
 	enum{char_set = CHAR_SET};
 
-	template<int m, typename T>
+	template<int m, typename T, UseBadChar_T b>
 		friend class mAcD;
 private:
 	AcNodeStore<CHAR_SET, ST> acNodesPool;
@@ -299,6 +299,8 @@ public:
 	virtual int searchGeneC(char* txt);
 	virtual int searchGene4C(char* txt, int n);
 	virtual int searchGene4C(char* txt);
+
+    virtual size_t memUsed(){ return memMalloced() + acNodesPool.memMalloced();}
 public:
 	acNodeP& pRoot(){ return acNodesPool.pRoot();}
 	acNodeP& pCur(){ return m_pCur;}
@@ -321,7 +323,7 @@ private:
 	void buildGeneTrie();
 	void buildTrie();
 	void buildFailure();
-	void convertDFA();
+	void convert2DFA();
 
 	template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt, int n);
 	template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt);
@@ -352,7 +354,7 @@ public:
  *  Description: The graph is implemented with array  
  * =====================================================================================
  */
-template<int CHAR_SET=256, typename idxT=U16>
+template<int CHAR_SET=256, typename idxT=U16, UseBadChar_T USE_BAD_CHAR= UseBadChar>
 class mAcD:public mMatch
 {
 public:

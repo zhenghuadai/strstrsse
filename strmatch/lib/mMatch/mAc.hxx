@@ -50,7 +50,7 @@ mAcBase_DEFINITION_HEADER()::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat
         buildFailure();
         printf("build Failure complete\n");
         printf("build DFA...\n");
-        convertDFA();
+        convert2DFA();
         printf("build DFA complete\n");
     }else {
         compile();
@@ -63,7 +63,7 @@ mAcBase_DEFINITION_HEADER()::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat
 mAcBase_DEFINITION_HEADER(void)::compile()
 {
     buildNFA();
-    convertDFA();
+    convert2DFA();
 }
 
 mAcBase_DEFINITION_HEADER(void)::buildNFA()
@@ -140,7 +140,7 @@ mAcBase_DEFINITION_HEADER(void)::buildFailure()
     }
 }
 
-mAcBase_DEFINITION_HEADER(void)::convertDFA()
+mAcBase_DEFINITION_HEADER(void)::convert2DFA()
 {
     if(pRoot() == NULL) return;
     queue<acNodeP> Queue;
@@ -178,20 +178,24 @@ int ACsearchGene(acNodeT* acBase, matchListT** matchListBase, NodeT pRoot, repor
     return 0;
 }
 
+#define SEARCH_GENE_TEMPLATE(state, geneCode) {\
+    unsigned char* p = (Uchar*) txt;	                                      \
+    for(;*p; p++){                                                            \
+        Uchar c = geneCode(*p);                                               \
+        if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}         \
+        state = nextState(state, c);                                          \
+        if(isMatched(state)) {                                                \
+            int ret = reportList(matchedList(state), (char*)p - txt);         \
+        }                                                                     \
+    }                                                                         \
+    return 0;                                                                 \
+}
+
 mAcBase_DEFINITION_HEADER(template<geneCodeFunc geneCode> int)::searchGene(acNodeP& state, char* txt)
 {
 #if 1
-    unsigned char* p = (Uchar*) txt;	
-    for(;*p; p++){
-        //Uchar c = agct2num(*p);
-        Uchar c = geneCode(*p);
-        if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
-        state = nextState(state, c); // state= state->go[*p]; 
-        if(isMatched(state)) {
-            int ret = reportList(matchedList(state), (char*)p - txt);
-        }
-    }
-    return 0;
+
+SEARCH_GENE_TEMPLATE(state, geneCode);
 #else
     return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, int, mAcBase<CHAR_SET,ST>::nextStateT, mAcBase<CHAR_SET,ST>::isMatchedT, mAcBase<CHAR_SET,ST>::reportMatchT>(NULL, NULL, pRoot(), report, txt);
 #endif
@@ -201,7 +205,6 @@ mAcBase_DEFINITION_HEADER( template<geneCodeFunc geneCode> int)::searchGene(acNo
 {
     unsigned char* p = (Uchar*) txt;	
     for(int i=0; i<n; p++,i++){
-        //Uchar c = agct2num(*p);
         Uchar c = geneCode(*p);
         if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}
         state = nextState(state, c);// state= state->go[*p]; 
@@ -368,7 +371,7 @@ mAcBase_DEFINITION_HEADER(int)::search(char* txt, int n)
 {
     unsigned char* p = (Uchar*) txt;	
     acNodeP state=pRoot();
-    for(int i=0; i<n; p++,i++){
+    for(; p<(unsigned char*)txt + n; p++){
         state = nextState(state, *p);// state= state->go[*p]; 
         if(state-> isMatched()) {
             int ret = reportList(matchedList(state), (char*)p - txt);
@@ -490,8 +493,8 @@ void AcNodeStore<CHAR_SET, StoreArray>::trans2WidthFirst()
     pRoot()= nodeList;
 }
 
-    template<int CHAR_SET, typename idxT>
-void mAcD<CHAR_SET,idxT>::transWidthFrom(mAcBase<CHAR_SET>& ac)
+#define mAcD_DEFINITION_HEADER( type ) template<int CHAR_SET, typename idxT, UseBadChar_T USE_BAD_CHAR> type mAcD<CHAR_SET, idxT, USE_BAD_CHAR>
+mAcD_DEFINITION_HEADER(void)::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
@@ -500,8 +503,7 @@ void mAcD<CHAR_SET,idxT>::transWidthFrom(mAcBase<CHAR_SET>& ac)
     pRoot() = 0;
 }
 
-    template<int CHAR_SET, typename idxT>
-void mAcD<CHAR_SET,idxT>::transDepthFrom(mAcBase<CHAR_SET>& ac)
+mAcD_DEFINITION_HEADER(void)::transDepthFrom(mAcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
@@ -510,28 +512,27 @@ void mAcD<CHAR_SET,idxT>::transDepthFrom(mAcBase<CHAR_SET>& ac)
     pRoot() = 0;
 }
 
-
-    template<int CHAR_SET, typename idxT>
-int mAcD<CHAR_SET,idxT>::search(char* txt, int n)
+mAcD_DEFINITION_HEADER(int)
+::search(char* txt, int n)
 {
     return 0;
 }
 
-    template<int CHAR_SET, typename idxT>
-int mAcD<CHAR_SET,idxT>::search(char* txt)
+mAcD_DEFINITION_HEADER(int)
+::search(char* txt)
 {
 
     return 0;
 }
 
-    template<int CHAR_SET, typename idxT>
-int mAcD<CHAR_SET,idxT>::searchGene(char* txt, int n)
+mAcD_DEFINITION_HEADER(int)
+::searchGene(char* txt, int n)
 {
     return 0;
 }
 
-    template<int CHAR_SET, typename idxT>
-int mAcD<CHAR_SET,idxT>::searchGene(char* txt)
+mAcD_DEFINITION_HEADER(int)
+::searchGene(char* txt)
 {
 #if 1
     unsigned char* p = (Uchar*) txt;	
@@ -540,7 +541,6 @@ int mAcD<CHAR_SET,idxT>::searchGene(char* txt)
         Uchar c = agct2num(*p);
         if(c >=CHAR_SET){state= pRoot(); continue;}
         state = nextState(state, c); 
-        //state= nodes[state].go[c]; 
         if( isMatched(state)) {
             int ret = reportList(matchedList(state), (char*)p - txt);
         }
@@ -552,15 +552,13 @@ int mAcD<CHAR_SET,idxT>::searchGene(char* txt)
 
 }
 
-    template<int CHAR_SET, typename idxT>
-int mAcD<CHAR_SET,idxT>::searchGene4(char* txt, int n)
+mAcD_DEFINITION_HEADER(int)::searchGene4(char* txt, int n)
 {
 
     return 0;
 }
 
-    template<int CHAR_SET, typename idxT>
-int mAcD<CHAR_SET,idxT>::searchGene4(char* txt)
+mAcD_DEFINITION_HEADER(int)::searchGene4(char* txt)
 {
 
     return 0;
