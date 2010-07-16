@@ -59,7 +59,7 @@ class memBase
         template<typename T>
 		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); free(p); p=NULL;}
         void mDecrease(size_t n){bytesUsed -=n;}
-        size_t memUsed(){return bytesUsed;}
+        size_t memMalloced(){return bytesUsed;}
     protected:
 		int bytesUsed;
 };
@@ -120,6 +120,11 @@ class mMatch:public memBase
 		//  
 		//!----------------------------------------------------------------------------
         double getTime(){return (double)(mTimeEnd - mTimeStart);}
+
+		//!----------------------------------------------------------------------------
+		//return the memory that has been used  
+		//!----------------------------------------------------------------------------
+        virtual size_t memUsed(){ return memMalloced();}
     public:
         static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
         static int reportSilent(int patid, int idx){}

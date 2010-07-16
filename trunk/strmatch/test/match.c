@@ -13,8 +13,8 @@ char * GetgenefromfileU(char *pfname);
 int isFastaFile(char* fn);
 typedef struct matchtest_
 {
-    void (* matchalg)(char * text,char * pat);
-    void (* matchalg2)(char * text,char * pat,int n, int m);
+    char* (* matchalg)(char * text,char * pat);
+    char* (* matchalg2)(char * text,char * pat,int n, int m);
     char * matchalgstr;
     int boolmatch;
 } matchTest;
@@ -159,6 +159,9 @@ int main(int argc,char *argv[])
     match[21].matchalg2        =0;
     match[21].matchalgstr    ="strstrsse42";
     #endif
+    match[22].matchalg        =strstrmmx;
+    match[22].matchalg2        =0;
+    match[22].matchalgstr    ="strstrmmx";
     for(i=0;i<ALLALG;i++)
     {
         match[i].boolmatch=1;
@@ -260,8 +263,11 @@ int main(int argc,char *argv[])
 
 	if(verbose ==0)
 		setReportFunc(SEARCH_SILENT);
-	else 
+	else if(verbose == 1) 
 		setReportFunc(SEARCH_ALL);
+    else 
+		setReportFunc(SEARCH_FIRST);
+
 	printf("alg2\n");
 	for(i=0;i<ALLALG;i++)
 	{   
@@ -288,42 +294,44 @@ int main(int argc,char *argv[])
 	{   
 		if(match[i].matchalg&& match[i].boolmatch)
 		{
+            char* pcur;
 			mdtime(0);
 			//Mtime(&startrdt);
 			//matchalg[i](Text,Pat);
-			match[i].matchalg(Text,Pat);
+			pcur = match[i].matchalg(Text,Pat);
 
 			//Mtime(&endrdt);
 			//elapsed_time =Mdifftime(startrdt,endrdt);
-			elapsed_time=mdtime(1);
-			if(i>16)
-				time_used[i] = elapsed_time;
-			printf("algorithm %15s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
-			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
-		}
+            elapsed_time=mdtime(1);
+            time_used[i] = elapsed_time;
+            if(verbose ==2)
+                printf("(%d)", pcur - Text);
+            printf("algorithm %15s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
+            fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
+        }
 
-	}//end for
+    }//end for
 
-	fclose(fp);
+    fclose(fp);
 
-	printf("speedup to bfStr :%f\n", time_used[0] / time_used[18]);
-	printf("speedup to bmStr :%f\n", time_used[1] / time_used[18]);
-	printf("speedup to bmhStr:%f\n", time_used[2] / time_used[18]);
+    printf("speedup to bfStr :%f\n", time_used[0] / time_used[18]);
+    printf("speedup to bmStr :%f\n", time_used[1] / time_used[18]);
+    printf("speedup to bmhStr:%f\n", time_used[2] / time_used[18]);
 
-	/* 输出结果 */ 
-	printf("%f\n%f\n%f\n%f\n%f\n%f\n",time_used[18], time_used[1], time_used[2], time_used[0],time_used[6],time_used[15]);
-	for(i=0;i<occurnum;i++)
-		printf("%d,",occurrenceint[i]);
-	//printf("\nalgorithm takes %6.2f seconds.\n", elapsed_time );
-	// elapsed_time =Mdifftime(startrdt,endrdt);
-	//printf("\nalgorithm takes %20.15f seconds.\n", elapsed_time );
+    /* 输出结果 */ 
+    printf("%f\n%f\n%f\n%f\n%f\n%f\n",time_used[18], time_used[1], time_used[2], time_used[0],time_used[6],time_used[15]);
+    for(i=0;i<occurnum;i++)
+        printf("%d,",occurrenceint[i]);
+    //printf("\nalgorithm takes %6.2f seconds.\n", elapsed_time );
+    // elapsed_time =Mdifftime(startrdt,endrdt);
+    //printf("\nalgorithm takes %20.15f seconds.\n", elapsed_time );
 
 }
 
 int isFastaFile(char* fn){
-	if(fn ==NULL) return 0;
-	int m = strlen(fn);
-	if((fn[m-3]=='.')&&(fn[m-2]=='f')&&(fn[m-1]=='a')) return 1;
-	return 0;
+    if(fn ==NULL) return 0;
+    int m = strlen(fn);
+    if((fn[m-3]=='.')&&(fn[m-2]=='f')&&(fn[m-1]=='a')) return 1;
+    return 0;
 }
 

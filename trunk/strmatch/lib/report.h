@@ -34,7 +34,7 @@ typedef int (*reportFunc)(char* text, int idx, char* pat);
 void setReportFunc(reportFunc rf);
 #define SEARCH_STOP 1
 #define SEARCH_CONTINUE 0
-#define SEARCH_THE_FIRST ((reportFunc) 1)
+#define SEARCH_FIRST ((reportFunc) 1)
 #define SEARCH_ALL ((reportFunc) 2)
 #define SEARCH_SILENT ((reportFunc) 3)
 
