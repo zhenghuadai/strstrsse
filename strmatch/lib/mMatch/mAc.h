@@ -286,25 +286,14 @@ public:
     ~mAcBase(){}
     void initAc(char** pat, int n);
 	void initAc(char** pat, int n, mAlgtype t);
-    virtual int search(char* txt, int n);
-    virtual int search(char* txt);
-    virtual int searchC(char* txt, int n);
-    virtual int searchC(char* txt);
-    virtual int searchGene(char* txt, int n);
-    virtual int searchGene(char* txt);
-    virtual int searchGene_(char* txt, int n);
-    virtual int searchGene_(char* txt);
-    virtual int searchGeneC(char* txt, int n);
-    virtual int searchGeneC(char* txt);
+    
     virtual size_t memUsed(){ return memMalloced() + acNodesPool.memMalloced();}
 public:
     acNodeP& pRoot(){ return acNodesPool.pRoot();}
-    acNodeP& pCur(){ return m_pCur;}
     int mStateNum(){return acNodesPool.mStateNum;}
 
     int patMatchListLen() {return acNodesPool.patMatchListLen;}
     int* patMatchList(){return acNodesPool.patMatchList;}
-    void rewind(){ m_pCur = pRoot();}
 protected:
     virtual void compile();
 public:
@@ -322,18 +311,12 @@ private:
     void buildFailure();
     void convert2DFA();
 
-    template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt, int n);
-    template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt);
-    int search(acNodeP&, char* txt, int n);
-    int search(acNodeP&, char* txt);
-
     int isBadChar(Uchar c) { return (c >= CHAR_SET);}
 private:
     acNodeP makeNode() {return acNodesPool.makeNode(); }
     void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
 private:
     AcNodeStore<CHAR_SET, ST> acNodesPool;
-    acNodeP m_pCur;
 
 };
 
@@ -361,6 +344,7 @@ class Ac:public mMatch
         virtual int searchGene_(char* txt);
         virtual int searchGeneC(char* txt, int n);
         virtual int searchGeneC(char* txt);
+        void rewind(){ m_pCur = pRoot();}
     private:
         template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt, int n);
         template<geneCodeFunc geneCode> int searchGene(acNodeP&, char* txt);
