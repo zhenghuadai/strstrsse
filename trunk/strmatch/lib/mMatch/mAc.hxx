@@ -28,17 +28,24 @@ namespace dmMatch{
 
 #define mAcBase_DEFINITION_HEADER( type ) template<int CHAR_SET, StoreType ST, UseBadChar_T USE_BAD_CHAR> type mAcBase<CHAR_SET, ST, USE_BAD_CHAR>
 
-mAcBase_DEFINITION_HEADER():: mAcBase(char** pat, int n) : mMatch(pat, n)
+mAcBase_DEFINITION_HEADER():: mAcBase(char** pat, int n) //: mMatch(pat, n)
 {
-    type = mAC;
-    acNodesPool.setMaxStateNum(charNum());
-	acNodesPool.type()=type;
-	this->compile();
-    reLocate();
+    initAc(pat,n);
 }
 
-mAcBase_DEFINITION_HEADER()::mAcBase(char** pat, int n, mAlgtype t) : mMatch(pat, n)
+mAcBase_DEFINITION_HEADER(void ):: initAc(char** pat, int n)
 {
+    initAc(pat, n , 0/*  mAc*/);
+}
+
+mAcBase_DEFINITION_HEADER()::mAcBase(char** pat, int n, mAlgtype t) //: mMatch(pat, n)
+{
+    initAc(pat, n, t);
+}
+
+mAcBase_DEFINITION_HEADER(void)::initAc(char** pat, int n, mAlgtype t) 
+{
+    setPatterns(pat, n);
     type = t;
 	acNodesPool.type()=t;
     acNodesPool.setMaxStateNum(charNum());
@@ -513,6 +520,123 @@ mAcD_DEFINITION_HEADER(int)
 //    delete ac1;
 //    delete ac2;
 //}
+
+
+#define Ac_DEFINITION_HEADER( type ) template<class Acautomaton,int CHAR_SET,  UseBadChar_T USE_BAD_CHAR> type Ac<Acautomaton, CHAR_SET, USE_BAD_CHAR>
+
+Ac_DEFINITION_HEADER(template<geneCodeFunc geneCode> int)::searchGene(acNodeP& state, char* txt)
+{
+#if 1
+SEARCH_GENE_TEMPLATE(state, geneCode);
+#else
+    return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, int, mAcBase<CHAR_SET,ST>::nextStateT, mAcBase<CHAR_SET,ST>::isMatchedT, mAcBase<CHAR_SET,ST>::reportMatchT>(NULL, NULL, pRoot(), report, txt);
+#endif
+}
+
+Ac_DEFINITION_HEADER( template<geneCodeFunc geneCode> int)::searchGene(acNodeP& state, char* txt, int n)
+{
+    SEARCH_GENE_TEMPLATE2(state, geneCode);
+}
+
+
+Ac_DEFINITION_HEADER(int)::search(acNodeP& state, char* txt)
+{
+    SEARCH_TEMPLATE(state)
+}
+
+Ac_DEFINITION_HEADER(int)::search(acNodeP& state, char* txt, int n)
+{
+SEARCH_TEMPLATE2(state)  
+}
+
+
+
+Ac_DEFINITION_HEADER(int)::searchGene(char* txt)
+{
+    acNodeP state=pRoot();
+    return searchGene<agct2num>(state, txt);
+}
+
+Ac_DEFINITION_HEADER(int)::searchGene(char* txt, int n)
+{
+    acNodeP state=pRoot();
+    return searchGene<agct2num>(state, txt, n);
+}
+
+Ac_DEFINITION_HEADER(int)::searchGene_(char* txt)
+{
+    acNodeP state=pRoot();
+    return searchGene<agct2pairnum>(state, txt);
+}
+
+Ac_DEFINITION_HEADER(int)::searchGene_(char* txt, int n)
+{
+    acNodeP state=pRoot();
+    return searchGene<agct2pairnum>(state, txt, n);
+}
+
+
+Ac_DEFINITION_HEADER(int)::searchGeneC(char* txt)
+{
+    acNodeP state=pCur();
+    int ret=searchGene<agct2num>(state, txt);
+    pCur()=state;
+    return ret; 
+}
+
+Ac_DEFINITION_HEADER(int)::searchGeneC(char* txt, int n)
+{
+    acNodeP state=pCur();
+    int ret=searchGene<agct2num>(state, txt, n);
+    pCur()=state;
+    return  ret; 
+}
+
+
+Ac_DEFINITION_HEADER(int)::searchC(char* txt)
+{
+    acNodeP state=pCur();
+    int ret=search(state, txt);
+    pCur()=state;
+    return  ret; 
+}
+
+Ac_DEFINITION_HEADER(int)::searchC(char* txt, int n)
+{
+    acNodeP state=pCur();
+    int ret=search(state, txt, n);
+    pCur()=state;
+    return  ret; 
+}
+
+Ac_DEFINITION_HEADER(int)::search(char* txt)
+{
+    acNodeP state=pRoot();
+    int ret=search(state, txt);
+    return  ret; 
+}
+
+Ac_DEFINITION_HEADER(int)::search(char* txt, int n)
+{
+    acNodeP state=pRoot();
+    int ret=search(state, txt,n);
+    pCur()=state;
+    return  ret; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 #endif

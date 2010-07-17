@@ -71,8 +71,9 @@ int main(int argc,char *argv[])
 
     i = 0;
     {
-        mAcBase<256> ac(Patts, ps, mACWid);
+//        mAcBase<256> ac(Patts, ps, mACWid);
 //        ac.setReportFunc(myreport);
+        Ac<mAcBase<256,StoreArray,UseBadChar>, 256,UseBadChar> ac(Patts, ps, mACWid);
         printf("mem:%d\n", ac.memUsed());
         Mtime( &startrdt );
         ac.search(Text);
