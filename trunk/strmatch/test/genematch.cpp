@@ -195,7 +195,7 @@ int main(int argc,char *argv[])
 	//mAcBase<4> ac(patts, ps, geneAC);
 	mAcBase<4> ac(patts, ps, geneACWid);
 	mAcBase<4> rac(rcpatts, ps, geneACWid);
-	//mAcD<4,unsigned int> acD(ac);
+	mAcD<4,unsigned int> acD(ac);
 	//mAcD<4,unsigned short> acD(ac);
     //mWm<8,geneHashWm8,4> wm(patts, ps);
 

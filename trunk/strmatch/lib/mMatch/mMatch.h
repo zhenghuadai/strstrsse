@@ -26,6 +26,9 @@
 #include <assert.h>
 #include "dmutil.h"
 
+#define interface public
+#define constructor public
+
 #if defined(__GNUC__)
 # 	define nasm0(op) __asm__( #op)
 inline size_t _msize(void* p){
@@ -46,7 +49,6 @@ namespace dmMatch{
 typedef enum{
     mAC, geneAC, mWM, mACDep, mACWid, geneACDep, geneACWid
 } mAlgtype;
-typedef enum {ACDep_First, ACWid_First} AC_Store_t;
 
 typedef int (* reportFunc)(int patID, int idx);
 
@@ -54,7 +56,7 @@ class memBase
 {
     public:
         memBase(){bytesUsed =0;}
-        ~memBase(){ASSERT( bytesUsed ==0);}
+        ~memBase(){ /*  ASSERT( bytesUsed ==0);*/}
 		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); return p;}
         template<typename T>
 		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); free(p); p=NULL;}

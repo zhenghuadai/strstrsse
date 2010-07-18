@@ -81,11 +81,25 @@ int main(int argc,char *argv[])
         printf("\n\n");
         elapsed_time= Mdifftime( startrdt, endrdt );
         printf("\nalgorithm %s takes\t %20.15f seconds.\n","AC", elapsed_time );
+#if 1 
+        {
+//            mAcD<> acD(ac.getAutomaton());
+//            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(Patts, ps, mACWid);
+            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(ac.getAutomaton(), mACWid);
+            printf("mem:%d\n", acD.memUsed());
+            Mtime( &startrdt );
+            acD.search(Text);
+            Mtime( &endrdt );
+            printf("\n\n");
+            elapsed_time= Mdifftime( startrdt, endrdt );
+            printf("\nalgorithm %s takes\t %20.15f seconds.\n","ACD", elapsed_time );
+        }
+#endif
     }
 
     {
         mWm<> wm(Patts, ps);
-//        wm.setReportFunc(myreport);
+        //        wm.setReportFunc(myreport);
         printf("mem:%d\n", wm.memUsed());
         Mtime( &startrdt );
         wm.search(Text);

@@ -23,7 +23,7 @@
 #include <stack>
 #include <map>
 
-//#include "mAc.h"
+#include "mMatch.h"
 namespace dmMatch{
 
 #define mAcBase_DEFINITION_HEADER( type ) template<int CHAR_SET, StoreType ST, UseBadChar_T USE_BAD_CHAR> type mAcBase<CHAR_SET, ST, USE_BAD_CHAR>
@@ -35,7 +35,7 @@ mAcBase_DEFINITION_HEADER():: mAcBase(char** pat, int n) //: mMatch(pat, n)
 
 mAcBase_DEFINITION_HEADER(void ):: initAc(char** pat, int n)
 {
-    initAc(pat, n , 0/*  mAc*/);
+    initAc(pat, n , (mAlgtype) 0);
 }
 
 mAcBase_DEFINITION_HEADER()::mAcBase(char** pat, int n, mAlgtype t) //: mMatch(pat, n)
@@ -317,47 +317,6 @@ mAcD_DEFINITION_HEADER(void)::transDepthFrom(mAcBase<CHAR_SET>& ac)
     pRoot() = 0;
 }
 
-mAcD_DEFINITION_HEADER(int)
-::search(char* txt, int n)
-{
-    return 0;
-}
-
-mAcD_DEFINITION_HEADER(int)
-::search(char* txt)
-{
-
-    return 0;
-}
-
-mAcD_DEFINITION_HEADER(int)
-::searchGene(char* txt, int n)
-{
-    return 0;
-}
-
-mAcD_DEFINITION_HEADER(int)
-::searchGene(char* txt)
-{
-#if 1
-    unsigned char* p = (Uchar*) txt;	
-    acNodeP state=pRoot();
-    for(;*p; p++){
-        Uchar c = agct2num(*p);
-        if(c >=CHAR_SET){state= pRoot(); continue;}
-        state = nextState(state, c); 
-        if( isMatched(state)) {
-            int ret = reportList(matchedList(state), (char*)p - txt);
-        }
-    }
-    return 0;
-#else
-    return 	ACsearchGene<acNodeP, acNodeShort<CHAR_SET,idxT>, int, mAcD<CHAR_SET,idxT>::nextStateT, mAcD<CHAR_SET,idxT>::isMatchedT, mAcD<CHAR_SET,idxT>::reportMatchT>(nodes, patIDList,pRoot(), report, txt);
-#endif
-
-}
-
-
 #define Ac_DEFINITION_HEADER( type ) template<class Acautomaton,int CHAR_SET,  UseBadChar_T USE_BAD_CHAR> type Ac<Acautomaton, CHAR_SET, USE_BAD_CHAR>
 
 Ac_DEFINITION_HEADER(template<geneCodeFunc geneCode> int)::searchGene(acNodeP& state, char* txt)
@@ -385,7 +344,7 @@ Ac_DEFINITION_HEADER( template<geneCodeFunc geneCode> int)::searchGene(acNodeP& 
         Uchar c = geneCode(*p);                                                
         if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}          
         state = nextState(state, c);                                           
-        if(state-> isMatched()) {                                              
+        if(isMatched(state)) {                                              
             int ret = reportList(matchedList(state), (char*)p - txt);          
         }                                                                      
     }                                                                          
@@ -400,7 +359,7 @@ Ac_DEFINITION_HEADER(int)::search(acNodeP& state, char* txt)
         Uchar c = (*p);                                                    
         if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}      
         state = nextState(state, c);                                       
-        if(state-> isMatched()) {                                          
+        if(isMatched(state)) {                                          
             int ret = reportList(matchedList(state), (char*)p - txt);      
         }                                                                  
     }                                                                      
@@ -414,7 +373,7 @@ Ac_DEFINITION_HEADER(int)::search(acNodeP& state, char* txt, int n)
         Uchar c = (*p);                                                     
         if(USE_BAD_CHAR){if(c>= CHAR_SET){state= pRoot(); continue;}}       
         state = nextState(state, c);                                        
-        if(state-> isMatched()) {                                           
+        if(isMatched(state)) {                                           
             int ret = reportList(matchedList(state), (char*)p - txt);       
         }                                                                   
     }                                                                       
