@@ -28,6 +28,7 @@
 
 #define interface public
 #define constructor public
+#define __static static 
 
 #if defined(__GNUC__)
 # 	define nasm0(op) __asm__( #op)

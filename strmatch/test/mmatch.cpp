@@ -70,7 +70,8 @@ int main(int argc,char *argv[])
     curText = Text;
 
     i = 0;
-    {
+   {
+#if 1
 //        mAcBase<256> ac(Patts, ps, mACWid);
 //        ac.setReportFunc(myreport);
         Ac<mAcBase<256,StoreArray,UseBadChar>, 256,UseBadChar> ac(Patts, ps, mACWid);
@@ -81,11 +82,12 @@ int main(int argc,char *argv[])
         printf("\n\n");
         elapsed_time= Mdifftime( startrdt, endrdt );
         printf("\nalgorithm %s takes\t %20.15f seconds.\n","AC", elapsed_time );
+#endif
 #if 1 
         {
 //            mAcD<> acD(ac.getAutomaton());
-//            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(Patts, ps, mACWid);
-            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(ac.getAutomaton(), mACWid);
+            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(Patts, ps, mACWid);
+//            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(ac.getAutomaton(), mACWid);
             printf("mem:%d\n", acD.memUsed());
             Mtime( &startrdt );
             acD.search(Text);
