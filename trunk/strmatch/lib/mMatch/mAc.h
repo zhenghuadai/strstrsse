@@ -46,7 +46,7 @@ public:
 	int* patIDArray;
 	int mMatchNum;
 public:
-	acNode(){memset(this, 0, sizeof(acNode*)*CHAR_SET); }
+	acNode(){memset(this, 0, sizeof(acNode)); }
 	void adjust(SSize bytes){ 
         for(int i=0;i<CHAR_SET;i++){
             if(go[i]!=0) go[i] =(acNode*) ( ((char*)go[i]) + bytes); 
@@ -61,8 +61,9 @@ public:
 
 	void addPattern(acNode* node){
 		if(!patIDList) patIDList = new list<int>();
-		for(typename list<int>::iterator i= node->patIDList->begin(); i!= node->patIDList->end(); i++) 
+		for(typename list<int>::iterator i= node->patIDList->begin(); i!= node->patIDList->end(); i++){ 
 			patIDList->push_back(*i); 
+        }
 		mMatchNum += node->mMatchNum;
 	}
 	//! when search
@@ -298,9 +299,9 @@ protected:
     virtual void compile();
 public:
     acNodeP& pRoot(){ return acNodesPool.pRoot();}
-    static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
-    static int isMatched(acNodeP state){return (state-> isMatched());} 
-    static int* matchedList(acNodeP s){ return s->patIDArray;}
+    __static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
+    __static int isMatched(acNodeP state){return (state-> isMatched());} 
+    __static int* matchedList(acNodeP s){ return s->patIDArray;}
 
 private:	
     static acNodeP nextStateT(acNode<CHAR_SET>* base, acNodeP cur, Uchar c){ return cur->go[c];}

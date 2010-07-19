@@ -138,10 +138,13 @@ mAcBase_DEFINITION_HEADER(void)::buildFailure()
             if( curNode==NULL) continue;
             Queue.push(curNode);
             acNodeP dst = parent->failure;
-            while(dst -> go[i] == NULL) dst = dst->failure;
+            while(dst -> go[i] == NULL){ 
+                dst = dst->failure;
+            }
             curNode->failure = dst->go[i];
-            if(dst->go[i]->isMatched())
+            if(dst->go[i]->isMatched()){
                 curNode->addPattern(dst->go[i]);
+            }
         }
 
     }
@@ -192,12 +195,11 @@ template<typename T>
 T top( stack<T>& q){return q.top();} 
 
     template<int CHAR_SET, typename idxT,  class travalT>
-void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, int** patIDList, int* patMatchList)
+void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes, int** patIDList, int* patMatchList)
 {
     int curState=0;
-    int mStateNum = ac.mStateNum();
+    int mStateNum = ac.mStateNum;
     typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
-    //queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
     travalT Queue;
 #if 0
     map<unsigned long long, U16> Map;
@@ -226,33 +228,44 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
                 Queue.push(curNode->go[i]);
         }
     }
-	ASSERT(mStateNum== curState);
-    memcpy(patMatchList, ac.patMatchList(), ac.patMatchListLen()*sizeof(int));
+    ASSERT(mStateNum== curState);
     for(int s=0;s<mStateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
-            nodes[s].go[i] = MapIndex(Map2[s]->go[i] ); 
+            nodes[s].go[i] = nodes + MapIndex(Map2[s]->go[i] ); 
         }
-        if(Map2[s]-> isMatched()){
-            patIDList[s] = patMatchList + (Map2[s]->patIDArray - ac.patMatchList());
-        }
+        nodes[s].failure = nodes + MapIndex( Map2[s]-> failure);
+        nodes[s].patIDList= Map2[s] ->patIDList;
+        nodes[s].patIDArray = Map2[s] -> patIDArray;
+        nodes[s].mMatchNum= Map2[s] -> mMatchNum;
     }
 
     delete Map2;
 }
 
+    template<int CHAR_SET>
+void AcNodeStore<CHAR_SET, StoreArray>::trans2WidthFirst()
+{
+    acNodeP tmpNodeList = (acNodeP)mMalloc(mStateNum* sizeof(acNodeT)); 
+    reoderacNode <CHAR_SET, Uint, queue<typename mAcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
+    clean(nodeList);
+    nodeList = tmpNodeList;
+    pRoot()= nodeList;
+}
+
     template<int CHAR_SET, typename idxT,  class travalT>
-void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes, int** patIDList, int* patMatchList)
+void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, int** patIDList, int* patMatchList)
 {
     int curState=0;
-    int mStateNum = ac.mStateNum;
+    int mStateNum = ac.mStateNum();
     typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
+    //queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
     travalT Queue;
 #if 0
     map<unsigned long long, U16> Map;
 #define MapIndex(a) Map[(unsigned long long)a]
 #else
     idxT* Map = new idxT[mStateNum];
-//#define MapIndex(a) Map[a - ac.pRoot()]
+    //#define MapIndex(a) Map[a - ac.pRoot()]
 #endif
     MapIndex(ac.pRoot())= curState;
     Map2[curState]=ac.pRoot();
@@ -274,29 +287,20 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
                 Queue.push(curNode->go[i]);
         }
     }
-	ASSERT(mStateNum== curState);
+    ASSERT(mStateNum== curState);
+    memcpy(patMatchList, ac.patMatchList(), ac.patMatchListLen()*sizeof(int));
     for(int s=0;s<mStateNum;s++){
         for(int i=0;i< CHAR_SET; i++) {
-            nodes[s].go[i] = nodes + MapIndex(Map2[s]->go[i] ); 
+            nodes[s].go[i] = MapIndex(Map2[s]->go[i] ); 
         }
-        nodes[s].failure = nodes + MapIndex( Map2[s]-> failure);
-        nodes[s].patIDList= Map2[s] ->patIDList;
-        nodes[s].patIDArray = Map2[s] -> patIDArray;
-        nodes[s].mMatchNum= Map2[s] -> mMatchNum;
+        if(Map2[s]-> isMatched()){
+            patIDList[s] = patMatchList + (Map2[s]->patIDArray - ac.patMatchList());
+        }
     }
 
     delete Map2;
 }
 
-template<int CHAR_SET>
-void AcNodeStore<CHAR_SET, StoreArray>::trans2WidthFirst()
-{
-    acNodeP tmpNodeList = (acNodeP)mMalloc(mStateNum* sizeof(acNodeT)); 
-	reoderacNode <CHAR_SET, Uint, queue<typename mAcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
-    clean(nodeList);
-    nodeList = tmpNodeList;
-    pRoot()= nodeList;
-}
 
 #define mAcD_DEFINITION_HEADER( type ) template<int CHAR_SET, typename idxT, UseBadChar_T USE_BAD_CHAR> type mAcD<CHAR_SET, idxT, USE_BAD_CHAR>
 mAcD_DEFINITION_HEADER(void)::transWidthFrom(mAcBase<CHAR_SET>& ac)
@@ -354,7 +358,7 @@ Ac_DEFINITION_HEADER( template<geneCodeFunc geneCode> int)::searchGene(acNodeP& 
 
 Ac_DEFINITION_HEADER(int)::search(acNodeP& state, char* txt)
 {
-   unsigned char* p = (Uchar*) txt;	                                   
+    unsigned char* p = (Uchar*) txt;	                                   
     for(;*p; p++){                                                         
         Uchar c = (*p);                                                    
         if(USE_BAD_CHAR){if(c >=CHAR_SET){state= pRoot(); continue;}}      
