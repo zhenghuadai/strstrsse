@@ -52,15 +52,23 @@ typedef enum{
 } mAlgtype;
 
 typedef int (* reportFunc)(int patID, int idx);
-
+#if 0
+#define MMalloc(x) ({printf("%0x +",this);printf(#x); mMalloc(x);})
+#define MFree(x)   {printf("%0x -", this);printf(#x); mFree(x);}
+#define DEBUG_MALLOC 1
+#else
+#define MMalloc(x) mMalloc(x)
+#define MFree(x) mFree(x)
+#define DEBUG_MALLOC 0
+#endif
 class memBase
 {
     public:
         memBase(){bytesUsed =0;}
-        ~memBase(){ /*  ASSERT( bytesUsed ==0);*/}
-		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); return p;}
+        ~memBase(){   ASSERT( bytesUsed <=10);}
+		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); if(DEBUG_MALLOC)printf("+%d=%d\n", _msize(p), bytesUsed); return p;}
         template<typename T>
-		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); free(p); p=NULL;}
+		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); if(DEBUG_MALLOC) printf("-%d=%d\n", _msize(p),bytesUsed);free(p); p=NULL;}
         void mDecrease(size_t n){bytesUsed -=n;}
         size_t memMalloced(){return bytesUsed;}
     protected:
@@ -73,7 +81,7 @@ class mMatch:public memBase
     public:
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent; report=reportDefault;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
-        ~mMatch(){ mFree(mPatLen); }
+        ~mMatch(){ MFree(mPatLen); }
     public:
 		//!----------------------------------------------------------------------------
 		// 
