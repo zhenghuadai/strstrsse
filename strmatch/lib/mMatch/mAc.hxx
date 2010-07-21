@@ -245,7 +245,7 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
     template<int CHAR_SET>
 void AcNodeStore<CHAR_SET, StoreArray>::trans2WidthFirst()
 {
-    acNodeP tmpNodeList = (acNodeP)mMalloc(mStateNum* sizeof(acNodeT)); 
+    acNodeP tmpNodeList = (acNodeP)MMalloc(mStateNum* sizeof(acNodeT)); 
     reoderacNode <CHAR_SET, Uint, queue<typename mAcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
     clean(nodeList);
     nodeList = tmpNodeList;
@@ -307,7 +307,7 @@ mAcD_DEFINITION_HEADER(void)::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
-    patMatchList = (int*) mMalloc( ac. patMatchListLen()* sizeof(int));
+    patMatchList = (int*) MMalloc( ac. patMatchListLen()* sizeof(int));
     transNode2Short<CHAR_SET, idxT, queue<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
     pRoot() = 0;
 }
@@ -316,7 +316,7 @@ mAcD_DEFINITION_HEADER(void)::transDepthFrom(mAcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
-    patMatchList = (int*) mMalloc( ac. patMatchListLen()* sizeof(int));
+    patMatchList = (int*) MMalloc( ac. patMatchListLen()* sizeof(int));
     transNode2Short<CHAR_SET,idxT, stack<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
     pRoot() = 0;
 }

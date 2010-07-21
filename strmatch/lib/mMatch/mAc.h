@@ -220,10 +220,10 @@ public:
 		for(int i=0;i< mStateNum; i++){
 			tNodeList[i].~acNodeT();
 		} 
-		mFree(tNodeList);
+		MFree(tNodeList);
 	}
 	acNodeP makeNode() {
-		if(pRoot()==0) nodeList = (acNodeP)mMalloc(mMaxStateNum * sizeof(acNodeT)); 
+		if(pRoot()==0) nodeList = (acNodeP)MMalloc(mMaxStateNum * sizeof(acNodeT)); 
 		mStateNum++;  acNodeP newNode= new(&nodeList[mStateNum-1]) acNodeT;
 		return newNode;
 	}
@@ -248,10 +248,10 @@ public:
 		patMatchListLen = pcur - patMatchList;
 	}
 	void reLocate(){
-		acNodeP tmpNodeList = (acNodeP)mMalloc(mStateNum* sizeof(acNodeT)); 
+		acNodeP tmpNodeList = (acNodeP)MMalloc(mStateNum* sizeof(acNodeT)); 
 		memcpy(tmpNodeList, nodeList, mStateNum*sizeof(acNodeT)); 
 		for(int i=0;i< mStateNum;i++){ tmpNodeList[i].adjust((SSize)tmpNodeList - (SSize)nodeList);}
-		mFree(nodeList); 
+		MFree(nodeList); 
 		nodeList = tmpNodeList;
 		pRoot()=nodeList;
 		if((mType == mACWid) ||(mType == geneACWid))
@@ -349,6 +349,7 @@ class mAcD:public mMatch
         enum{char_set = CHAR_SET};
 constructor:
         mAcD(){}
+        ~mAcD(){freeMem();}
         mAcD(mAcBase<CHAR_SET>& ac,mAlgtype st= mACWid){if(st== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
         void initAc(char** pat, int n){initAc(pat,n,mACWid);};
         void initAc(char** pat, int n, mAlgtype t){ 
@@ -362,11 +363,11 @@ constructor:
         void transDepthFrom(mAcBase<CHAR_SET>& ac);
         void transWidthFrom(mAcBase<CHAR_SET>& ac);
         void mallocMem(int n){ 
-            nodes= (acNodeT*)mMalloc(n * sizeof(acNodeT));
-            patIDList = (int**)mMalloc( n* sizeof(int*));
+            nodes= (acNodeT*)MMalloc(n * sizeof(acNodeT));
+            patIDList = (int**)MMalloc( n* sizeof(int*));
             memset(patIDList, 0 , n* sizeof(int*));
         }
-        void freeMem(){}
+        void freeMem(){ MFree(patIDList); MFree(nodes); mFree(patMatchList);}
     private:
         //! for template
         static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].get(c);}
