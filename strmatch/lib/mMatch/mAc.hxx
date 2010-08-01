@@ -50,20 +50,20 @@ mAcBase_DEFINITION_HEADER(void)::initAc(char** pat, int n, mAlgtype t)
 	acNodesPool.type()=t;
     acNodesPool.setMaxStateNum(charNum());
     if((type==geneAC)||(type==geneACWid) ||(type==geneACDep)){
-        printf("build Trie...\n");
+        debprintf("build Trie...\n");
         buildGeneTrie();
-        printf("build Trie complete\n");
-        printf("build Failure...\n");
+        debprintf("build Trie complete\n");
+        debprintf("build Failure...\n");
         buildFailure();
-        printf("build Failure complete\n");
-        printf("build DFA...\n");
+        debprintf("build Failure complete\n");
+        debprintf("build DFA...\n");
         convert2DFA();
-        printf("build DFA complete\n");
+        debprintf("build DFA complete\n");
     }else {
         compile();
     }
     reLocate();
-    printf("build complete\n");
+    debprintf("build complete\n");
     //printf("#states num: %d\n", mStateNum);
 }
 
