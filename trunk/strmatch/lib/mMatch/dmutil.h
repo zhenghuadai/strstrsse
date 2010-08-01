@@ -39,6 +39,13 @@ typedef long long SSize;
 typedef int SSize;
 #endif
 
+#ifdef _DEBUG 
+#define debprintf(format,...) { \
+    fprintf(stdout,format,##__VA_ARGS__);\
+}
+#else
+#define debprintf(format,...) 
+#endif
 
 #ifdef __cplusplus
 #define __INLINE__ inline
