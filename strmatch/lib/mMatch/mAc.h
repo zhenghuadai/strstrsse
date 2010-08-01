@@ -285,6 +285,7 @@ public:
 	mAcBase(char** pat, int n);
 	mAcBase(char** pat, int n, mAlgtype t);
     ~mAcBase(){}
+interface:
     void initAc(char** pat, int n);
 	void initAc(char** pat, int n, mAlgtype t);
     void initAc(mAcBase& o, mAlgtype t){}
@@ -297,23 +298,18 @@ public:
     int* patMatchList(){return acNodesPool.patMatchList;}
 protected:
     virtual void compile();
-public:
+interface:
     acNodeP& pRoot(){ return acNodesPool.pRoot();}
     __static acNodeP nextState(acNodeP cur, Uchar c){ return cur->go[c];}
     __static int isMatched(acNodeP state){return (state-> isMatched());} 
     __static int* matchedList(acNodeP s){ return s->patIDArray;}
 
 private:	
-    static acNodeP nextStateT(acNode<CHAR_SET>* base, acNodeP cur, Uchar c){ return cur->go[c];}
-    static int isMatchedT(int** base, acNodeP state){return (state-> isMatched());} 
-    static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return  reportList(matchedList(s), rf,  idx);}
     void buildNFA();
     void buildGeneTrie();
     void buildTrie();
     void buildFailure();
     void convert2DFA();
-
-    int isBadChar(Uchar c) { return (c >= CHAR_SET);}
 private:
     acNodeP makeNode() {return acNodesPool.makeNode(); }
     void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
@@ -351,6 +347,7 @@ constructor:
         mAcD(){}
         ~mAcD(){freeMem();}
         mAcD(mAcBase<CHAR_SET>& ac,mAlgtype st= mACWid){if(st== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
+interface:
         void initAc(char** pat, int n){initAc(pat,n,mACWid);};
         void initAc(char** pat, int n, mAlgtype t){ 
             mAcBase<CHAR_SET, StoreArray, UseBadChar> ac(pat, n, t); 
@@ -368,12 +365,7 @@ constructor:
             memset(patIDList, 0 , n* sizeof(int*));
         }
         void freeMem(){ MFree(patIDList); MFree(nodes); mFree(patMatchList);}
-    private:
-        //! for template
-        static acNodeP nextStateT(acNodeT* base, acNodeP cur, Uchar c){ return base[cur].get(c);}
-        static int isMatchedT(int** base, acNodeP state){return (base[state] !=NULL);} 
-        static int reportMatchT(int** base, acNodeP s, reportFunc rf, int idx ){ return reportList(base[s],rf,idx);}
-interface:
+    interface:
         acNodeP& pRoot(){return m_pRoot;}
         acNodeP nextState(acNodeP cur, Uchar c){ return nodes[cur].get(c);}
         int isMatched(acNodeP state){return (patIDList[state]!=NULL);} 

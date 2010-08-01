@@ -172,22 +172,6 @@ mAcBase_DEFINITION_HEADER(void)::convert2DFA()
     }
 }
 
-
-    template<typename NodeT , typename acNodeT, typename matchListT, NodeT (*nextState)( acNodeT*, NodeT, Uchar), int (*isMatched)(matchListT**, NodeT), int (*reportMatch)(matchListT**, NodeT , reportFunc , int ) >
-int ACsearchGene(acNodeT* acBase, matchListT** matchListBase, NodeT pRoot, reportFunc report, char* txt)
-{
-    NodeT state=pRoot;
-    for(unsigned char* p = (Uchar*) txt;*p; p++){
-        Uchar c = agct2num(*p);
-        if(c >=acNodeT::char_set){state= pRoot; continue;}
-        state = nextState(acBase, state, c); // state= state->go[*p]; 
-        if(isMatched((matchListT**)matchListBase, state)) {
-            int ret = reportMatch( (matchListT**)matchListBase, state, report, (char*)p -txt);
-        }
-    }
-    return 0;
-}
-
 template<typename T>
 T top( queue<T>& q){return q.front();} 
 
@@ -337,7 +321,6 @@ Ac_DEFINITION_HEADER(template<geneCodeFunc geneCode> int)::searchGene(acNodeP& s
     }                                                                         
     return 0;
 #else
-    return 	ACsearchGene<acNodeP, acNode<CHAR_SET>, int, mAcBase<CHAR_SET,ST>::nextStateT, mAcBase<CHAR_SET,ST>::isMatchedT, mAcBase<CHAR_SET,ST>::reportMatchT>(NULL, NULL, pRoot(), report, txt);
 #endif
 }
 
