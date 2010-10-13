@@ -49,7 +49,7 @@ void setReportFunc(reportFunc rf)
 { 
 	if(rf == SEARCH_ALL){
 		report_function = report_all;
-	}else if(rf==SEARCH_THE_FIRST){
+	}else if(rf==SEARCH_FIRST){
 		report_function = report_default;
 	}else if(rf==SEARCH_SILENT){
 		report_function = report_silent;

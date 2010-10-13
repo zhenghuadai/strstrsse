@@ -29,6 +29,9 @@
  *idx : the offset of position that is matched
  *pat : the pattern
  */
+#ifdef __cplusplus 
+extern "C"{
+#endif
 typedef int (*reportFunc)(char* text, int idx, char* pat);
 
 void setReportFunc(reportFunc rf);
@@ -39,4 +42,7 @@ void setReportFunc(reportFunc rf);
 #define SEARCH_SILENT ((reportFunc) 3)
 
 extern reportFunc report_function ;
+#ifdef __cplusplus 
+}
+#endif
 #endif   /* ----- #ifndef REPORT_INC  ----- */
