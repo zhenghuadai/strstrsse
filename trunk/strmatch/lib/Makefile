@@ -26,7 +26,7 @@ ifeq ($(arch), x64)
 Gflag+= -m64
 endif
 
-sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o strstrmmx.o report.o  
+sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o report.o  # strstrmmx.o strstrsse2.o 
 ifeq ($(SSE42), yes)
 sobj+=strstrsse42.o 
 endif
@@ -37,20 +37,12 @@ matchasmobj:=matchasm.o Ady.o extract.o output.o Mtime.o
 lib:${algobj}
 	ar cur  $(libstrmatch) $^
 	${Compiler} ${Gflag} -shared -fPIC -o $(libstrmatchso) $^
-matchgene: ${matchgeneobj}
-	${Compiler} ${Gflag} -o matchgene ${matchgeneobj}
-matcho3: ${matchobj}
-	${Compiler} ${Gflag} -O3 -o matcho3 ${matchobj}
-matchmul:${matchmulobj} 
-	${Compiler} ${Gflag} -O3 -o matchmul ${matchmulobj} 
-matchasm:${matchasmobj}
-	${Compiler} ${Gflag} -o matchasm ${matchasmobj}
 %.o:%.c
 	${Compiler} ${Gflag} -c $< 
 strstrsse42.o:strstrsse42.c
 	${Compiler} ${Gflag} -msse4  -c $< 
 strstrmmx.o:strstrmmx.c	
-	icc -use-msasm -c -O3 $@ 
+	icc -use-msasm -c -O3 $< 
 clean:
 	rm -f *.o
 	rm -f libstrmatch.a libstrmatch.so
