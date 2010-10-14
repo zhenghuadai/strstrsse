@@ -31,7 +31,4 @@ double Mdifftime(_U64 start,_U64 end);
 #ifdef __cplusplus 
 }
 #endif
-int output(int);
-int  outputs(int whichp,int addr);
-#define OUTPUT(x) if( output(x) == STOP ) return ;
 #endif
