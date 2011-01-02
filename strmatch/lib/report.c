@@ -25,19 +25,19 @@
 #include <stdlib.h>
 #include "report.h"
 
-static int report_all(char* text, int idx, char* pat)
+static int report_all(const char* text, int idx, const char* pat)
 {
 	printf("<%d>,", idx);
 	return SEARCH_CONTINUE;
 }
 
-static int report_default(char* text, int idx, char* pat)
+static int report_default(const char* text, int idx, const char* pat)
 {
 	printf("<%d> ", idx);
 	return SEARCH_STOP;
 }
 
-static int report_silent(char* text, int idx, char* pat)
+static int report_silent(const char* text, int idx, const char* pat)
 {
 	return SEARCH_CONTINUE;
 }

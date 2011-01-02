@@ -32,7 +32,7 @@
 #ifdef __cplusplus 
 extern "C"{
 #endif
-typedef int (*reportFunc)(char* text, int idx, char* pat);
+typedef int (*reportFunc)(const char* text, int idx, const char* pat);
 
 void setReportFunc(reportFunc rf);
 #define SEARCH_STOP 1

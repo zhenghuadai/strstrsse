@@ -1,33 +1,31 @@
-/*
+/**
  * =====================================================================================
+ *       @file    match.h
  *
- *       Filename:  .c
+ *       @brief  search pat from text, return the first hit or report all the hits.
  *
- *    Description:  
+ *       @author  DAI ZHENGHUA (), djx.zhenghua@gmail.com
+ *       @version 1.0
+ *       @date    
  *
- *        Version:  
- *        Created:  
- *       Revision:   
- *       Compiler:   
- *
- *         Author:  Zhenghua Dai (Zhenghua Dai), djx.zhenghua@gamil.com
- *        Company:  dzh
- *
+ *       Revision none
+ *       Compiler gcc
+ *       Company  
  * =====================================================================================
  */
-#include <stdio.h>
 #ifndef STRINGMATCH_HEADER__
 #define STRINGMATCH_HEADER__
-#define MAXPAT 256 //the maximal length of Pattern
+#define MAXPAT 256 //!the maximal length of Pattern
 
-#define CHARACTERS 256 //the length of   set of character  
+#define CHARACTERS 256 //!the length of   set of character  
 #define ASIZE 256
 #if __WORDSIZE == 32 
 #define WORD_SIZE 32
 typedef unsigned int Uword;
+typedef unsigned int u32;
 #else
 #define WORD_SIZE 64
-typedef unsigned long long Uword;
+typedef unsigned long long u64;
 #endif
 
 #define MAXINT2 2147483648 
@@ -42,118 +40,144 @@ typedef void* (* preSearchFunc)(__const1 char* pat, int m);
 typedef void* (* search1Func)(__const1 char* text, void* pat);
 typedef void* (* search2Func)(__const1 char* text, __const2 char* pat, int n, int m);
 typedef void* (* search3Func)(__const1 char* text, void* pat, int n, int m);
-//! group pre-Search 
-void* preSbf      (__const1 char* pat, int m);//brute force
-void* prebfstr    (__const1 char* pat, int m);
-void* preSmp      (__const1 char* pat, int m);//MP
-void* preSkmp     (__const1 char* pat, int m); //KMP
-                                   
-void* preSbm      (__const1 char* pat, int m) ;//bm 
-void* preSbmh     (__const1 char* pat, int m);// Horspool 
-void* preSbmhs    (__const1 char* pat, int m);//SUNDAY，又称 quich search 
-void* preSsmith   (__const1 char* pat, int m);//smith  
-                                   
-void* preSdfa     (__const1 char* pat, int m);//
-void* preSbdm     (__const1 char* pat, int m);//Forward Dawg Matching algorithm 
-void* preSbndm    (__const1 char* pat, int m);//Forward Dawg Matching algorithm 
-void* preSbom     (__const1 char* pat, int m);//BOM 
-void* preSshiftor (__const1 char* pat, int m);//shift-or  
-void* preSshiftand(__const1 char* pat, int m);//shift-and  
-void* preSshiftorW(__const1 char* pat, int m);//shift-or  
-                                   
-void* preSkr      (__const1 char* pat, int m);//KR 
-void* preSbyh     (__const1 char* pat, int m);//计数 
-void* preSskip    (__const1 char* pat, int m);//跳跃 
-void* preSkmpskip (__const1 char* pat, int m);// kmp跳跃 
-void* prebfstr    (__const1 char* pat, int m);// gcc 
 
-
-//! group 1
-char* Sbf        (__const1 char* text, __const2 char* pat);//brute force  
+/**
+ * @name single-pattern
+ * @brief the string ends with \0.
+ * @param text 
+ * @param pat
+ * @return depends on the report function 
+ * @{ */
+char* Sbf        (__const1 char* text, __const2 char* pat);//!brute force  
 char* bfstr      (__const1 char* text, __const2 char* pat);
-char* Smp        (__const1 char* text, __const2 char* pat);//MP 
-char* Skmp       (__const1 char* text, __const2 char* pat); //KMP
+char* Smp        (__const1 char* text, __const2 char* pat);//!MP 
+char* Skmp       (__const1 char* text, __const2 char* pat);//!KMP
                                     
-char* Sbm        (__const1 char* text, __const2 char* pat) ;//bm 
-char* Sbmh       (__const1 char* text, __const2 char* pat);// Horspool 
-char* Sbmhs      (__const1 char* text, __const2 char* pat);//SUNDAY，又称 quich search 
-char* Ssmith     (__const1 char* text, __const2 char* pat);//smith  
+char* Sbm        (__const1 char* text, __const2 char* pat);//!bm 
+char* Sbmh       (__const1 char* text, __const2 char* pat);//! Horspool 
+char* Sbmhs      (__const1 char* text, __const2 char* pat);//!SUNDA quich search 
+char* Ssmith     (__const1 char* text, __const2 char* pat);//!smith  
                                     
-char* Sdfa       (__const1 char* text, __const2 char* pat);//基本的自动机 
-char* Sbdm       (__const1 char* text, __const2 char* pat);//Forward Dawg Matching algorithm 
-char* Sbndm      (__const1 char* text, __const2 char* pat);//Forward Dawg Matching algorithm 
-char* Sbom       (__const1 char* text, __const2 char* pat);//BOM 
-char* Sshiftor   (__const1 char* text, __const2 char* pat);//shift-or  
-char* Sshiftand  (__const1 char* text, __const2 char* pat);//shift-and  
-char* SshiftorW  (__const1 char* text, __const2 char* pat);//shift-or  
+char* Sdfa       (__const1 char* text, __const2 char* pat);//!
+char* Sbdm       (__const1 char* text, __const2 char* pat);//!Forward Dawg Matching algorithm 
+char* Sbndm      (__const1 char* text, __const2 char* pat);//!Forward Dawg Matching algorithm 
+char* Sbom       (__const1 char* text, __const2 char* pat);//!BOM 
+char* Sshiftor   (__const1 char* text, __const2 char* pat);//!shift-or  
+char* Sshiftand  (__const1 char* text, __const2 char* pat);//!shift-and  
+char* SshiftorW  (__const1 char* text, __const2 char* pat);//!shift-or  
                                     
-char* Skr        (__const1 char* text, __const2 char* pat);//KR 
-char* Sbyh       (__const1 char* text, __const2 char* pat);//计数 
-char* Sskip      (__const1 char* text, __const2 char* pat);//跳跃 
-char* Skmpskip   (__const1 char* text, __const2 char* pat);// kmp跳跃 
-char* bfstr      (__const1 char* text, __const2 char* pat);// gcc 
-char* lstrstr    (__const1 char* text, __const2 char* pat);// gcc 
-char* strstrsse  (__const1 char* text, __const2 char* pat);// gcc 
-char* strstrmmx  (__const1 char* text, __const2 char* pat);// gcc 
-char* strstrsse42(__const1 char* text, __const2 char* pat);// gcc 
+char* Skr        (__const1 char* text, __const2 char* pat);//!KR 
+char* Sbyh       (__const1 char* text, __const2 char* pat);//!
+char* Sskip      (__const1 char* text, __const2 char* pat);//!
+char* Skmpskip   (__const1 char* text, __const2 char* pat);//! kmp
+char* bfstr      (__const1 char* text, __const2 char* pat);//! gcc 
+char* lstrstr    (__const1 char* text, __const2 char* pat);//! gcc 
+char* strstrsse  (__const1 char* text, __const2 char* pat);//! gcc 
+char* strstrmmx  (__const1 char* text, __const2 char* pat);//! gcc 
+char* strstrsse42(__const1 char* text, __const2 char* pat);//! gcc 
+/**  @} */
 
-/*  下面为单模式串精确匹配 ，函数名以S开头，第一个参数为目标串，第二个参数为模式串*/
-char* Sbf2      (__const1 char* text, __const2 char* pat, int n, int m);//brute force  
+/**
+ * @name single-patten with length
+ * @brief the string has length.
+ * @param text 
+ * @param pat
+ * @param n the length of text
+ * @param m the length of pat
+ * @return depends on the report function 
+ * @{ */
+char* Sbf2      (__const1 char* text, __const2 char* pat, int n, int m);//!brute force  
 char* bfstr2    (__const1 char* text, __const2 char* pat, int n, int m);
-char* Smp2      (__const1 char* text, __const2 char* pat, int n, int m);//MP 
-char* Skmp2     (__const1 char* text, __const2 char* pat, int n, int m); //KMP
+char* Smp2      (__const1 char* text, __const2 char* pat, int n, int m);//!MP 
+char* Skmp2     (__const1 char* text, __const2 char* pat, int n, int m);//!KMP
                                    
-char* Sbm2      (__const1 char* text, __const2 char* pat, int n, int m) ;//bm 
-char* Sbmh2     (__const1 char* text, __const2 char* pat, int n, int m);// Horspool 
-char* Sbmhs2    (__const1 char* text, __const2 char* pat, int n, int m);//SUNDAY，又称 quich search 
-char* Ssmith2   (__const1 char* text, __const2 char* pat, int n, int m);//smith  
+char* Sbm2      (__const1 char* text, __const2 char* pat, int n, int m);//!bm 
+char* Sbmh2     (__const1 char* text, __const2 char* pat, int n, int m);//! Horspool 
+char* Sbmhs2    (__const1 char* text, __const2 char* pat, int n, int m);//!SUNDAY，又称 quich search 
+char* Ssmith2   (__const1 char* text, __const2 char* pat, int n, int m);//!smith  
                                    
-char* Sdfa2     (__const1 char* text, __const2 char* pat, int n, int m);//基本的自动机 
-char* Sbdm2     (__const1 char* text, __const2 char* pat, int n, int m);//Forward Dawg Matching algorithm 
-char* Sbndm2    (__const1 char* text, __const2 char* pat, int n, int m);//Forward Dawg Matching algorithm 
-char* Sbom2     (__const1 char* text, __const2 char* pat, int n, int m);//BOM 
-char* Sshiftor2 (__const1 char* text, __const2 char* pat, int n, int m);//shift-or  
-char* Sshiftand2(__const1 char* text, __const2 char* pat, int n, int m);//shift-and  
-char* SshiftorW2(__const1 char* text, __const2 char* pat, int n, int m);//shift-or  
+char* Sdfa2     (__const1 char* text, __const2 char* pat, int n, int m);//!
+char* Sbdm2     (__const1 char* text, __const2 char* pat, int n, int m);//!Forward Dawg Matching algorithm 
+char* Sbndm2    (__const1 char* text, __const2 char* pat, int n, int m);//!Forward Dawg Matching algorithm 
+char* Sbom2     (__const1 char* text, __const2 char* pat, int n, int m);//!BOM 
+char* Sshiftor2 (__const1 char* text, __const2 char* pat, int n, int m);//!shift-or  
+char* Sshiftand2(__const1 char* text, __const2 char* pat, int n, int m);//!shift-and  
+char* SshiftorW2(__const1 char* text, __const2 char* pat, int n, int m);//!shift-or  
                                    
-char* Skr2      (__const1 char* text, __const2 char* pat, int n, int m);//KR 
-char* Sbyh2     (__const1 char* text, __const2 char* pat, int n, int m);//计数 
-char* Sskip2    (__const1 char* text, __const2 char* pat, int n, int m);//跳跃 
-char* Skmpskip2 (__const1 char* text, __const2 char* pat, int n, int m);// kmp跳跃 
-char* bfstr2    (__const1 char* text, __const2 char* pat, int n, int m);// gcc 
+char* Skr2      (__const1 char* text, __const2 char* pat, int n, int m);//!KR 
+char* Sbyh2     (__const1 char* text, __const2 char* pat, int n, int m);//!
+char* Sskip2    (__const1 char* text, __const2 char* pat, int n, int m);//!
+char* Skmpskip2 (__const1 char* text, __const2 char* pat, int n, int m);//! kmp跳跃 
+char* bfstr2    (__const1 char* text, __const2 char* pat, int n, int m);//! gcc 
+/**  @} */
 
-/*  下面为单模式串精确匹配 ，函数名以S开头，第一个参数为目标串，第二个参数为模式串*/
-char* Sbf3      (__const1 char* text, void* pat, int n, int m);//brute force  
+/**
+ * @name single-pattern with pre-processed structure 
+ * @brief pre process the pattern and return a structure representing the pattern.
+ * @{ */
+void* preSbf      (__const1 char* pat, int m);//!brute force
+void* prebfstr    (__const1 char* pat, int m);
+void* preSmp      (__const1 char* pat, int m);//!MP
+void* preSkmp     (__const1 char* pat, int m);//!KMP
+                                   
+void* preSbm      (__const1 char* pat, int m);//!bm 
+void* preSbmh     (__const1 char* pat, int m);//! Horspool 
+void* preSbmhs    (__const1 char* pat, int m);//!SUNDAY quich search 
+void* preSsmith   (__const1 char* pat, int m);//!smith  
+                                   
+void* preSdfa     (__const1 char* pat, int m);//!
+void* preSbdm     (__const1 char* pat, int m);//!Forward Dawg Matching algorithm 
+void* preSbndm    (__const1 char* pat, int m);//!Forward Dawg Matching algorithm 
+void* preSbom     (__const1 char* pat, int m);//!BOM 
+void* preSshiftor (__const1 char* pat, int m);//!shift-or  
+void* preSshiftand(__const1 char* pat, int m);//!shift-and  
+void* preSshiftorW(__const1 char* pat, int m);//!shift-or  
+                                   
+void* preSkr      (__const1 char* pat, int m);//!KR 
+void* preSbyh     (__const1 char* pat, int m);//! 
+void* preSskip    (__const1 char* pat, int m);//! 
+void* preSkmpskip (__const1 char* pat, int m);//! kmp 
+void* prebfstr    (__const1 char* pat, int m);//! gcc 
+
+
+/**
+ * @brief search using the pre-processed pattern. 
+ */
+char* Sbf3      (__const1 char* text, void* pat, int n, int m);//!brute force  
 char* bfstr3    (__const1 char* text, void* pat, int n, int m);
-char* Smp3      (__const1 char* text, void* pat, int n, int m);//MP 
-char* Skmp3     (__const1 char* text, void* pat, int n, int m); //KMP
+char* Smp3      (__const1 char* text, void* pat, int n, int m);//!MP 
+char* Skmp3     (__const1 char* text, void* pat, int n, int m);//!KMP
                                    
-char* Sbm3      (__const1 char* text, void* pat, int n, int m) ;//bm 
-char* Sbmh3     (__const1 char* text, void* pat, int n, int m);// Horspool 
-char* Sbmhs3    (__const1 char* text, void* pat, int n, int m);//SUNDAY，又称 quich search 
-char* Ssmith3   (__const1 char* text, void* pat, int n, int m);//smith  
+char* Sbm3      (__const1 char* text, void* pat, int n, int m);//!bm 
+char* Sbmh3     (__const1 char* text, void* pat, int n, int m);//! Horspool 
+char* Sbmhs3    (__const1 char* text, void* pat, int n, int m);//!SUNDAY，又称 quich search 
+char* Ssmith3   (__const1 char* text, void* pat, int n, int m);//!smith  
                                    
-char* Sdfa3     (__const1 char* text, void* pat, int n, int m);//基本的自动机 
-char* Sbdm3     (__const1 char* text, void* pat, int n, int m);//Forward Dawg Matching algorithm 
-char* Sbndm3    (__const1 char* text, void* pat, int n, int m);//Forward Dawg Matching algorithm 
-char* Sbom3     (__const1 char* text, void* pat, int n, int m);//BOM 
-char* Sshiftor3 (__const1 char* text, void* pat, int n, int m);//shift-or  
-char* Sshiftand3(__const1 char* text, void* pat, int n, int m);//shift-and  
-char* SshiftorW3(__const1 char* text, void* pat, int n, int m);//shift-or  
+char* Sdfa3     (__const1 char* text, void* pat, int n, int m);//!
+char* Sbdm3     (__const1 char* text, void* pat, int n, int m);//!Forward Dawg Matching algorithm 
+char* Sbndm3    (__const1 char* text, void* pat, int n, int m);//!Forward Dawg Matching algorithm 
+char* Sbom3     (__const1 char* text, void* pat, int n, int m);//!BOM 
+char* Sshiftor3 (__const1 char* text, void* pat, int n, int m);//!shift-or  
+char* Sshiftand3(__const1 char* text, void* pat, int n, int m);//!shift-and  
+char* SshiftorW3(__const1 char* text, void* pat, int n, int m);//!shift-or  
                                    
-char* Skr3      (__const1 char* text, void* pat, int n, int m);//KR 
-char* Sbyh3     (__const1 char* text, void* pat, int n, int m);//计数 
-char* Sskip3    (__const1 char* text, void* pat, int n, int m);//跳跃 
-char* Skmpskip3 (__const1 char* text, void* pat, int n, int m);// kmp跳跃 
-char* bfstr3    (__const1 char* text, void* pat, int n, int m);// gcc 
+char* Skr3      (__const1 char* text, void* pat, int n, int m);//!KR 
+char* Sbyh3     (__const1 char* text, void* pat, int n, int m);//!
+char* Sskip3    (__const1 char* text, void* pat, int n, int m);//!
+char* Skmpskip3 (__const1 char* text, void* pat, int n, int m);//! kmp
+char* bfstr3    (__const1 char* text, void* pat, int n, int m);//! gcc 
+/**  @} */
 
-/* 下面为多模式串精确匹配，函数名以M开头*/
-void Mac        (__const1 char *T,char *Ps[],int s);//AC
-void Mwm        (__const1 char *T,char *Ps[],int s);//WM
-void acsm       (__const1 char *T,char *Ps[],int s);//WM
-void snortwm    (__const1 char *T,char *Ps[],int s);//WM
-void Msbom      (__const1 char *T,char *Ps[],int s);//SBOM 
-void Mshiftor   (__const1 char *T,char *Ps[],int s);//shift-0r 
+/**
+ * @multi-pattern
+ * @{ */
+void Mac        (__const1 char *T,char *Ps[],int s);//!AC
+void Mwm        (__const1 char *T,char *Ps[],int s);//!WM
+void acsm       (__const1 char *T,char *Ps[],int s);//!WM
+void snortwm    (__const1 char *T,char *Ps[],int s);//!WM
+void Msbom      (__const1 char *T,char *Ps[],int s);//!SBOM 
+void Mshiftor   (__const1 char *T,char *Ps[],int s);//!shift-0r 
+/**  @} */
 
 
 #ifdef __cplusplus 

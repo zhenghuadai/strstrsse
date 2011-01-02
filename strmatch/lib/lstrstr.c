@@ -37,7 +37,7 @@ register unsigned long long lomagic = 0x0101010101010101L;
 	return ((a- lomagic) & himagic);
 }
 
-inline static int strcmpInline(char* str1,char* str2)
+inline static int strcmpInline(const char* str1, const char* str2)
 {
 	while(*str1 == * str2) {
 		if(*str2 == 0) return 0;
