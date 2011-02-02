@@ -1,3 +1,18 @@
+/**
+ * =====================================================================================
+ *       @file    match.c
+ *
+ *       @brief   test the performance of the string matching algorithms.
+ *
+ *       @author  DAI ZHENGHUA (), djx.zhenghua@gmail.com
+ *       @version 1.0
+ *       @date    01/02/2011 02:53:25 PM
+ *
+ *       Revision none
+ *       Compiler gcc
+ *       Company  
+ * =====================================================================================
+ */
 #include <string.h>
 #include <stdio.h>
 #include <stdio.h>
