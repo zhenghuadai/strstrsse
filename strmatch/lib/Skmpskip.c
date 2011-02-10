@@ -33,6 +33,7 @@ void preKmp(char *x, int m, int kmpNext[]) {
    }
 }
 */
+void preKmp(char *pat,int m,int kmpNext[]);
 //KMP Skip Search algorithm
 int attempt(char *y, char *x, int m, int start, int wall) {
    int k;

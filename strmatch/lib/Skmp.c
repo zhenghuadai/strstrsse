@@ -5,7 +5,7 @@
 #define XSIZE 100
 
 
-static void preKmp(char *pat,int m,int kmpNext[])
+void preKmp(char *pat,int m,int kmpNext[])
 {
    int i,j;
    i=0;
