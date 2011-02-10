@@ -71,7 +71,7 @@ Pattern_fasta* loadGene_fasta(char *pfname)
     }
 
     psubstep=0;
-    while((temp2=fgetc(pf))!=EOF)
+    while(((temp2=fgetc(pf))!=EOF) && (temp2 != '>'))
     {
         if( EQ5(temp2, 'A', 'G','C','T','N')){
             psub[psubstep++]=temp2 + case_num<case_type>::low_case;
@@ -106,8 +106,8 @@ int   loadGenePattern_Fasta(char *pfname, list<Pattern_fasta>* patts)
         printf("cannot open input string");	
         exit(0);
     }
-
-    while((temp2=fgetc(pf))!=EOF)
+    temp2=fgetc(pf);
+    while(temp2!=EOF)
     {
         if(temp2 == '>'){ //! name
             while(((temp2=fgetc(pf))!='\n') &&(temp2 != EOF)){
@@ -123,7 +123,7 @@ int   loadGenePattern_Fasta(char *pfname, list<Pattern_fasta>* patts)
         }
 
         //! str 
-        while(((temp2=fgetc(pf))!='\n') &&(temp2 != EOF)){
+        while(((temp2=fgetc(pf))!='>') &&(temp2 != EOF)){
             if( EQ5(temp2, 'A', 'G','C','T','N')){
                 buff[psubstep++]=temp2 + case_num<case_type>::low_case;
             }else if(EQ5(temp2, 'a', 'g','c','t','n')){
@@ -142,6 +142,7 @@ int   loadGenePattern_Fasta(char *pfname, list<Pattern_fasta>* patts)
         patno ++;
         name = 0;
         str = 0;
+        temp2=fgetc(pf);
     }
     return patno;
 

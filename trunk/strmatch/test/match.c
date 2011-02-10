@@ -174,9 +174,9 @@ int main(int argc,char *argv[])
     match[21].matchalg2        =0;
     match[21].matchalgstr    ="strstrsse42";
     #endif
-    match[22].matchalg        =strstrmmx;
-    match[22].matchalg2        =0;
-    match[22].matchalgstr    ="strstrmmx";
+   // match[22].matchalg        =strstrmmx;
+   // match[22].matchalg2        =0;
+   // match[22].matchalgstr    ="strstrmmx";
     for(i=0;i<ALLALG;i++)
     {
         match[i].boolmatch=1;

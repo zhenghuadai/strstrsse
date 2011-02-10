@@ -51,6 +51,8 @@ int main(int argc,char *argv[])
     {
         quryfname="patterns";
         subjfname="sub";
+        printf("mmatch subject_file pattern_file\n");
+        printf("use default file: mmatch %s %s\n", subjfname, quryfname);
     }
     else
     {

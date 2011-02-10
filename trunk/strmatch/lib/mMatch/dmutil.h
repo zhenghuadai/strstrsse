@@ -1,26 +1,19 @@
-/*
+/**
  * =====================================================================================
- *Copyright(C) by Zhenghua Dai. All rights reserved.
+ *       @file    dmutil.h
  *
+ *       @brief   '
  *
+ *       @author  DAI ZHENGHUA (), djx.zhenghua@gmail.com
+ *       @version 1.0
+ *       @date    02/06/2011 07:20:38 PM
  *
- * =====================================================================================
- * =====================================================================================
- *
- *       Filename:  util.h
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  2009年10月15日 19时01分11秒
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Zhenghua Dai (Zhenghua Dai), djx.zhenghua@gmail.com
- *        Company:  dzh
- *
+ *       Revision none
+ *       Compiler gcc
+ *       Company  
  * =====================================================================================
  */
+
 #ifndef  UTIL_HEADER__INC
 #define  UTIL_HEADER__INC
 
