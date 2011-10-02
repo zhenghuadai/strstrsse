@@ -8,14 +8,14 @@
 //#define WORD_SIZE 32
 char*  Sbndm2(char * text,char *pat,int n, int m) //Backward Nondeterministic Dawg Matching algorithm
 {
-	Uword B[ASIZE];
-	Uword s, d, last;
+	u32 B[ASIZE];
+	u32 s, d, last;
 	int i, j; 
 	if (m > WORD_SIZE)
 		error("BNDM");
 
 	/* Pre processing */
-	memset(B,0,ASIZE*sizeof(Uword));
+	memset(B,0,ASIZE*sizeof(u32));
 	s=1;
 	for (i=m-1; i>=0; i--){
 		B[pat[i]] |= s;

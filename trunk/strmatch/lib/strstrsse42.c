@@ -20,7 +20,7 @@
 
 #include <nmmintrin.h>
 #include "report.h"
-#define REPORT(i) {if( report_function((char*)s1, i-(char*)s1, (char*)s2)== SEARCH_STOP) return i;};
+#define REPORT(i) {if( report_function((char*)ss1, i-(char*)ss1, (char*)s2)== SEARCH_STOP) return i;};
 #ifdef USE_AS_STRCASESTR
 # include <ctype.h>
 # include <locale/localeinfo.h>
@@ -288,6 +288,7 @@ char *
 strstrsse42uc(const unsigned char *s1, const unsigned char *s2)
 {
 #define p1 s1
+	const unsigned char *ss1 = s1;
 	const unsigned char *p2 = s2;
 
 	if (p2[0] == '\0')
@@ -369,7 +370,7 @@ strstrsse42uc(const unsigned char *s1, const unsigned char *s2)
 
 		/* Since s2 is less than 16 bytes, com_c is definitive
 		   determination of full match.  */
-		REPORT(((char*)p1+cmp));return (char *) p1 + cmp;
+		REPORT(((char*)p1+cmp));//return (char *) p1 + cmp;
 	}
 
 	/* General case, s2 is at least 16 bytes or more.

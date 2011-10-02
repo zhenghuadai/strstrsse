@@ -21,12 +21,12 @@
 #define ASIZE 256
 #if __WORDSIZE == 32 
 #define WORD_SIZE 32
-typedef unsigned int Uword;
-typedef unsigned int u32;
 #else
 #define WORD_SIZE 64
-typedef unsigned long long u64;
 #endif
+typedef unsigned int Uword;
+typedef unsigned int u32;
+typedef unsigned long long u64;
 
 #define MAXINT2 2147483648 
 #include "stdio.h"

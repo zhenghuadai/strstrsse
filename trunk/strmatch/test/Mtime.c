@@ -14,5 +14,5 @@ void Mtime(_U64* u)
 
 double Mdifftime(_U64 start, _U64 end)
 {
-    return (double) (end.u64 - start.u64);
+    return (double) (end._u64 - start._u64);
 }

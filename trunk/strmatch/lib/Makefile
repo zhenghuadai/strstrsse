@@ -1,6 +1,7 @@
 #CMPCOUNT:=
 include config.mk
 Compiler=gcc
+Inc=-I./
 ifeq ($(CMPCOUNT),y)
 	DFLAGS:=-c -DCMPCOUNT
 else
@@ -26,6 +27,7 @@ ifeq ($(arch), x64)
 Gflag+= -m64
 endif
 
+Gflag+= ${Inc}
 sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o report.o  # strstrmmx.o strstrsse2.o 
 ifeq ($(SSE42), yes)
 sobj+=strstrsse42.o 
@@ -45,4 +47,5 @@ strstrmmx.o:strstrmmx.c
 	icc -use-msasm -c -O3 $< 
 clean:
 	rm -f *.o
+	rm -f *.a *.so
 	rm -f libstrmatch.a libstrmatch.so
