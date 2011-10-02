@@ -1,27 +1,18 @@
-/*
+/**
  * =====================================================================================
- *Copyright(C) by Zhenghua Dai. All rights reserved.
+ *       @file    mWm.h
  *
+ *       @brief   '
  *
+ *       @author  DAI ZHENGHUA (), djx.zhenghua@gmail.com
+ *       @version 1.0
+ *       @date    02/11/2011 04:00:59 PM
  *
- * ==================================
- * ==================================
- *
- *       Filename:  mWm.h
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  2009年10月27日 21时42分26秒
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Zhenghua Dai (Zhenghua Dai), djx.zhenghua@gmail.com
- *        Company:  dzh
- *
+ *       Revision none
+ *       Compiler gcc
+ *       Company  
  * =====================================================================================
  */
-
 #ifndef  MWM_TEMPLATE_HEADER__INC
 #define  MWM_TEMPLATE_HEADER__INC
 #include <stdio.h>

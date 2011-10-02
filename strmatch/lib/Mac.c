@@ -99,7 +99,7 @@ void preFail(int preG[][ASIZE],int allstate,int preF[])
 }
           
 
-void Mac(char *text,char  **pat,int rows)
+void Mac(char *text,char  **patts,int rows)
 {
    int state,matchS,tempS,oS;
    int preG[MAXSTATE][ASIZE],preF[MAXSTATE],preO[MAXSTATE];
@@ -109,7 +109,7 @@ void Mac(char *text,char  **pat,int rows)
    
    temPat[0]="";
    for(i=0;i<rows;i++)
-	   temPat[i+1]=pat[i];
+	   temPat[i+1]=patts[i];
    for(i=0;i<MAXSTATE;i++)
       preO[i]=0;
 

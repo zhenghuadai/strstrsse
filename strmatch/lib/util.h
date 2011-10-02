@@ -5,7 +5,7 @@ typedef struct
 {
 	union	
 	{
-		unsigned long long u64;
+		unsigned long long _u64;
 		struct{
 			unsigned int low;
 			unsigned int high;
@@ -27,7 +27,7 @@ int  outputs(int whichp,int addr);
 #define OUTPUT3(text, x , pat) if( report_function(text, x, pat) == STOP ) return (text +(x)) ;
 //#define SRET(i) if( (i)< n) return (text + j) ; else return NULL;
 #define SRET(i)  return NULL;
-#define OUTPUTs(which, i) if( outputs(which, i) == STOP ) return ;
+#define OUTPUTs(which, i) if( report_function(text, i, patts[which]) == STOP ) return ;
 
 typedef struct {
 	char str[3];

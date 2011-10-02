@@ -169,6 +169,8 @@ void Mwm(char *Tt,char *Patts[],int s)
     unsigned char * T;//dzh emend at 2004.10.22
     _U64 sta1,end1;
     double ela;
+    char* text = Tt;
+    char** patts = Patts;
     T=Tt;
     m=preShift(Patts,s,preSHIFT);
     prePoint(Patts,s,prePOINTER);
