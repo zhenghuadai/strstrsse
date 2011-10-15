@@ -16,10 +16,11 @@ Uword preSo(char *x, int m, Uword S[]) {
 	return(lim); 
 } 
 
-char* Sshiftor2(char *text,char *pat,int n, int m) { 
+char* Sshiftor2(char *text0, char *pat, int n, int m) { 
 	Uword lim, state; 
 	Uword S[ASIZE];
-	int j; 
+	int j;
+    unsigned char* text = text0;
 	if (m > WORD_SIZE) 
 		error("SO: Use pattern size <= word size"); 
 

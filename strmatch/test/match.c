@@ -173,6 +173,10 @@ int main(int argc,char *argv[])
     match[21].matchalg        =strstrsse42;
     match[21].matchalg2        =0;
     match[21].matchalgstr    ="strstrsse42";
+
+    match[22].matchalg        =strstrsse42a;
+    match[22].matchalg2        =0;
+    match[22].matchalgstr    ="strstrsse42a";
     #endif
    // match[22].matchalg        =strstrmmx;
    // match[22].matchalg2        =0;
