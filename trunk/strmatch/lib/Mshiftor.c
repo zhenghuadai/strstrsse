@@ -41,6 +41,8 @@ void Mshiftor(char *T,char *Ps[],int ss)
 	unsigned int lim, state,limmax=0,limmin=0,t=1; 
 	unsigned int S[ASIZE];
 	int i,j,n,length=0,temp,maxsingle=0;
+    char* text = T;
+    char** patts = Ps;
 	n=strlen(T);
 	for(i=0;i<ss;i++){
 		temp=strlen(Ps[i]);

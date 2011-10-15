@@ -75,6 +75,7 @@ char* lstrstr    (__const1 char* text, __const2 char* pat);//! gcc
 char* strstrsse  (__const1 char* text, __const2 char* pat);//! gcc 
 char* strstrmmx  (__const1 char* text, __const2 char* pat);//! gcc 
 char* strstrsse42(__const1 char* text, __const2 char* pat);//! gcc 
+char* strstrsse42a(__const1 char* text, __const2 char* pat);//! gcc 
 /**  @} */
 
 /**

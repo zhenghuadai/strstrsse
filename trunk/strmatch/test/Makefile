@@ -17,6 +17,7 @@ LIBSTRMATCH= -lstrmatch
 endif
 
 LIB=$(LIBSTRMATCH)
+EXT:=
 
 ifeq ($(SSE42), yes)
 Gflag+= -DSSE4 
@@ -43,23 +44,23 @@ matchthreadobj:=matchthread.o    ${utilobj} ../lib/strstrsse2.o io.o  # ${algobj
 matchgeneobj:=match.o ${utilobj} ${algobj} 
 matchmulobj:=matchmul.o   extract.o Mtime.o ../others/acsmx.o ../others/snortmwm.o
 matchasmobj:=matchasm.o Ady.o extract.o  Mtime.o
-all: match matchmul 
+all: match${EXT} matchmul${EXT} 
 
-match: ${matchobj}
+match${EXT}: ${matchobj}
 	${Compiler} ${Gflag} ${INC_PATH} -static  -o match ${matchobj} ${LIB} ${LIBPATH} -lstdc++
-matchthread: ${matchthreadobj}
+matchthread${EXT}: ${matchthreadobj}
 	${Compiler} ${Gflag} ${INC_PATH} -static  -o $@ $^  ${LIB} ${LIBPATH} -lstdc++ -lpthread -I${THREAD_INC}
 #matchgene: ${matchgeneobj}
 #	${Compiler} ${Gflag} ${INC_PATH} -static -o matchgene ${matchgeneobj} ${LIB} ${LIBPATH} 
-matcho3: ${matchobj}
+matcho3${EXT}: ${matchobj}
 	${Compiler} ${Gflag}  -o matcho3 ${matchobj}
-matchmul:${matchmulobj} 
+matchmul${EXT}:${matchmulobj} 
 	${Compiler} ${Gflag}  ${INC_PATH} -static -o matchmul ${matchmulobj}  ${LIB} ${LIBPATH}
-matchasm:${matchasmobj}
+matchasm${EXT}:${matchasmobj}
 	${Compiler} ${Gflag} -o matchasm ${matchasmobj}
-mmatch:mmatch.o ${utilobj}
+mmatch${EXT}:mmatch.o ${utilobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
-genematch:genematch.o ${utilobj} io.o
+genematch${EXT}:genematch.o ${utilobj} io.o
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
 %.o:%.c
@@ -74,6 +75,7 @@ clean:
 	rm -f matchmul
 	rm -f matcho3
 	rm -f matchgene
+	rm -f *.exe 
 	rm -f ${matchmulobj}
 
 mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx

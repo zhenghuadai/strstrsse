@@ -30,7 +30,8 @@ endif
 Gflag+= ${Inc}
 sobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o dsor.o strstrsse.o lstrstr.o report.o  # strstrmmx.o strstrsse2.o 
 ifeq ($(SSE42), yes)
-sobj+=strstrsse42.o 
+sobj+=strstrsse42.o strstrsse42a.o 
+Gflag+= -msse4
 endif
 mobj:= Msbom.o Mwm.o Mshiftor.o Mac.o
 algobj:= ${sobj} ${mobj} 
