@@ -25,7 +25,10 @@
 #include "strstrsse.h"
 
 #include "report.h"
-#define REPORT(i) {if( report_function((char*)ss1, (char*)i-(char*)ss1, (char*)s2)== SEARCH_STOP) return i;};
+char* strchrsse(const char *str,char c);
+static char* __STRSTRSSE42A_gt16(const char* text, const char* pattern);
+#define STRCHR strchrsse
+#define REPORT(i) {if( report_function((char*)ss1, (char*)i-(char*)ss1, (char*)s2)== SEARCH_STOP) return (i);};
 #ifndef  STRSTRSSE42A
 #define  STRSTRSSE42A strstrsse42a
 #endif   /* ----- #ifndef strstrsse42a_INC  ----- */
@@ -97,7 +100,7 @@ char* STRSTRSSE42A(const char* text, const char* pattern)
     __m128i premV, postmV;
     __m128i * sseiPtr = (__m128i *) text;
     __m128i sseiWord0 ;//= *sseiPtr ;
-    __m128i sseiPattern = SIMD_LOADU(pattern);
+    __m128i sseiPattern; 
     __m128i sseiPattern2;
     __m128i shf_indexV;
     if(text==NULL) return NULL;
@@ -106,19 +109,9 @@ char* STRSTRSSE42A(const char* text, const char* pattern)
     }
     if(pattern ==NULL) return NULL;
     if(pattern[0] == 0) return text;
-    {
-        if(plen < 16){
-            shf_indexV = SIMD_LOAD(IndexVector[plen]);
-            __attribute__ ((aligned (16))) char pbuf[16];
-            int i=0, j=0;
-            for(i =0;i<16-plen ;i++){
-                pbuf[i] = 0xff;
-            }
-            for(;i<16;i++)
-                pbuf[i] = pattern[j++];
-            sseiPattern2 = SIMD_LOAD(pbuf);
-        }
-    }
+	if(pattern[1] == 0) return STRCHR(text,pattern[0]); 
+    if(plen > 16) return __STRSTRSSE42A_gt16(text, pattern); 
+
     {
         int i;
         int j;
@@ -147,6 +140,21 @@ char* STRSTRSSE42A(const char* text, const char* pattern)
     }
 
 alignStart:
+    {
+        if(plen <= 16){
+            shf_indexV = SIMD_LOAD(IndexVector[plen]);
+            __attribute__ ((aligned (16))) char pbuf[16];
+            int i=0, j=0;
+            for(i =0;i<16-plen ;i++){
+                pbuf[i] = 0xff;
+            }
+            for(;i<16;i++)
+                pbuf[i] = pattern[j++];
+            sseiPattern2 = SIMD_LOAD(pbuf);
+        }
+    }
+
+    sseiPattern = SIMD_LOADU(pattern);
     sseiWord0 = SIMD_LOAD(sseiPtr) ;
     pref = SEARCH_PRE_F(sseiPattern, sseiWord0);
     ret_z = has_byte_null(sseiWord0); 
@@ -183,6 +191,122 @@ alignStart:
             sseiPtr ++;
             sseiWord0 = SIMD_LOAD(sseiPtr) ;
             postf = SEARCH_PRE_F(sseiWord0, sseiPattern2);
+            if( postf + pref == 32 - plen){
+                REPORT(sseiPtr);
+            }
+        }
+#endif
+        pref = SEARCH_PRE_F(sseiPattern, sseiWord0);
+        ret_z = has_byte_null(sseiWord0); 
+    }
+
+}
+
+__inline int simple_strcmp(const char* s1, const char* s2)
+{
+    while(*s2 && *s1 &&(*s1 == *s2)){
+        s1 ++;
+        s2 ++;
+    }
+    return *s2;
+}
+
+/*Don't call this function directly. It must only be called in STRSTRSSE42A  */
+static char* __STRSTRSSE42A_gt16(const char* text, const char* pattern)
+{
+    const unsigned char *ss1 = text;
+    const unsigned char *s2 = pattern;
+    char *pp= text;
+    char *pt= pattern;
+    unsigned char * chPtrAligned = (unsigned char*)text;
+    unsigned int ret_z;
+    unsigned int pref=0;
+    int patlen = strlen(pattern);
+    int plen = 16;
+    __m128i premV, postmV;
+    __m128i *sseiPtr = (__m128i *) text;
+    __m128i sseiWord0 ;//= *sseiPtr ;
+    __m128i sseiPattern; 
+    __m128i shf_indexV;
+    /*  
+        if(text==NULL) return NULL;
+        if(text[0] == 0) {
+        return pattern[0]?NULL:text;
+        }
+        if(pattern ==NULL) return NULL;
+        if(pattern[0] == 0) return text;
+        if(pattern[1] == 0) return STRCHR(text,pattern[0]); 
+        */
+    plen = 16;
+    {
+        int i;
+        int j;
+        int preBytes = 16 - (((unsigned long long) text) & 15);
+        char	chara = pattern[0];
+        char	charb = pattern[1];
+        char	charc = pattern[2];
+        char* bytePtr;
+
+        preBytes &= 15;
+        if (preBytes == 0) goto alignStart;
+        chPtrAligned = (unsigned char*)text + preBytes;
+        for(j =0;j< preBytes; j++){
+            if(text[j] ==0) return NULL;
+            if(text[j] == chara){
+                if(text[j+1] == charb){
+                    int i=1;
+                    bytePtr = & text[j];
+                    while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
+                    if(pattern[i] == 0) REPORT(bytePtr);
+                    if(bytePtr[i] == 0) return NULL;
+                }
+            }
+        }
+        sseiPtr = (__m128i *) chPtrAligned;
+    }
+
+alignStart:
+    shf_indexV = SIMD_LOAD(IndexVector[16]);
+    sseiPattern = SIMD_LOADU(pattern);
+    sseiWord0 = SIMD_LOAD(sseiPtr) ;
+    pref = SEARCH_PRE_F(sseiPattern, sseiWord0);
+    ret_z = has_byte_null(sseiWord0); 
+    while(!ret_z){
+        //! find out the prefix
+        __m128i postmV2;
+        __m128i flagV;
+        u32 flag16;
+        while(( pref==16)&&( ret_z ==0)){
+            sseiPtr ++;
+            sseiWord0 = SIMD_LOAD(sseiPtr) ;
+            ret_z = has_byte_null(sseiWord0); 
+            pref = SEARCH_PRE_F(sseiPattern, sseiWord0);
+        }
+        if(pref == 0){
+            //! find out the first 16 bytes;
+            if(simple_strcmp((((char*)sseiPtr)+pref+16), pattern + 16)==0)
+            REPORT((((char*)sseiPtr)+pref));
+        }
+#if 1
+        premV = SEARCH_PRE_M(sseiPattern, sseiWord0);
+        sseiPtr ++;
+        sseiWord0 = SIMD_LOAD(sseiPtr) ;
+        postmV = SEARCH_PRE_M(sseiWord0, sseiPattern);
+        postmV2= bit_reverse(postmV);
+        flagV  = SS_XAND(premV, postmV2);
+        flag16 = SS_GET_MASK(flagV);
+
+        if(flag16){
+            int idx = bsf(flag16);
+            if(simple_strcmp((((char*)sseiPtr)+idx), pattern + 16)==0)
+            REPORT((((char*)sseiPtr)-16+idx));
+        }
+#else
+        {
+            unsigned int postf=0;
+            sseiPtr ++;
+            sseiWord0 = SIMD_LOAD(sseiPtr) ;
+            postf = SEARCH_PRE_F(sseiWord0, sseiPattern);
             if( postf + pref == 32 - plen){
                 REPORT(sseiPtr);
             }

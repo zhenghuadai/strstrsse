@@ -301,7 +301,7 @@ int main(int argc,char *argv[])
 			//elapsed_time =Mdifftime(startrdt,endrdt);
 			elapsed_time=mdtime(1);
 			time_used[i] = elapsed_time;
-			printf("algorithm %15s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
+			printf("algorithm %15s takes %20f clock cycles.\n",match[i].matchalgstr, elapsed_time );
 			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
 
 		}
@@ -325,7 +325,7 @@ int main(int argc,char *argv[])
             time_used[i] = elapsed_time;
             if(verbose ==2)
                 printf("(%d)", pcur - Text);
-            printf("algorithm %15s takes %20f clocks.\n",match[i].matchalgstr, elapsed_time );
+            printf("algorithm %15s takes %20f clock cycles.\n",match[i].matchalgstr, elapsed_time );
             fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
         }
 

@@ -27,6 +27,7 @@
 typedef unsigned int Uword;
 typedef unsigned int u32;
 typedef unsigned long long u64;
+# define strstrsse42 __strstr_sse42
 
 #define MAXINT2 2147483648 
 #include "stdio.h"
