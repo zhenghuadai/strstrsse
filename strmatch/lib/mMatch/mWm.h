@@ -31,7 +31,8 @@ class mWm :public mMatch
 	private:
 		enum{SHIFT_WIDTH=WM_BLOCK_WIDTH, SHIFT_TABLE_SIZE=(1<< ((SHIFT_WIDTH * 8)/HashCompressRatio))};
 	public:
-		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0),matchArrayMem(0){type=mAC; mWm::compile();}
+		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0),matchArrayMem(0){type=maWM; mWm::compile();}
+        ~mWm();
 	public:
 		virtual void compile();
 		virtual int search(char* txt, int n);
@@ -66,8 +67,8 @@ class mWm :public mMatch
         }
 
 
-        static void transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n);
-        static void freeList(list<int>**& matchList,int n);
+        void transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n);
+        void freeList(list<int>**& matchList,int n);
 
     private:
         Uchar mShift[SHIFT_TABLE_SIZE];

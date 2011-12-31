@@ -48,7 +48,7 @@ static inline unsigned long long getrdtsc(){
 using namespace std;
 namespace dmMatch{
 typedef enum{
-    mAC, geneAC, mWM, mACDep, mACWid, geneACDep, geneACWid
+    maAC, geneAC, maWM, mACDep, mACWid, geneACDep, geneACWid
 } mAlgtype;
 
 typedef int (* reportFunc)(int patID, int idx);
@@ -65,7 +65,7 @@ class memBase
 {
     public:
         memBase(){bytesUsed =0;}
-        ~memBase(){   ASSERT( bytesUsed <=10);}
+        ~memBase(){  /*printf("destroy :%d bytes left\n", bytesUsed);*/ ASSERT( bytesUsed <=10);}
 		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); if(DEBUG_MALLOC)printf("+%d=%d\n", _msize(p), bytesUsed); return p;}
         template<typename T>
 		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); if(DEBUG_MALLOC) printf("-%d=%d\n", _msize(p),bytesUsed);free(p); p=NULL;}

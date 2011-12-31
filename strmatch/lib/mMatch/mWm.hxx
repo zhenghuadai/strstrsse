@@ -8,7 +8,7 @@ namespace dmMatch{
 mWm_DEFINITION_HEADER(void)::compile()
 {
 	mMinPatLen=	minPatLen();
-	matchList= (list<int>**) malloc( SHIFT_TABLE_SIZE* sizeof(list<int>*));
+	matchList= (list<int>**) mMalloc( SHIFT_TABLE_SIZE* sizeof(list<int>*));
 	memset(matchList, 0, SHIFT_TABLE_SIZE* sizeof(list<int>*));
 	
 	for(int i=0;i<SHIFT_TABLE_SIZE;i++) mShift[i] = mMinPatLen-WM_BLOCK_WIDTH+1;
@@ -23,7 +23,7 @@ mWm_DEFINITION_HEADER(void)::compile()
 		{
 			tHash = hash((Uchar*)mPatterns[i] + mMinPatLen);
 			if(matchList[tHash] ==NULL) {
-				matchList[tHash] = new list<int>;
+				matchList[tHash] = new  list<int>;
 			}
 			matchList[tHash]->push_back(i);
 		}
@@ -32,14 +32,21 @@ mWm_DEFINITION_HEADER(void)::compile()
 	printf("build Wm complete WM_BLOCK_WIDTH:%d, SHIFT_TABLE_SIZE:%d\n", WM_BLOCK_WIDTH,SHIFT_TABLE_SIZE);
 }
 
+mWm_DEFINITION_HEADER()::~mWm()
+{
+    mFree(matchArrayMem);
+    mFree(matchArray);
+
+}
+
 mWm_DEFINITION_HEADER(void)::transList(list<int>**& matchList, int**& matchArray, int*& matchArrayMem, int n)
 {
     int memSize = 0;
     for(int i=0;i<n;i++)
         if( matchList[i] != NULL)
             memSize +=( matchList[i]->size() + 1) ;
-    matchArrayMem = (int*) malloc(memSize * sizeof(int));        
-    matchArray = (int**) malloc(n * sizeof(int*));
+    matchArrayMem = (int*) mMalloc(memSize * sizeof(int));        
+    matchArray = (int**) mMalloc(n * sizeof(int*));
 	ASSERT(matchArrayMem && matchArray);
     int* pstart =matchArrayMem;
     for(int i=0; i<n;i++){
@@ -61,9 +68,10 @@ mWm_DEFINITION_HEADER(void)::transList(list<int>**& matchList, int**& matchArray
 
 mWm_DEFINITION_HEADER(void)::freeList(list<int>**& matchList,int n){
     for(int i=0;i<n;i++){
-        delete matchList[i];
+        if(matchList[i])
+            delete matchList[i];
     }
-    free(matchList);
+    mFree(matchList);
     matchList=0;
 }
 

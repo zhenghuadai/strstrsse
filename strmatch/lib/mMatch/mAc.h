@@ -136,7 +136,7 @@ public:
 	int patMatchListLen;
 	int mType;
 public:
-	AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0),mType(mAC){};
+	AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0),mType(maAC){};
 	~AcNodeStore(){ this -> clean(nodeList); delete patMatchList;}
 	void setMaxStateNum(int n){mMaxStateNum = n;}
 public:
@@ -207,7 +207,7 @@ public:
 	int patMatchListLen;
 	int mType;
 public:
-	AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0),mType(mAC){};
+	AcNodeStore():mRoot(0), mStateNum(0), mMaxStateNum(0),patMatchList(0),patMatchListLen(0),mType(maAC){};
 	~AcNodeStore(){ this -> clean(nodeList);delete patMatchList;}
 	void setMaxStateNum(int n){mMaxStateNum = n;}
 	void trans2WidthFirst();
