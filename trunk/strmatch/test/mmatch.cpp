@@ -64,8 +64,8 @@ int main(int argc,char *argv[])
     Text=Getsubjectfromfile(subjfname);
 
     occurnum=0;
+    printf("\nText Length:%d ok\n",strlen(Text));
     printf("\n");
-    printf("\n%d ok\n",strlen(Text));
 
 	
 	gPatList=Patts;
@@ -81,9 +81,9 @@ int main(int argc,char *argv[])
         Mtime( &startrdt );
         ac.search(Text);
         Mtime( &endrdt );
-        printf("\n\n");
         elapsed_time= Mdifftime( startrdt, endrdt );
         printf("\nalgorithm %s takes\t %20.15f seconds.\n","AC", elapsed_time );
+        printf("\n\n");
 #endif
 #if 1 
         {
@@ -94,9 +94,9 @@ int main(int argc,char *argv[])
             Mtime( &startrdt );
             acD.search(Text);
             Mtime( &endrdt );
-            printf("\n\n");
             elapsed_time= Mdifftime( startrdt, endrdt );
             printf("\nalgorithm %s takes\t %20.15f seconds.\n","ACD", elapsed_time );
+            printf("\n\n");
         }
 #endif
     }
@@ -108,8 +108,8 @@ int main(int argc,char *argv[])
         Mtime( &startrdt );
         wm.search(Text);
         Mtime( &endrdt );
-        printf("\n\n");
         elapsed_time= Mdifftime( startrdt, endrdt );
         printf("\nalgorithm %s takes\t %20.15f seconds.\n","WM", elapsed_time );
+        printf("\n\n");
     }
 }

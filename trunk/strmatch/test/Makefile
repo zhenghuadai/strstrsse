@@ -72,6 +72,7 @@ genematch${EXT}:genematch.o ${utilobj} io.o
 clean:
 	rm -f *.o
 	rm -f match
+	rm -f mmatch
 	rm -f matchmul
 	rm -f matcho3
 	rm -f matchgene
