@@ -26,7 +26,7 @@
 #include "mMatch.h"
 namespace dmMatch{
 
-#define mAcBase_DEFINITION_HEADER( type ) template<int CHAR_SET, StoreType ST, UseBadChar_T USE_BAD_CHAR> type mAcBase<CHAR_SET, ST, USE_BAD_CHAR>
+#define mAcBase_DEFINITION_HEADER( type ) template<int CHAR_SET, StoreType ST> type mAcBase<CHAR_SET, ST>
 
 mAcBase_DEFINITION_HEADER():: mAcBase(char** pat, int n) //: mMatch(pat, n)
 {
@@ -286,7 +286,7 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
 }
 
 
-#define mAcD_DEFINITION_HEADER( type ) template<int CHAR_SET, typename idxT, UseBadChar_T USE_BAD_CHAR> type mAcD<CHAR_SET, idxT, USE_BAD_CHAR>
+#define mAcD_DEFINITION_HEADER( type ) template<int CHAR_SET, typename idxT> type mAcD<CHAR_SET, idxT >
 mAcD_DEFINITION_HEADER(void)::transWidthFrom(mAcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
@@ -305,7 +305,7 @@ mAcD_DEFINITION_HEADER(void)::transDepthFrom(mAcBase<CHAR_SET>& ac)
     pRoot() = 0;
 }
 
-#define Ac_DEFINITION_HEADER( type ) template<class Acautomaton,int CHAR_SET,  UseBadChar_T USE_BAD_CHAR> type Ac<Acautomaton, CHAR_SET, USE_BAD_CHAR>
+#define Ac_DEFINITION_HEADER( type ) template<class Acautomaton,  UseBadChar_T USE_BAD_CHAR> type Ac<Acautomaton,  USE_BAD_CHAR>
 
 Ac_DEFINITION_HEADER(template<geneCodeFunc geneCode> int)::searchGene(acNodeP& state, char* txt)
 {

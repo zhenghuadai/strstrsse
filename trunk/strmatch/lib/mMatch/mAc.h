@@ -267,10 +267,10 @@ typedef enum {
 /*
  * =====================================================================================
  *        Class:  mAcBase
- *  Description:  The graph is implemented with tree
+ *  Description:  Pointer-based automaton 
  * =====================================================================================
  */
-template<int CHAR_SET=256, StoreType ST=StoreArray, UseBadChar_T USE_BAD_CHAR= UseBadChar>
+template<int CHAR_SET=256, StoreType ST=StoreArray>
 class mAcBase:public mMatch
 {
 public:
@@ -278,7 +278,7 @@ public:
 	typedef acNode<CHAR_SET>  acNodeT;
 	enum{char_set = CHAR_SET};
 
-	template<int m, typename T, UseBadChar_T b>
+	template<int m, typename T>
 		friend class mAcD;
 public:
 	mAcBase(){};
@@ -333,10 +333,10 @@ class acNodeShort
 /*
  * =====================================================================================
  *        Class:  mAcD
- *  Description: The graph is implemented with array  
+ *  Description: index-based automaton 
  * =====================================================================================
  */
-template<int CHAR_SET=256, typename idxT=U16, UseBadChar_T USE_BAD_CHAR= UseBadChar>
+template<int CHAR_SET=256, typename idxT=U16>
 class mAcD:public mMatch
 {
     public:
@@ -350,11 +350,11 @@ constructor:
 interface:
         void initAc(char** pat, int n){initAc(pat,n,mACWid);};
         void initAc(char** pat, int n, mAlgtype t){ 
-            mAcBase<CHAR_SET, StoreArray, UseBadChar> ac(pat, n, t); 
+            mAcBase<CHAR_SET, StoreArray> ac(pat, n, t); 
             if(t== mACWid) transWidthFrom(ac);else transDepthFrom(ac);
         };
         template<StoreType ST>
-        void initAc(mAcBase<CHAR_SET,ST, USE_BAD_CHAR>& ac, mAlgtype t){if(t== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
+        void initAc(mAcBase<CHAR_SET,ST >& ac, mAlgtype t){if(t== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
     private:
         //! for building DFA (transfer from mAcBase)
         void transDepthFrom(mAcBase<CHAR_SET>& ac);
@@ -378,21 +378,29 @@ interface:
         int* patMatchList;
 };
 
-template<class Acautomaton, int CHAR_SET=256,UseBadChar_T USE_BAD_CHAR= UseBadChar>
+/**
+ * @brief This is Search class 
+ *
+ * @tparam Acautomaton
+ * @tparam USE_BAD_CHAR
+ */
+template<class Acautomaton, UseBadChar_T USE_BAD_CHAR= UseBadChar>
 class Ac:public mMatch
 {
     public:
         typedef typename Acautomaton::acNodeP acNodeP;
+        enum{CHAR_SET=Acautomaton::char_set};
+        enum{char_set=Acautomaton::char_set};
     public:
         Acautomaton acAutom;
-    public:
+constructor:
         Ac(){}
         Ac(char** pat, int n){acAutom.initAc(pat,n);}
         Ac(char** pat, int n, mAlgtype t){acAutom.initAc(pat, n, t);}
         template<StoreType ST>
-        Ac(mAcBase<CHAR_SET, ST, USE_BAD_CHAR>& o, mAlgtype t) {acAutom.initAc(o,t);}
+        Ac(mAcBase<Acautomaton::char_set, ST>& o, mAlgtype t) {acAutom.initAc(o,t);}
         ~Ac(){}
-    public:
+interface:
         virtual int search(char* txt, int n);
         virtual int search(char* txt);
         virtual int searchC(char* txt, int n);

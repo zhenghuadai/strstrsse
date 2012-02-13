@@ -82,7 +82,7 @@ class mMatch:public memBase
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent; report=reportDefault;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
         ~mMatch(){ MFree(mPatLen); }
-    public:
+interface:
 		//!----------------------------------------------------------------------------
 		// 
 		//!----------------------------------------------------------------------------

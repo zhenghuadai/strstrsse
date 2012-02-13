@@ -76,7 +76,7 @@ int main(int argc,char *argv[])
 #if 1
 //        mAcBase<256> ac(Patts, ps, mACWid);
 //        ac.setReportFunc(myreport);
-        Ac<mAcBase<256,StoreArray,UseBadChar>, 256,UseBadChar> ac(Patts, ps, mACWid);
+        Ac<mAcBase<256,StoreArray>, UseBadChar> ac(Patts, ps, mACWid);
         printf("mem:%d\n", ac.memUsed());
         Mtime( &startrdt );
         ac.search(Text);
@@ -88,7 +88,7 @@ int main(int argc,char *argv[])
 #if 1 
         {
 //            mAcD<> acD(ac.getAutomaton());
-            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(Patts, ps, mACWid);
+            Ac<mAcD<256, U16 >,  UseBadChar> acD(Patts, ps, mACWid);
 //            Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD(ac.getAutomaton(), mACWid);
             printf("mem:%d\n", acD.memUsed());
             Mtime( &startrdt );
