@@ -199,6 +199,15 @@ alignStart:
         pref = SEARCH_PRE_F(sseiPattern, sseiWord0);
         ret_z = has_byte_null(sseiWord0); 
     }
+    //! now there is less than 16 char left
+    if( (pref != 16)&& (pref <= 16 - plen)){
+        char* p = ((char*)sseiPtr ) + pref; 
+        char* pend = p + plen;
+        while((p <pend) && (*p != NULL)) p++;
+        if(p == pend){
+                REPORT(pend - plen);
+        }
+    }
 
 }
 
@@ -315,5 +324,5 @@ alignStart:
         pref = SEARCH_PRE_F(sseiPattern, sseiWord0);
         ret_z = has_byte_null(sseiWord0); 
     }
-
+   
 }

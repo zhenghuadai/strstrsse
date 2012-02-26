@@ -160,7 +160,7 @@ int main(int argc,char *argv[])
     match[17].matchalgstr    ="SshiftorW";
     match[18].matchalg        =strstrsse;
     match[18].matchalg2        =0;
-    match[18].matchalgstr    ="strstrsse";
+    match[18].matchalgstr    ="strstrsse2";
     #ifdef TEST_2
     match[19].matchalg        =lstrstrsseLong;
     match[19].matchalg2        =0;
@@ -269,7 +269,8 @@ int main(int argc,char *argv[])
 	}
 	fprintf(fp,"***********************************************\n");
 	fprintf(fp,"length of Text:%d\nlength of pattern:%d\n ",strlen(Text),strlen(Pat));
-	fprintf(stdout,"length of Text:%d\nlength of pattern:%d %s\n ",strlen(Text),strlen(Pat),Pat);
+	fprintf(stdout,"length of Text:%d\nlength of pattern:%d %s\n",strlen(Text),strlen(Pat),Pat);
+	fprintf(stdout,"Text Address: %0x; Pattern Address:%0x\n ",Text,Pat);
 
 	setReportFunc(SEARCH_SILENT);
 	for(i=0;i<ALLALG;i++)
@@ -333,10 +334,18 @@ int main(int argc,char *argv[])
 
     fclose(fp);
 
-    printf("speedup to bfStr :%f\n", time_used[0] / time_used[18]);
-    printf("speedup to bmStr :%f\n", time_used[1] / time_used[18]);
-    printf("speedup to bmhStr:%f\n", time_used[2] / time_used[18]);
+    printf("strstrsse2   speedup to bfStr :%f\n", time_used[0] / time_used[18]);
+    printf("strstrsse2   speedup to bmStr :%f\n", time_used[1] / time_used[18]);
+    printf("strstrsse2   speedup to bmhStr:%f\n", time_used[2] / time_used[18]);
+#ifdef SSE4
+    printf("strstrsse42  speedup to bfStr :%f (released in glibc, created by intel)\n", time_used[0] / time_used[21]);
+    printf("strstrsse42  speedup to bmStr :%f (released in glibc, created by intel)\n", time_used[1] / time_used[21]);
+    printf("strstrsse42  speedup to bmhStr:%f (released in glibc, created by intel)\n", time_used[2] / time_used[21]);
 
+    printf("strstrsse42a speedup to bfStr :%f\n", time_used[0] / time_used[22]);
+    printf("strstrsse42a speedup to bmStr :%f\n", time_used[1] / time_used[22]);
+    printf("strstrsse42a speedup to bmhStr:%f\n", time_used[2] / time_used[22]);
+#endif
     /* Êä³ö½á¹û */ 
     //printf("\nalgorithm takes %6.2f seconds.\n", elapsed_time );
     // elapsed_time =Mdifftime(startrdt,endrdt);
