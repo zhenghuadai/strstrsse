@@ -216,52 +216,7 @@ int main(int argc,char *argv[])
 
 	if(Pat[m-1] == '\n') Pat[m-1]=0;
 
-	/*fp=fopen("sub","w");
-	  fprintf(fp,"%s",Text);
-	  fclose(fp);
-	  printf("%s\n",Pat);*/
-	//Pat="ncinc";
-	// Text="Till today, the lantern ncinchpc  festival is Natashastill held each year ncinchpc around the country. Lanterns of various shapes and sizes ncinchpc are hung in the streets, attracting countless visitors. Children will hold self-made or bought lanterns to stroll with on the streets, extremely excite";
 	occurnum=0;
-	/* µ÷ÓÃ´®Æ¥Åäº¯Êý */
-	//time( &start );
-	/*
-	   Mtime(&startrdt);
-	//for(i=0;i<1;i++)
-	{
-	printf("bf:\n");
-	Sbf(Text,Pat);
-	printf("mp:\n");
-	Smp(Text,Pat);
-	printf("kmp:\n");
-	Skmp(Text,Pat);
-	printf("bm:\n");
-	Sbm(Text,Pat);
-	printf("bmh:\n");
-	Sbmh(Text,Pat);
-	printf("bmhs:\n");
-	Sbmhs(Text,Pat);
-	printf("smith:\n");
-	Ssmith(Text,Pat);
-	printf("dfa:\n");
-	Sdfa(Text,Pat);
-	printf("bdm:\n");
-	Sbdm(Text,Pat);
-	printf("byh:\n");
-	Sbyh(Text,Pat);
-	printf("kr:\n");
-	Skr(Text,Pat);
-	printf("skip:\n");
-	Sskip(Text,Pat);
-	printf("kmpskip:\n");
-	Skmpskip(Text,Pat);
-	printf("shiftor:\n");
-	Sshiftor(Text,Pat);
-	printf("\n");
-	}
-	Mtime(&endrdt);*/
-	//time( &finish );
-	//elapsed_time= difftime( finish, start );
 	if((fp=fopen("result","w"))==NULL)
 	{
 		printf("open result file err");
@@ -288,7 +243,7 @@ int main(int argc,char *argv[])
     else 
 		setReportFunc(SEARCH_FIRST);
 
-	printf("alg2\n");
+	printf("strstr(char * text,char * pat,int n, int m): length of text and pattern are known\n");
 	for(i=0;i<ALLALG;i++)
 	{   
 		if(match[i].matchalg2 && match[i].boolmatch)
@@ -309,7 +264,7 @@ int main(int argc,char *argv[])
 
 	}//end for
 
-	printf("alg\n");
+	printf("strstr(char * text,char * pat): text and pattern are NULL-terminated\n");
 	for(i=0;i<ALLALG;i++)
 	{   
 		if(match[i].matchalg&& match[i].boolmatch)
