@@ -27,18 +27,25 @@
 
 static int report_all(const char* text, int idx, const char* pat)
 {
+    (void) text;
+    (void) pat;
 	printf("<%d>,", idx);
 	return SEARCH_CONTINUE;
 }
 
 static int report_default(const char* text, int idx, const char* pat)
 {
+    (void) text;
+    (void) pat;
 	printf("<%d> ", idx);
 	return SEARCH_STOP;
 }
 
 static int report_silent(const char* text, int idx, const char* pat)
 {
+    (void) text;
+    (void) pat;
+    (void) idx;
 	return SEARCH_CONTINUE;
 }
 

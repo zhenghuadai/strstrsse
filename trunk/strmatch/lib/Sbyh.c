@@ -7,10 +7,10 @@
 char* SbyhSearch(unsigned char *text,int m,int n,int  ch[]); 
 char* Sbyh2(char *textt,char *patt,int n ,int m)
 {
-	int i,j;
+	int i;
 	unsigned char *text,*pat;
-	text=textt;
-	pat=patt;
+	text = (unsigned char*) textt;
+	pat = (unsigned char*)patt;
 	int ch[ASIZE];
 	for(i=0;i<ASIZE;i++)
 		ch[i]=-1;
@@ -31,7 +31,7 @@ char* Sbyh(char *textt,char *patt)
 }
 
 char* SbyhSearch(unsigned char *text,int m,int n,int ch[]){
-	int j,pos;
+	int j;
     const int yu = 64;//(2*m>32?(2*m>64?128:64):32);
 	int  count[yu];
 	//int yu=2*m; 

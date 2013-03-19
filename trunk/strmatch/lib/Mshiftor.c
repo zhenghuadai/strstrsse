@@ -16,7 +16,7 @@ char x[length];
 temp=x;
 for(k=0;k<maxsingle;k++)
 for(i=0;i<ss;i++) {
-	if(strlen(Ps[i])>k){
+	if((int)strlen(Ps[i])>k){
 		 *temp=*(Ps[i]+k);
 		 temp++;
 		 }
@@ -28,7 +28,7 @@ for(i=0;i<ss;i++) {
 for (i = 0; i < ASIZE; ++i) 
      S[i] = ~0; 
 for (lim = i = 0, j = 1; i < length; ++i, j <<= 1) { 
-    S[x[i]] &= ~j; 
+    S[(unsigned char)x[i]] &= ~j; 
     lim |= j; 
 
    } 
@@ -63,7 +63,7 @@ void Mshiftor(char *T,char *Ps[],int ss)
 	}          
 	/* Searching */ 
 	for (state = ~0, j = 0; j < n; ++j) {
-		state = (state<<maxsingle) | S[T[j]];
+		state = (state<<maxsingle) | S[(unsigned char)T[j]];
 		t=~state;
 		if(t>=limmin && t<=limmax)    	   
 			OUTPUTs(0,j -maxsingle + 1);

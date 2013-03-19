@@ -12,12 +12,12 @@ void preBmBc(char *pat, int m, int bmBc[]) {
    for (i = 0; i < ASIZE; ++i)
       bmBc[i] = m;
    for (i = 0; i < m - 1; ++i)
-      bmBc[pat[i]] = m - i - 1;
+      bmBc[(unsigned char)pat[i]] = m - i - 1;
 }
  
  
 void suffipates(char *pat, int m, int *suff) {
-   int f, g, i;
+   int f = 0, g, i;
  
    suff[m - 1] = m;
    g = m - 1;

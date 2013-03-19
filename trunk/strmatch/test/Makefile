@@ -22,7 +22,7 @@ EXT:=
 ifeq ($(SSE42), yes)
 Gflag+= -DSSE4 
 endif
-#Gflag+= -Wall
+Gflag+= -Wall -Wextra
 
 ifeq ($(arch), x86)
 Gflag+= -m32

@@ -11,18 +11,18 @@ void preQsBc(char *pat,int m,int qsBc[])
    for (i=0;i<ASIZE;++i)
       qsBc[i]=m+1;
    for (i=0;i<m;++i)
-      qsBc[pat[i]]=m-i;
+      qsBc[(unsigned char)pat[i]]=m-i;
 }
 
 char* Sbmhs2(char * textt,char *patt,int n, int m)//SUNDAYËã·¨£¬ÓÖ³Æ quich search 
 {
 	int j,qsBc[ASIZE];
 	unsigned char *text,*pat;
-	text=textt;
-	pat=patt;
+	text = (unsigned char*)textt;
+	pat = (unsigned char*)patt;
 
 	/* preprocessing */
-	preQsBc(pat,m,qsBc);
+	preQsBc((char*)pat,m,qsBc);
 
 	/* Searching */
 	j=0;

@@ -17,11 +17,13 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <emmintrin.h>
 #include <xmmintrin.h>
 #include "strstrsse.h"
 char* lstrchr(const char *str,char c);
 char* lstrstrabsse(char* text, char* pattern);
+char* strstrsse(const char* text, const char* pattern);
 //#define REPORT(i) return i;
 #define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
 
@@ -67,7 +69,7 @@ char* lstrstrsseLong(const char* text, const char* pattern)
 	register __m128i byte16a;
 	register __m128i byte16b;
 	register __m128i byte16c;
-	char* bytePtr =text;
+	char* bytePtr = (char*)text;
 	int m =strlen(pattern);
 	if(m < 5) 
 		return strstrsse(text, pattern);
@@ -77,9 +79,8 @@ char* lstrstrsseLong(const char* text, const char* pattern)
 #if 1
 	//! the pre-byte that is not aligned.
 	{
-		int i;
 		int j;
-		int preBytes = 16 - (((unsigned long long) text) & 15);
+		int preBytes = 16 - (((size_t) text) & 15);
 		preBytes &= 15;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
@@ -88,7 +89,7 @@ char* lstrstrsseLong(const char* text, const char* pattern)
 			if(text[j] == chara){
 				if(text[j+1] == charb){
 					int i=1;
-					bytePtr = & text[j];
+					bytePtr = (char*)& text[j];
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
 					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
@@ -119,7 +120,6 @@ alignStart:
 			if(retabc){ 
 				int i=1;
 				char * bytePtr0 = (char*) ( sseiPtr-1 );
-				int j;
 				while(retabc){
 					int idx ;
 					idx = bsf(retabc);
@@ -138,7 +138,7 @@ alignStart:
 		sseiPtr ++;
 		sseiWord1 = *sseiPtr;
 	}
-prePareForEnd:
+//prePareForEnd:
 	{
 		unsigned int reta;
 		unsigned int retb;

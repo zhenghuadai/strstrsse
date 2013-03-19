@@ -31,8 +31,8 @@ register unsigned long lomagic = 0x01010101L;
 
 static inline long long haszerobytel(unsigned long long a)
 {
-register unsigned long long himagic = 0x8080808080808080L;
-register unsigned long long lomagic = 0x0101010101010101L;
+register unsigned long long himagic = 0x8080808080808080LL;
+register unsigned long long lomagic = 0x0101010101010101LL;
 	//return ((((a+ magic_bits) ^ ~a) & ~magic_bits));
 	return ((a- lomagic) & himagic);
 }
@@ -49,7 +49,7 @@ inline static int strcmpInline(const char* str1, const char* str2)
 
 //#define REPORT(i) return i 
 #ifndef REPORT
-#define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
+#define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return (char*)i;};
 #endif
 char* lstrstr(const char* text, const char* pattern)
 {
@@ -65,10 +65,10 @@ char* lstrstr(const char* text, const char* pattern)
 	char* bytePtr = (char*) &byte4a0;
 	if(text==NULL) return NULL;
 	if(text[0] == 0) {
-		return pattern[0]?NULL:text;
+		return pattern[0]?NULL: (char*)text;
 	}
 	if(pattern ==NULL) return NULL;
-	if(pattern[0] == 0) return text;
+	if(pattern[0] == 0) return (char*)text;
 	if(pattern[1] == 0) return lstrchr(text,pattern[0]); 
 	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
 	bytePtr = (char*) &byte4b0;
@@ -78,8 +78,7 @@ char* lstrstr(const char* text, const char* pattern)
 #if 1
 	//! the pre-byte that is not aligned.
 	{
-		int i;
-		int preBytes = 4 - (((unsigned long long) text) & 3);
+		int preBytes = 4 - (((size_t) text) & 3);
 		preBytes &= 3;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
@@ -130,11 +129,11 @@ alignStart:
 	while( haszerobyte(intWord) ==0) 
 	{
 		unsigned int reta ;
-searcha:
+//searcha:
 		reta = haszerobyte(intWord ^ byte4a);
 		if(reta!=0 ) {
 			unsigned int retb ;
-findouta:		
+//findouta:		
 			retb = haszerobyte(intWord ^ byte4b) ;
 findoutb:
 			//if(((reta | retb)&((reta| retb)>>8)/*ab|ba|bb|aa*/ )){

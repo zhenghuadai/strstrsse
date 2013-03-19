@@ -19,7 +19,8 @@ libstrmatchso=libstrmatch.so
 Gflag= -O3 
 OBJ_DIR =release/
 endif
-Gflag+= -fPIC -msse2
+Gflag+= -fPIC -msse2 
+Gflag+= -Wall -Wextra 
 
 ifeq ($(arch), x86)
 Gflag+= -m32
