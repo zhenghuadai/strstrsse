@@ -22,10 +22,10 @@
 #include "strstrsse.h"
 #define USE_BTR 
 char* strchrsse(const char *str,char c);
-char* strstrabsse(char* text, char* pattern);
+char* strstrabsse(const char* text, const char* pattern);
 //#define REPORT(i) return i;
 #ifndef REPORT
-#define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return i;};
+#define REPORT(i) {if( report_function(text, i-text, pattern)== SEARCH_STOP) return (char*)i;};
 #endif
 
 static inline unsigned int hasByteC16(__m128i a0, register __m128i sseic)
@@ -65,13 +65,13 @@ char* strstrsse(const char* text, const char* pattern)
 	register __m128i byte16a;
 	register __m128i byte16b;
 	register __m128i byte16c;
-	char* bytePtr =text;
+	char* bytePtr = (char*)text;
 	if(text==NULL) return NULL;
 	if(text[0] == 0) {
-		return pattern[0]?NULL:text;
+		return pattern[0]?NULL:(char*)text;
 	}
 	if(pattern ==NULL) return NULL;
-	if(pattern[0] == 0) return text;
+	if(pattern[0] == 0) return (char*)text;
 	if(pattern[1] == 0) return strchrsse(text,pattern[0]); 
 	if(pattern[2] == 0) return strstrabsse(text,pattern); 
 	chara = pattern[0];
@@ -83,9 +83,8 @@ char* strstrsse(const char* text, const char* pattern)
 #if 1
 	//! the pre-byte that is not aligned.
 	{
-		int i;
 		int j;
-		int preBytes = 16 - (((unsigned long long) text) & 15);
+		int preBytes = 16 - (((size_t) text) & 15);
 		preBytes &= 15;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
@@ -94,7 +93,7 @@ char* strstrsse(const char* text, const char* pattern)
 			if(text[j] == chara){
 				if(text[j+1] == charb){
 					int i=1;
-					bytePtr = & text[j];
+					bytePtr = (char*)& text[j];
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
 					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
@@ -112,12 +111,12 @@ alignStart:
 	while( haszeroByte(sseiWord0,sseiWord1,sseiZero) ==0) 
 	{
 		unsigned int reta ;
-searcha:
+//searcha:
 		reta = hasByteC(sseiWord0,sseiWord1,  byte16a);
 		if(reta!=0 ) {
 			unsigned int retb ;
 			unsigned int retc ;
-findouta:		
+//findouta:		
 			retb = hasByteC(sseiWord0,sseiWord1,  byte16b);
 			retc = hasByteC(sseiWord0,sseiWord1,  byte16c);
 findoutb:
@@ -128,7 +127,6 @@ findoutb:
 				// have ab
 				int i=1;
 				char * bytePtr0 = (char*) ( sseiPtr );
-				int j;
 #ifdef USE_BTR
 				while(reta){
 					int idx ;
@@ -293,7 +291,7 @@ prePareForEnd:
 }
 
 
-char* strstrabsse(char* text, char* pattern)
+char* strstrabsse(const char* text, const char* pattern)
 {
 	__m128i * sseiPtr = (__m128i *) text;
 	unsigned char * chPtrAligned = (unsigned char*)text;
@@ -304,7 +302,7 @@ char* strstrabsse(char* text, char* pattern)
 	char charb = pattern[1];
 	register __m128i byte16a;
 	register __m128i byte16b;
-	char* bytePtr =text;
+	char* bytePtr = (char*)text;
 	if(pattern ==NULL) return NULL;
 	if(pattern[0] == 0) return NULL;
 	if(pattern[1] == 0) return strchrsse(text,pattern[0]); 
@@ -313,9 +311,8 @@ char* strstrabsse(char* text, char* pattern)
 #if 1
 	//! the pre-byte that is not aligned.
 	{
-		int i;
 		int j;
-		int preBytes = 16 - (((unsigned long long) text) & 15);
+		int preBytes = 16 - (((size_t) text) & 15);
 		preBytes &= 15;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
@@ -324,7 +321,7 @@ char* strstrabsse(char* text, char* pattern)
 			if(text[j] == chara){
 				if(text[j+1] == charb){
 					int i=1;
-					bytePtr = & text[j];
+					bytePtr = (char*)& text[j];
 					while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
 					if(pattern[i] == 0) REPORT(bytePtr);
 					if(bytePtr[i] == 0) return NULL;
@@ -342,18 +339,17 @@ alignStart:
 	while( haszeroByte(sseiWord0,sseiWord1,sseiZero) ==0) 
 	{
 		unsigned int reta ;
-searcha:
+//searcha:
 		reta = hasByteC(sseiWord0,sseiWord1,  byte16a);
 		if(reta!=0 ) {
 			unsigned int retb ;
-findouta:		
+//findouta:		
 			retb = hasByteC(sseiWord0,sseiWord1,  byte16b);
 findoutb:
 			reta = (reta ) & (retb >> 1);
 			if(reta)
 			{
 				// have ab
-				int i=1;
 				char * bytePtr0 = (char*) ( sseiPtr );
 				int j;
 				//printf("test::%0x,%d\n",reta ,bytePtr0 -text);
@@ -466,7 +462,7 @@ char* strchrsse(const char *text,char c)
 	__m128i byte16c= _mm_set1_epi8(c);
 	__m128i sseiZero = _mm_set1_epi8(0);
 	__m128i m128word;
-	for (char_ptr = text; ((unsigned int)char_ptr 
+	for (char_ptr = text; ((size_t)char_ptr 
 				& (sizeof(__m128) - 1)) != 0;
 			++char_ptr) {
 		if (*char_ptr == '\0')return NULL;
@@ -474,7 +470,7 @@ char* strchrsse(const char *text,char c)
 			REPORT(char_ptr);
 	}
 
-	m128_ptr = (__m128*)char_ptr;
+	m128_ptr = (const __m128i*)char_ptr;
 
 
 	m128word= *m128_ptr;
@@ -522,9 +518,8 @@ char* strstrabxsse(char* text, char* pattern)
 #if 1
 	//! the pre-byte that is not aligned.
 	{
-		int i;
 		int j;
-		int preBytes = 16 - (((unsigned long long) text) & 15);
+		int preBytes = 16 - (((size_t) text) & 15);
 		preBytes &= 15;
 		if (preBytes == 0) goto alignStart;
 		chPtrAligned = (unsigned char*)text + preBytes;
@@ -551,11 +546,11 @@ alignStart:
 	while( haszeroByte(sseiWord0,sseiWord1,sseiZero) ==0) 
 	{
 		unsigned int reta ;
-searcha:
+//searcha:
 		reta = hasByteC(sseiWord0,sseiWord1,  byte16a);
 		if(reta!=0 ) {
 			unsigned int retb ;
-findouta:		
+//findouta:		
 			retb = hasByteC(sseiWord0,sseiWord1,  byte16b);
 findoutb:
 			reta = (reta ) & (retb >> 1);

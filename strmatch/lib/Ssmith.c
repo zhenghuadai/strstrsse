@@ -4,19 +4,20 @@
 #include <stdio.h>
 #define ASIZE 256
 #define MAX(a,b) (a>b)?a:b
-
+void preBmBc(char *pat, int m, int bmBc[]); 
+void preQsBc(char *pat,int m,int qsBc[]);
 
 char*  Ssmith2(char * textt,char *patt,int n, int m)//smith Ëã·¨ 
 {
 	int j,bmBc[ASIZE],qsBc[ASIZE];
 	unsigned char * text,*pat;
-	text=textt;
-	pat=patt;
+	text = (unsigned char*)textt;
+	pat = (unsigned char*)patt;
 
 
 	/* preprocessing */
-	preBmBc(pat,m,bmBc);
-	preQsBc(pat,m,qsBc);
+	preBmBc((char*)pat,m,bmBc);
+	preQsBc((char*)pat,m,qsBc);
 
 	/* searching */
 	j=0;

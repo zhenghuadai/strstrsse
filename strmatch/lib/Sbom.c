@@ -30,8 +30,10 @@ void setTransition(int p, int q, List L[]) {
    List cell;
 
    cell = (List)malloc(sizeof(struct _cell));
-   if (cell == NULL)
-      error("BOM/setTransition");
+   if (cell == NULL){
+      //error("BOM/setTransition");
+      return; 
+   }
    cell->element = q;
    cell->next = L[p];
    L[p] = cell;
@@ -39,7 +41,7 @@ void setTransition(int p, int q, List L[]) {
 
 
 void oracle(char *x, int m, char T[], List L[]) {
-   int i, p, q;
+   int i, p, q = 0;
    int S[m + 1];
    char c;
 
@@ -67,7 +69,7 @@ char* Sbom2(char *text,char *pat,int n, int m)
 {
 	char T[strlen(pat) + 1];
 	List L[strlen(pat) + 1];
-	int i, j, p, period, q, shift;
+	int i, j, p, period = 0, q, shift;
 	/* Preprocessing */
 	memset(L, 0, (m + 1)*sizeof(List));
 	memset(T, FALSE, (m + 1)*sizeof(char));

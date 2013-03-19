@@ -9,7 +9,7 @@ Uword preSa(char *x, int m, Uword S[]) {
 	for (i = 0; i < ASIZE; ++i) 
 		S[i] = 0; 
 	for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) { 
-		S[x[i]] |= j; 
+		S[(unsigned char)x[i]] |= j; 
 	} 
     lim = (((Uword)1)<<(m-1)) -1; 
 	return(lim); 
@@ -19,7 +19,7 @@ char* Sshiftand2(char *text0,char *pat,int n, int m) {
 	Uword lim, state; 
 	Uword S[ASIZE];
 	int j; 
-    unsigned char* text = text0;
+    unsigned char* text =(unsigned char*) text0;
 	if (m > WORD_SIZE) 
 		error("SO: Use pattern size <= word size"); 
 

@@ -25,6 +25,7 @@ char* Sbf2(char *text,char *pat,int n, int m)
 char* Sbf(char *text,char *pat)
 {
 	int n,m;
+    n = strlen(text); 
 	m=strlen(pat);
 	return Sbf2(text,pat,n,m);
 }
@@ -163,5 +164,7 @@ bfstr2(text, pattern, n, m)
 	int n;
 	int m;
 {
+    (void) n;
+    (void) m;
 	return bfstr(text, pattern);
 }

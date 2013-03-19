@@ -34,6 +34,7 @@ void preKmp(char *x, int m, int kmpNext[]) {
 }
 */
 void preKmp(char *pat,int m,int kmpNext[]);
+void  preMp(char *pat,int m,int mpNext[]);
 //KMP Skip Search algorithm
 int attempt(char *y, char *x, int m, int start, int wall) {
    int k;
@@ -48,14 +49,14 @@ int attempt(char *y, char *x, int m, int start, int wall) {
 char* Skmpskip2(char *textt,char *patt,int n, int m) {
 	int i, j, k, kmpStart, per, start, wall;
 	unsigned char * text,*pat;
-	text=textt;
-	pat=patt;
+	text = (unsigned char *) textt;
+	pat = (unsigned char *)patt;
 	int kmpNext[m], list[m], mpNext[m],
 		z[ASIZE];
 
 	/* Preprocessing */
-	preMp(pat, m, mpNext);
-	preKmp(pat, m, kmpNext);
+	preMp((char*)pat, m, mpNext);
+	preKmp((char*)pat, m, kmpNext);
 	memset(z, -1, ASIZE*sizeof(int));
 	memset(list, -1, m*sizeof(int));
 	z[pat[0]] = 0;
@@ -72,13 +73,13 @@ char* Skmpskip2(char *textt,char *patt,int n, int m) {
 		j += m;
 	} while (j < n && z[text[j]] < 0);
 	if (j >= n)
-		return;
+		return NULL;
 	i = z[text[j]];
 	start = j - i;
 	while (start <= n - m) {
 		if (start > wall)
 			wall = start;
-		k = attempt(text, pat, m, start, wall);
+		k = attempt((char*)text, (char*)pat, m, start, wall);
 		wall = start + k;
 		if (k == m) {
 			OUTPUT(start);
@@ -91,7 +92,7 @@ char* Skmpskip2(char *textt,char *patt,int n, int m) {
 				j += m;
 			} while (j < n && z[text[j]] < 0);
 			if (j >= n)
-				return;
+				return NULL;
 			i = z[text[j]];
 		}
 		kmpStart = start + k - kmpNext[k];
@@ -106,7 +107,7 @@ char* Skmpskip2(char *textt,char *patt,int n, int m) {
 						j += m;
 					} while (j < n && z[text[j]] < 0);
 					if (j >= n)
-						return;
+						return NULL;
 					i = z[text[j]];
 				}
 				start = j - i;

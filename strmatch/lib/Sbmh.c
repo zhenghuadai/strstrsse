@@ -3,18 +3,18 @@
 #include <stdio.h>
 #include <stdio.h>
 #define ASIZE 256
-
+void preBmBc(char *pat, int m, int bmBc[]); 
 
 char*  Sbmh2(char * textt,char *patt,int n, int m) // HorspoolÀ„∑® 
 {
 	int j,bmBc[ASIZE];
 	unsigned char c;
 	unsigned char * text,*pat;
-	text=textt;
-	pat=patt;
+	text = (unsigned char*)textt;
+	pat = (unsigned char*)patt;
 
 	/* preprocessing */
-	preBmBc(pat,m,bmBc);
+	preBmBc((char*)pat,m,bmBc);
 	/* searching */
 	j=0;
 	while (j<=n-m)

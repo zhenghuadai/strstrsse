@@ -9,7 +9,7 @@ static int preSo(char *x, int m, unsigned int S[]) {
 	for (i = 0; i < ASIZE; ++i) 
 		S[i] = ~0; 
 	for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) { 
-		S[x[i]] &= ~j; 
+		S[(unsigned char)x[i]] &= ~j; 
 		lim |= j; 
 
 		//                    printf("S[%c]:%u  lim:%d\n",x[i],S[x[i]],lim); 
@@ -25,6 +25,7 @@ char* SshiftorW2(char *text,char *pat,int n, int m) {
 	short *ps=(short*)text;
 	unsigned int S[ASIZE*ASIZE];
 	int j; 
+    (void)n;
 	if (m > WORD_SIZE) 
 		error("SO: Use pattern size <= word size"); 
 

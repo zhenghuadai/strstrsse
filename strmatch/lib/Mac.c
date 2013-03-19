@@ -28,16 +28,16 @@ int prestate(char **pat,int rows,int preG[][ASIZE],int preO[])
        m=strlen(y[i]);
        j=0;
        state=0;
-       while (preG[state][y[i][j]]!=MFail) 
+       while (preG[state][(unsigned char)y[i][j]]!=MFail) 
        {
-          state=preG[state][y[i][j]];
+          state=preG[state][(unsigned char)y[i][j]];
           j++;
        }
 
        for(p=j;p<m;p++)
        {
           newstate++;
-          preG[state][y[i][p]]=newstate;
+          preG[state][(unsigned char)y[i][p]]=newstate;
           state=newstate;
        }
        preO[state]=i;
@@ -121,7 +121,7 @@ void Mac(char *text,char  **patts,int rows)
    j=0;
    while(j<n)
    {
-      tempS=preG[matchS][text[j]];
+      tempS=preG[matchS][(unsigned char)text[j]];
       if(tempS!=MFail)
       {
          matchS=tempS;

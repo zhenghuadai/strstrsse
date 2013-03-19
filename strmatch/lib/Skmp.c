@@ -1,7 +1,7 @@
 #include "util.h"
 #include <string.h>
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
 #define XSIZE 100
 
 
@@ -43,6 +43,7 @@ char* Skmp2(char *text,char *pat, int n, int m) //KMPÀ„∑®
         i=kmpNext[i];
      }
    }
+   return NULL;
 }
 
 char* Skmp(char *text,char *pat) //KMPÀ„∑®
@@ -57,7 +58,7 @@ char* Skmp(char *text,char *pat) //KMPÀ„∑®
 typedef struct{
     structHeader header;
     int limit;
-    unsigned int kmpNext[XSIZE];
+    int kmpNext[XSIZE];
 }structSkmp;
 
 void* preSkmp(char* pat, int m)

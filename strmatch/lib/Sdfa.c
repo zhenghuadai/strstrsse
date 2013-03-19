@@ -27,8 +27,10 @@ Graph newGraph(int v,int e)
 {
     Graph g;
     g=(Graph)calloc(1,sizeof(struct _graph));
-    if (g==NULL)
-       error("newgraph");
+    if (g==NULL){
+       //error("newgraph");
+       return 0;
+    }
     g->vertexNumber=v;
     g->edgeNumber=e;
     g->initial=0;
@@ -56,6 +58,7 @@ int newVertex(Graph g)
     if (g!=NULL && g->vertexCounter<=g->vertexNumber)
        return(g->vertexCounter++);
     error("newvertex");
+    return -1; //Make the compiler happy
 }
 
 /* return the initial vertex of graph g */
@@ -64,6 +67,7 @@ int getInitial(Graph g)
     if (g!=NULL)
        return(g->initial);
     error("getinitial");
+    return -1; //Make the compiler happy
 }
 
 /* return true if vertex v is terminal in graph g */
@@ -72,6 +76,7 @@ boolean isTerminal(Graph g,int v)
     if (g!=NULL && g->terminal!=NULL && v<g->vertexNumber)
        return(g->terminal[v]);
     error("isterminal");
+    return 0; //Make the compiler happy
 }
 
 /* set vertex v to be terminal in graph g */
@@ -89,6 +94,7 @@ int getTarget(Graph g,int v,unsigned char c)
     if (g!=NULL && g->target!=NULL && v<g->vertexNumber && v*c<g->edgeNumber)
        return(g->target[v*(g->edgeNumber/g->vertexNumber)+c]);
     error("getTarget");
+    return -1; //Make the compiler happy
 }
 
 /* add the edge from vertex v to vertex t labelled by character c in graph g */

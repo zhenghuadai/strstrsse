@@ -15,8 +15,8 @@ char* Sskip2(char *textt,char *patt, int n, int m)//ÌøÔ¾Ëã·¨
 {
 	int i, j;
 	unsigned char * text,*pat;
-	text=textt;
-	pat=patt;
+	text = (unsigned char *) textt;
+	pat = (unsigned char *)patt;
 	List ptr, z[ASIZE];
 	/* Preprocessing */
 	memset(z, 0, ASIZE*sizeof(List));

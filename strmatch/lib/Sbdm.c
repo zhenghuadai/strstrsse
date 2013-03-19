@@ -23,7 +23,13 @@ struct _graph{
 typedef struct _graph *Graph;
 typedef int boolean;
 
+int newVertex(Graph g);
 Graph newAutomaton(int v,int e);
+int getInitial(Graph g);
+int getTarget(Graph g,int v,unsigned char c);
+void setTarget(Graph g,int v,unsigned char c,int t);
+void copyVertex(Graph g,int target,int source);
+void setTerminal(Graph g,int v);
 
 /* returns a new data structure for a suffix automaton with v vertices and e edges */
 Graph newSuffixAutomaton(int v, int e) 
@@ -54,6 +60,7 @@ int getSuffixLink(Graph g, int v)
        v < g->vertexNumber)
       return(g->suffixLink[v]);
    error("getSuffixLink");
+   return -1; //Make the compiler happy
 }
 
 
@@ -75,6 +82,7 @@ int getLength(Graph g, int v)
        v < g->vertexNumber)
       return(g->length[v]);
    error("getLength");
+   return -1; //Make the compiler happy
 }
 
 
@@ -94,6 +102,7 @@ int getPosition(Graph g, int v) {
        v < g->vertexNumber)
       return(g->position[v]);
    error("getPosition");
+   return -1; //Make the compiler happy
 }
 
 
@@ -115,6 +124,7 @@ int getShift(Graph g, int v, unsigned char c) {
       return(g->shift[v*(g->edgeNumber/g->vertexNumber) +
              c]);
    error("getShift");
+   return -1; //Make the compiler happy
 }
 
 

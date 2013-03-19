@@ -171,14 +171,14 @@ void Mwm(char *Tt,char *Patts[],int s)
     double ela;
     char* text = Tt;
     char** patts = Patts;
-    T=Tt;
+    T=(unsigned char*)Tt;
     m=preShift(Patts,s,preSHIFT);
     prePoint(Patts,s,prePOINTER);
     preHash(prePOINTER,s,preHASH);
     prePrefix(prePOINTER,s,m,preFIX);
     preFind(prePOINTER,Patts,s,preFIND);
      
-    textm=strlen(T);
+    textm=strlen((char*)T);
     i=m-1;
     Mtime(&sta1);
     while(i<textm)
