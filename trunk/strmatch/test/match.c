@@ -36,9 +36,9 @@ typedef struct matchtest_
 int main(int argc,char *argv[])
 {
     /*  读入目标串和模式串 初始化 */ 
-    int i,j;
+    int i;
     char *subjfname=0,*quryfname=0;
-    time_t   start, finish;
+//    time_t   start, finish;
     double elapsed_time;
     int n, m;
     int isGene = 0;
@@ -51,7 +51,7 @@ int main(int argc,char *argv[])
     FILE *fp;
     int verbose = 0;
     //FILE *fp;
-    _U64 startrdt,endrdt;
+//    _U64 startrdt,endrdt;
     if(argc==1)
     {
         printf("match [-t text_file|-s text] [-a pattern| -q pattern_file] -v n\n");
@@ -225,7 +225,7 @@ int main(int argc,char *argv[])
 	fprintf(fp,"***********************************************\n");
 	fprintf(fp,"length of Text:%d\nlength of pattern:%d\n ",strlen(Text),strlen(Pat));
 	fprintf(stdout,"length of Text:%d\nlength of pattern:%d %s\n",strlen(Text),strlen(Pat),Pat);
-	fprintf(stdout,"Text Address: %0x; Pattern Address:%0x\n ",Text,Pat);
+	fprintf(stdout,"Text Address: %p; Pattern Address:%p\n ",Text,Pat);
 
 	setReportFunc(SEARCH_SILENT);
 	for(i=0;i<ALLALG;i++)
@@ -306,6 +306,7 @@ int main(int argc,char *argv[])
     // elapsed_time =Mdifftime(startrdt,endrdt);
     //printf("\nalgorithm takes %20.15f seconds.\n", elapsed_time );
 
+    return 0;
 }
 
 int isFastaFile(char* fn){
