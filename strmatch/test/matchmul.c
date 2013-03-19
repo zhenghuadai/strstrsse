@@ -39,8 +39,10 @@ int main(int argc,char *argv[])
     }
     else
     {
-        for(i=0;i<5;i++)
-            fscanf(fp,"%d",&boolmatch[i]);
+        for(i=0;i<5;i++){
+            int n = fscanf(fp,"%d",&boolmatch[i]);
+            (void)n;
+        }
 
         fclose(fp);
     }	
@@ -121,4 +123,6 @@ int main(int argc,char *argv[])
       printf("\n algorithm takes %20.15f seconds.\n", elapsed_time );
       */	 
 
+    (void) stats_flag;
+    return 0;
 }

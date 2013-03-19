@@ -43,7 +43,7 @@ char * Getsubjectfromfile(char *pfname)
 
 int   Getpatternfromfile(char *pfname,char **patts)
 {
-    int psubstep=0,buffcounts;
+    int psubstep=0;
     //      unsigned int temp;
     char buff[256];
     char * psub;
@@ -84,7 +84,6 @@ int   Getpatternfromfile(char *pfname,char **patts)
 char* GetGenesubjectfromfile(char *pfname)
 {
     int psubstep=0,buffcounts;
-    unsigned int temp;
     char * psub;
     char temp2;
     FILE *pf;	
@@ -121,7 +120,7 @@ char* GetGenesubjectfromfile(char *pfname)
 
 int   GetGenepatternfromfile(char *pfname,char **patts)
 {
-    int psubstep=0,buffcounts;
+    int psubstep=0;
     //      unsigned int temp;
     char buff[256];
     char * psub;
