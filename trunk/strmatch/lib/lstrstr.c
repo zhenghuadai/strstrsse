@@ -224,7 +224,7 @@ char* lstrchr(const char *text,char c)
 	p[0] =p[1] = p[2]=p[3] = c;
 	byte4c = byte4c0;
 
-	for (char_ptr = text; ((unsigned int)char_ptr 
+	for (char_ptr = text; ((size_t)char_ptr 
 				& (sizeof(unsigned int) - 1)) != 0;
 			++char_ptr) {
 		if (*char_ptr == '\0')return NULL;
