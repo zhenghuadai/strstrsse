@@ -23,6 +23,7 @@
 #include <tmmintrin.h>
 #include <pmmintrin.h>
 #include "strstrsse.h"
+#include <string.h> // for strlen
 
 #include "report.h"
 char* strchrsse(const char *str,char c);
@@ -89,14 +90,12 @@ static inline unsigned int has_byte_null(__m128i a0)
 
 char* STRSTRSSE42A(const char* text, const char* pattern)
 {
-    const unsigned char *ss1 = text;
-    const unsigned char *s2 = pattern;
-    char *pp= text;
-    char *pt= pattern;
+    const unsigned char *ss1 = (const unsigned char*)text;
+    const unsigned char *s2 = (const unsigned char*)pattern;
     unsigned char * chPtrAligned = (unsigned char*)text;
     unsigned int ret_z;
     unsigned int pref=0;
-    int plen = strlen(pattern);
+    unsigned int plen = strlen(pattern);
     __m128i premV, postmV;
     __m128i * sseiPtr = (__m128i *) text;
     __m128i sseiWord0 ;//= *sseiPtr ;
@@ -105,20 +104,19 @@ char* STRSTRSSE42A(const char* text, const char* pattern)
     __m128i shf_indexV;
     if(text==NULL) return NULL;
     if(text[0] == 0) {
-        return pattern[0]?NULL:text;
+        return pattern[0]?NULL:(char*)text;
     }
     if(pattern ==NULL) return NULL;
-    if(pattern[0] == 0) return text;
+    if(pattern[0] == 0) return (char*)text;
 	if(pattern[1] == 0) return STRCHR(text,pattern[0]); 
     if(plen > 16) return __STRSTRSSE42A_gt16(text, pattern); 
 
     {
-        int i;
         int j;
-        int preBytes = 16 - (((unsigned long long) text) & 15);
+        int preBytes = 16 - (((size_t) text) & 15);
         char	chara = pattern[0];
         char	charb = pattern[1];
-        char	charc = pattern[2];
+//        char	charc = pattern[2];
         char* bytePtr;
 
         preBytes &= 15;
@@ -129,7 +127,7 @@ char* STRSTRSSE42A(const char* text, const char* pattern)
             if(text[j] == chara){
                 if(text[j+1] == charb){
                     int i=1;
-                    bytePtr = & text[j];
+                    bytePtr = (char*) & text[j];
                     while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
                     if(pattern[i] == 0) REPORT(bytePtr);
                     if(bytePtr[i] == 0) return NULL;
@@ -144,7 +142,7 @@ alignStart:
         if(plen <= 16){
             shf_indexV = SIMD_LOAD(IndexVector[plen]);
             __attribute__ ((aligned (16))) char pbuf[16];
-            int i=0, j=0;
+            unsigned int i=0, j=0;
             for(i =0;i<16-plen ;i++){
                 pbuf[i] = 0xff;
             }
@@ -203,12 +201,12 @@ alignStart:
     if( (pref != 16)&& (pref <= 16 - plen)){
         char* p = ((char*)sseiPtr ) + pref; 
         char* pend = p + plen;
-        while((p <pend) && (*p != NULL)) p++;
+        while((p < pend) && (*p != 0)) p++;
         if(p == pend){
                 REPORT(pend - plen);
         }
     }
-
+    return NULL;
 }
 
 __inline int simple_strcmp(const char* s1, const char* s2)
@@ -223,14 +221,11 @@ __inline int simple_strcmp(const char* s1, const char* s2)
 /*Don't call this function directly. It must only be called in STRSTRSSE42A  */
 static char* __STRSTRSSE42A_gt16(const char* text, const char* pattern)
 {
-    const unsigned char *ss1 = text;
-    const unsigned char *s2 = pattern;
-    char *pp= text;
-    char *pt= pattern;
+    const unsigned char *ss1 = (const unsigned char*)text;
+    const unsigned char *s2 = (const unsigned char*)pattern;
     unsigned char * chPtrAligned = (unsigned char*)text;
     unsigned int ret_z;
     unsigned int pref=0;
-    int patlen = strlen(pattern);
     int plen = 16;
     __m128i premV, postmV;
     __m128i *sseiPtr = (__m128i *) text;
@@ -248,12 +243,11 @@ static char* __STRSTRSSE42A_gt16(const char* text, const char* pattern)
         */
     plen = 16;
     {
-        int i;
         int j;
-        int preBytes = 16 - (((unsigned long long) text) & 15);
+        int preBytes = 16 - (((size_t) text) & 15);
         char	chara = pattern[0];
         char	charb = pattern[1];
-        char	charc = pattern[2];
+//        char	charc = pattern[2];
         char* bytePtr;
 
         preBytes &= 15;
@@ -264,7 +258,7 @@ static char* __STRSTRSSE42A_gt16(const char* text, const char* pattern)
             if(text[j] == chara){
                 if(text[j+1] == charb){
                     int i=1;
-                    bytePtr = & text[j];
+                    bytePtr = (char*)& text[j];
                     while((pattern[i] )&&(bytePtr[i] == pattern[i])) i++;
                     if(pattern[i] == 0) REPORT(bytePtr);
                     if(bytePtr[i] == 0) return NULL;
@@ -324,5 +318,5 @@ alignStart:
         pref = SEARCH_PRE_F(sseiPattern, sseiWord0);
         ret_z = has_byte_null(sseiWord0); 
     }
-   
+    return NULL;
 }
