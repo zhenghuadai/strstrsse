@@ -1,4 +1,6 @@
-There is two library, one is for single pattern string matching which is located at strmatch/lib, another is for multipattern which is located at strmatch/lib/mMatch
+There are two libraries.
+* one is for single pattern string matching which is located at strmatch/lib.
+* another is for multipattern which is located at strmatch/lib/mMatch
 1. To build single-pattern string matching lib:
     cd strmatch/lib 
     make
