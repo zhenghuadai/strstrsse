@@ -1,0 +1,1 @@
+use sse to optimize strstr
