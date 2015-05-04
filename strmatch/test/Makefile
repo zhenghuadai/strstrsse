@@ -11,10 +11,15 @@ endif
 ifeq ($(debug), yes)
 Gflag= -g -O0 #-fPIC 
 LIBSTRMATCH= -lstrmatchd
+OBJ_DIR = .debug/
 else 
 Gflag=-O3 #-fPIC 
 LIBSTRMATCH= -lstrmatch
+OBJ_DIR = .release/
 endif
+
+$(shell mkdir -p $(OBJ_DIR))
+$(shell mkdir -p $(OBJ_DIR)/others)
 
 LIB=$(LIBSTRMATCH)
 EXT:=
@@ -38,12 +43,14 @@ THREAD_INC=../../..//codelibrarydzh/include
 LIBPATH= -L../lib -L../lib/mMatch
 #Gflag= -O0 -g
 #algobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o 
-utilobj:= Mtime.o extract.o 
-matchobj:=match.o    ${utilobj} ../lib/strstrsse2.o io.o  # ${algobj} 
-matchthreadobj:=matchthread.o    ${utilobj} ../lib/strstrsse2.o io.o  # ${algobj} 
-matchgeneobj:=match.o ${utilobj} ${algobj} 
-matchmulobj:=matchmul.o   extract.o Mtime.o ../others/acsmx.o ../others/snortmwm.o
-matchasmobj:=matchasm.o Ady.o extract.o  Mtime.o
+utilobj:= $(OBJ_DIR)/Mtime.o $(OBJ_DIR)/extract.o #utilobj=$(foreach i, $(utilobj), $(OBJ_DIR)/${i}.o)
+matchobj:=$(OBJ_DIR)/match.o    ${utilobj} ../lib/strstrsse2.o $(OBJ_DIR)/io.o  # ${algobj} 
+matchthreadobj:=$(OBJ_DIR)/matchthread.o    ${utilobj} ../lib/strstrsse2.o  # ${algobj} 
+matchgeneobj:=$(OBJ_DIR)/match.o ${utilobj} ${algobj} 
+matchmulobj:=$(OBJ_DIR)/matchmul.o $(utilobj)  $(OBJ_DIR)/others/acsmx.o $(OBJ_DIR)/others/snortmwm.o
+matchasmobj:=$(OBJ_DIR)/matchasm.o Ady.o $(OBJ_DIR)/extract.o  $(OBJ_DIR)/Mtime.o
+
+
 all: match${EXT} matchmul${EXT} 
 
 match${EXT}: ${matchobj}
@@ -58,17 +65,23 @@ matchmul${EXT}:${matchmulobj}
 	${Compiler} ${Gflag}  ${INC_PATH} -static -o matchmul ${matchmulobj}  ${LIB} ${LIBPATH}
 matchasm${EXT}:${matchasmobj}
 	${Compiler} ${Gflag} -o matchasm ${matchasmobj}
-mmatch${EXT}:mmatch.o ${utilobj}
+mmatch${EXT}:$(OBJ_DIR)/mmatch.o ${utilobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
-genematch${EXT}:genematch.o ${utilobj} io.o
+genematch${EXT}:$(OBJ_DIR)/genematch.o ${utilobj} $(OBJ_DIR)/io.o
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
-%.o:%.c
-	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC}
-%.o:%.cpp
+$(OBJ_DIR)/%.o:%.c
+	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC} 
+$(OBJ_DIR)/%.o:%.cpp
 	${CXX} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC}
+$(OBJ_DIR)/others/%.o $(OBJ_DIR)/others/%.o:../others/%.c
+	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC} 
 ../lib/strstrsse2.o:../lib/strstrsse2.c
 	${Compiler} ${Gflag} ${INC_PATH} -msse2  -c $< -o $@ 
+../lib/libstrmatch.a:
+	make -C ../lib
+../lib/libstrmatchd.a:
+	make -C ../lib debug=yes
 clean:
 	rm -f *.o
 	rm -f match
@@ -78,11 +91,13 @@ clean:
 	rm -f matchgene
 	rm -f *.exe 
 	rm -f ${matchmulobj}
+	rm -rf .debug .release 
 
-mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx
-genematch.o: genematch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx
+
+$(OBJ_DIR)/mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx
+$(OBJ_DIR)/genematch.o: genematch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx
 ifeq ($(debug), yes)
-match.o:match.c ../lib/match.h ../lib/libstrmatchd.a 
+$(OBJ_DIR)/match.o:match.c ../lib/match.h ../lib/libstrmatchd.a 
 else
-match.o:match.c ../lib/match.h ../lib/libstrmatch.a 
+$(OBJ_DIR)/match.o:match.c ../lib/match.h ../lib/libstrmatch.a 
 endif
