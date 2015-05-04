@@ -29,6 +29,7 @@
 #include <list>
 #include <string.h>
 #include "io.h"
+#include <sys/stat.h>
 using namespace std;
 #define EQ5(d, a0, a1, a2, a3, a4) ( (d==a0) || (d==a1) ||(d==a2) ||(d==a3) ||(d==a4) )
 template<CASE_TYPE case_type>
