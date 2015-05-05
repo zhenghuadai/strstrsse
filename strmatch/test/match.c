@@ -144,9 +144,9 @@ int main(int argc,char *argv[])
     match[16].matchalg        =Sshiftand;
     match[16].matchalg2        =Sshiftand2;
     match[16].matchalgstr    ="Sshiftand";
-    match[17].matchalg        =SshiftorW;
-    match[17].matchalg2        =SshiftorW2;
-    match[17].matchalgstr    ="SshiftorW";
+    match[17].matchalg        = 0;
+    match[17].matchalg2        = 0;
+    match[17].matchalgstr    ="";
     match[18].matchalg        =strstrsse;
     match[18].matchalg2        =0;
     match[18].matchalgstr    ="strstrsse2";

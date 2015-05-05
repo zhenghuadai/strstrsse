@@ -72,6 +72,8 @@ genematch${EXT}:$(OBJ_DIR)/genematch.o ${utilobj} $(OBJ_DIR)/io.o
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 strstrtest${EXT}:$(OBJ_DIR)/strstrtest.o
 	${CXX} ${Gflag} ${INC_PATH} -static  -o $@ $<  ${LIB} ${LIBPATH} 
+mmatchtest${EXT}:$(OBJ_DIR)/mmatchtest.o ${utilobj}
+	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
 $(OBJ_DIR)/%.o:%.c
 	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC} 
@@ -85,6 +87,10 @@ $(OBJ_DIR)/others/%.o $(OBJ_DIR)/others/%.o:../others/%.c
 	make -C ../lib
 ../lib/libstrmatchd.a:
 	make -C ../lib debug=yes
+../lib/mMatch/libmmatch.a:
+	make -C ../lib/mMatch
+../lib/mMatch/libmmatchd.a:
+	make -C ../lib/mMatch debug=yes
 clean:
 	rm -f *.o
 	rm -f match
@@ -101,6 +107,8 @@ $(OBJ_DIR)/mmatch.o: mmatch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../l
 $(OBJ_DIR)/genematch.o: genematch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.h ../lib/mMatch/mAc.hxx  ../lib/mMatch/mWm.h ../lib/mMatch/mWm.hxx
 ifeq ($(debug), yes)
 $(OBJ_DIR)/match.o:match.c ../lib/match.h ../lib/libstrmatchd.a 
+$(OBJ_DIR)/mmatch.o:mmatch.cpp ../lib/match.h ../lib/mMatch/libmmatchd.a 
 else
 $(OBJ_DIR)/match.o:match.c ../lib/match.h ../lib/libstrmatch.a 
+$(OBJ_DIR)/mmatch.o:mmatch.cpp ../lib/match.h ../lib/mMatch/libmmatch.a 
 endif
