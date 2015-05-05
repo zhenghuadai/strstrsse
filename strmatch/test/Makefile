@@ -37,6 +37,7 @@ ifeq ($(arch), x64)
 Gflag+= -m64
 endif
 
+Gflag+= -std=c++11
 
 INC_PATH= -I../lib -I../others -I../lib/mMatch
 THREAD_INC=../../..//codelibrarydzh/include
@@ -69,6 +70,8 @@ mmatch${EXT}:$(OBJ_DIR)/mmatch.o ${utilobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 genematch${EXT}:$(OBJ_DIR)/genematch.o ${utilobj} $(OBJ_DIR)/io.o
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
+strstrtest${EXT}:$(OBJ_DIR)/strstrtest.o
+	${CXX} ${Gflag} ${INC_PATH} -static  -o $@ $<  ${LIB} ${LIBPATH} 
 
 $(OBJ_DIR)/%.o:%.c
 	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC} 

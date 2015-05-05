@@ -24,8 +24,8 @@ int output(char* text, int i, char* pat);
 int  outputs(int whichp,int addr);
 #define STOP 1
 #define CONTINUE 0
-#define OUTPUT(x) if( report_function((const char*)text, x, (const char*)pat) == STOP ) return (char*)(text + (x));
-#define OUTPUT3(text, x , pat) if( report_function((const char*)text, x, (const char*)pat) == STOP ) return (char*) (text +(x)) ;
+#define OUTPUT(x)              if( report_function((const char*)text, x, (const char*)pat) == STOP ) return (char*)(text + (x));
+#define OUTPUT3(text, x , pat) if( report_function((const char*)text, x, (const char*)pat) == STOP ) return (char*)(text +(x)) ;
 //#define SRET(i) if( (i)< n) return (text + j) ; else return NULL;
 #define SRET(i)  return NULL;
 #define OUTPUTs(which, i) if( report_function(text, i, patts[which]) == STOP ) return ;

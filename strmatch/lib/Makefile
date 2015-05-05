@@ -33,7 +33,7 @@ Gflag+= -m64
 endif
 
 Gflag+= ${Inc}
-ssrc:= Sbf.c Sbom.c Smp.c Skmp.c Sbm.c Sbmh.c Sbmhs.c Ssmith.c Sdfa.c Sbdm.c Sbndm.c Sshiftor.c Sshiftand.c Skr.c Sbyh.c Sskip.c Skmpskip.c dsor.c strstrsse.c lstrstr.c report.c  # strstrmmx.c strstrsse2.c 
+ssrc:= Sbf.c Sbom.c Smp.c Skmp.c Sbm.c Sbmh.c Sbmhs.c Ssmith.c Sdfa.c Sbdm.c Sbndm.c Sshiftor.c Sshiftand.c Skr.c Sbyh.c Sskip.c Skmpskip.c strstrsse.c lstrstr.c report.c  # strstrmmx.c strstrsse2.c 
 ifeq ($(SSE42), yes)
 ssrc+=strstrsse42.c strstrsse42a.c 
 Gflag+= -msse4

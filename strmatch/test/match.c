@@ -38,20 +38,13 @@ int main(int argc,char *argv[])
     /*  读入目标串和模式串 初始化 */ 
     int i;
     char *subjfname=0,*quryfname=0;
-//    time_t   start, finish;
     double elapsed_time;
     int n, m;
     int isGene = 0;
-    //void (* matchalg[20])(char * text,char * pat);
-    //void (* matchalg2[20])(char * text,char * pat,int n, int m);
-    //char * matchalgstr[20]={0};
-    //int boolmatch[20];
     matchTest match[ALLALG ];
     double time_used[ALLALG ];
     FILE *fp;
     int verbose = 0;
-    //FILE *fp;
-//    _U64 startrdt,endrdt;
     if(argc==1)
     {
         printf("match [-t text_file|-s text] [-a pattern| -q pattern_file] -v n\n");
@@ -63,11 +56,9 @@ int main(int argc,char *argv[])
         printf("-v n  \n");
         printf("   n is 0: the reporter does nothing  \n");
         printf("   n is 1: the reporter print the matching position\n");
-		printf("for example: match -s helloworld -a llo -v 1\n");
-		printf("for example: match -t helloworld.txt -a llo -v 1\n");
+        printf("for example: match -s helloworld -a llo -v 1\n");
+        printf("for example: match -t helloworld.txt -a llo -v 1\n");
         exit(0);
-        //subjfname="sub";
-        //quryfname="pattern";
     }
     else
     {
@@ -86,11 +77,11 @@ int main(int argc,char *argv[])
                         Pat=argv[i+1];
                         break;
                     case 's': Text = argv[i+1];
-                        break;
+                              break;
                     case 'v':
-						if (i+1 < argc)
-							verbose = atoi(argv[i+1]);
-                        break;
+                              if (i+1 < argc)
+                                  verbose = atoi(argv[i+1]);
+                              break;
                 }
             }
         }
@@ -99,8 +90,6 @@ int main(int argc,char *argv[])
 
     for(i=0;i<ALLALG ;i++)
     {
-        //matchalg[i]=NULL;
-        //matchalg2[i]=NULL;
         match[i].matchalg = NULL;
         match[i].matchalg2= NULL;
     }
@@ -161,15 +150,15 @@ int main(int argc,char *argv[])
     match[18].matchalg        =strstrsse;
     match[18].matchalg2        =0;
     match[18].matchalgstr    ="strstrsse2";
-    #ifdef TEST_2
+#ifdef TEST_2
     match[19].matchalg        =lstrstrsseLong;
     match[19].matchalg2        =0;
     match[19].matchalgstr    ="lstrstrsse2";
     match[20].matchalg        =lstrstr;
     match[20].matchalg2        =0;
     match[20].matchalgstr    ="lstrstr";
-    #endif
-    #ifdef SSE4
+#endif
+#ifdef SSE4
     match[21].matchalg        =strstrsse42;
     match[21].matchalg2        =0;
     match[21].matchalgstr    ="strstrsse42";
@@ -177,10 +166,7 @@ int main(int argc,char *argv[])
     match[22].matchalg        =strstrsse42a;
     match[22].matchalg2        =0;
     match[22].matchalgstr    ="strstrsse42a";
-    #endif
-   // match[22].matchalg        =strstrmmx;
-   // match[22].matchalg2        =0;
-   // match[22].matchalgstr    ="strstrmmx";
+#endif
     for(i=0;i<ALLALG;i++)
     {
         match[i].boolmatch=1;
@@ -204,80 +190,71 @@ int main(int argc,char *argv[])
 
     if(quryfname !=NULL)
         Pat=Getsubjectfromfile(quryfname);
-	if(subjfname!=NULL){
-		if(isGene){
-			Text=GetgenefromfileU(subjfname);
-		}else{
-			Text=Getsubjectfromfile(subjfname);
-		}
-	}
-	n = strlen(Text);
-	m = strlen(Pat);
+    if(subjfname!=NULL){
+        if(isGene){
+            Text=GetgenefromfileU(subjfname);
+        }else{
+            Text=Getsubjectfromfile(subjfname);
+        }
+    }
+    n = strlen(Text);
+    m = strlen(Pat);
 
-	if(Pat[m-1] == '\n') Pat[m-1]=0;
+    if(Pat[m-1] == '\n') Pat[m-1]=0;
 
-	occurnum=0;
-	if((fp=fopen("result","w"))==NULL)
-	{
-		printf("open result file err");
-		exit(0);
-	}
-	fprintf(fp,"***********************************************\n");
-	fprintf(fp,"length of Text:%d\nlength of pattern:%d\n ",strlen(Text),strlen(Pat));
-	fprintf(stdout,"length of Text:%d\nlength of pattern:%d %s\n",strlen(Text),strlen(Pat),Pat);
-	fprintf(stdout,"Text Address: %p; Pattern Address:%p\n ",Text,Pat);
+    occurnum=0;
+    if((fp=fopen("result","w"))==NULL)
+    {
+        printf("open result file err");
+        exit(0);
+    }
+    fprintf(fp,"***********************************************\n");
+    fprintf(fp,"length of Text:%d\nlength of pattern:%d\n ",strlen(Text),strlen(Pat));
+    fprintf(stdout,"length of Text:%d\nlength of pattern:%d %s\n",strlen(Text),strlen(Pat),Pat);
+    fprintf(stdout,"Text Address: %p; Pattern Address:%p\n ",Text,Pat);
 
-	setReportFunc(SEARCH_SILENT);
-	for(i=0;i<ALLALG;i++)
-	{   
-		if(match[i].matchalg2 && match[i].boolmatch)
-			match[i].matchalg2(Text,Pat, n, m);
-		if(match[i].matchalg && match[i].boolmatch)
-			match[i].matchalg(Text,Pat);
-	}
+    setReportFunc(SEARCH_SILENT);
+    for(i=0;i<ALLALG;i++)
+    {   
+        if(match[i].matchalg2 && match[i].boolmatch)
+            match[i].matchalg2(Text,Pat, n, m);
+        if(match[i].matchalg && match[i].boolmatch)
+            match[i].matchalg(Text,Pat);
+    }
 
-	if(verbose ==0)
-		setReportFunc(SEARCH_SILENT);
-	else if(verbose == 1) 
-		setReportFunc(SEARCH_ALL);
+    if(verbose ==0)
+        setReportFunc(SEARCH_SILENT);
+    else if(verbose == 1) 
+        setReportFunc(SEARCH_ALL);
     else 
-		setReportFunc(SEARCH_FIRST);
+        setReportFunc(SEARCH_FIRST);
 
-	printf("strstr(char * text,char * pat,int n, int m): length of text and pattern are known\n");
-	for(i=0;i<ALLALG;i++)
-	{   
-		if(match[i].matchalg2 && match[i].boolmatch)
-		{
-			mdtime(0);
-			//Mtime(&startrdt);
-			//matchalg[i](Text,Pat);
-			match[i].matchalg2(Text,Pat, n, m);
-
-			//Mtime(&endrdt);
-			//elapsed_time =Mdifftime(startrdt,endrdt);
-			elapsed_time=mdtime(1);
-			time_used[i] = elapsed_time;
-			printf("algorithm %15s takes %20f clock cycles.\n",match[i].matchalgstr, elapsed_time );
-			fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
-
-		}
-
-	}//end for
-
-	printf("strstr(char * text,char * pat): text and pattern are NULL-terminated\n");
-	for(i=0;i<ALLALG;i++)
-	{   
-		if(match[i].matchalg&& match[i].boolmatch)
-		{
-            char* pcur;
-			mdtime(0);
-			//Mtime(&startrdt);
-			//matchalg[i](Text,Pat);
-			pcur = match[i].matchalg(Text,Pat);
-
-			//Mtime(&endrdt);
-			//elapsed_time =Mdifftime(startrdt,endrdt);
+    printf("strstr(char * text,char * pat,int n, int m): length of text and pattern are known\n");
+    for(i=0;i<ALLALG;i++)
+    {   
+        if(match[i].matchalg2 && match[i].boolmatch)
+        {
+            mdtime(0);
+            match[i].matchalg2(Text,Pat, n, m);
             elapsed_time=mdtime(1);
+            time_used[i] = elapsed_time;
+            printf("algorithm %15s takes %20f clock cycles.\n",match[i].matchalgstr, elapsed_time );
+            fprintf(fp,"%20.15f seconds:algorithm %s takes \n ", elapsed_time, match[i].matchalgstr);
+
+        }
+
+    }//end for
+
+    printf("strstr(char * text,char * pat): text and pattern are NULL-terminated\n");
+    for(i=0;i<ALLALG;i++)
+    {   
+        if(match[i].matchalg&& match[i].boolmatch)
+        {
+            char* pcur;
+            mdtime(0);
+            pcur = match[i].matchalg(Text,Pat);
+            elapsed_time=mdtime(1);
+
             time_used[i] = elapsed_time;
             if(verbose ==2)
                 printf("(%d)", pcur - Text);
@@ -302,10 +279,6 @@ int main(int argc,char *argv[])
     printf("strstrsse42a speedup to bmhStr:%f\n", time_used[2] / time_used[22]);
 #endif
     /* 输出结果 */ 
-    //printf("\nalgorithm takes %6.2f seconds.\n", elapsed_time );
-    // elapsed_time =Mdifftime(startrdt,endrdt);
-    //printf("\nalgorithm takes %20.15f seconds.\n", elapsed_time );
-
     return 0;
 }
 
