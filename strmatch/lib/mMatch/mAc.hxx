@@ -85,7 +85,7 @@ mAcBase_DEFINITION_HEADER(void)::buildTrie()
     for(int i=0;i<mPatNum; i++){
         acNodeP curNode = pRoot();
         char* p = mPatterns[i];
-        while( *p && (curNode->go[*p]!=NULL)){ curNode=curNode->go[*p]; p++; }
+        while( *p && (curNode->go[(int)*p]!=NULL)){ curNode=curNode->go[(int)*p]; p++; }
         for(; *p; p++){
             Uchar c=*p;
             curNode-> go[c] = makeNode();
@@ -102,7 +102,7 @@ mAcBase_DEFINITION_HEADER(void)::buildGeneTrie()
     for(int i=0;i<mPatNum; i++){
         acNodeP curNode = pRoot();
         unsigned char* p =(unsigned char*) mPatterns[i];
-        int n = strlen((const char *)p);
+        //int n = strlen((const char *)p);
         while( *p && (curNode->go[agct2num4(*p)]!=NULL)){ 
             curNode=curNode->go[agct2num4(*p)]; p++; }
         for(; *p; p++){
@@ -185,6 +185,8 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
     int mStateNum = ac.mStateNum;
     typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
     travalT Queue;
+    (void)patIDList;
+    (void)patMatchList;
 #if 0
     map<unsigned long long, U16> Map;
 #define MapIndex(a) Map[(unsigned long long)a]
@@ -317,6 +319,7 @@ Ac_DEFINITION_HEADER(template<geneCodeFunc geneCode> int)::searchGene(acNodeP& s
         state = nextState(state, c);                                          
         if(isMatched(state)) {                                                
             int ret = reportList(matchedList(state), (char*)p - txt);         
+            (void)ret;
         }                                                                     
     }                                                                         
     return 0;
@@ -333,6 +336,7 @@ Ac_DEFINITION_HEADER( template<geneCodeFunc geneCode> int)::searchGene(acNodeP& 
         state = nextState(state, c);                                           
         if(isMatched(state)) {                                              
             int ret = reportList(matchedList(state), (char*)p - txt);          
+            (void)ret;
         }                                                                      
     }                                                                          
     return 0;
@@ -348,6 +352,7 @@ Ac_DEFINITION_HEADER(int)::search(acNodeP& state, char* txt)
         state = nextState(state, c);                                       
         if(isMatched(state)) {                                          
             int ret = reportList(matchedList(state), (char*)p - txt);      
+            (void)ret;
         }                                                                  
     }                                                                      
     return 0;
@@ -362,6 +367,7 @@ Ac_DEFINITION_HEADER(int)::search(acNodeP& state, char* txt, int n)
         state = nextState(state, c);                                        
         if(isMatched(state)) {                                           
             int ret = reportList(matchedList(state), (char*)p - txt);       
+            (void)ret;
         }                                                                   
     }                                                                       
     return 0;

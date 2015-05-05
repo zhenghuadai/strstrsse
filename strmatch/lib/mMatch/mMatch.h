@@ -66,9 +66,9 @@ class memBase
     public:
         memBase(){bytesUsed =0;}
         ~memBase(){  /*printf("destroy :%d bytes left\n", bytesUsed);*/ ASSERT( bytesUsed <=10);}
-		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); if(DEBUG_MALLOC)printf("+%d=%d\n", _msize(p), bytesUsed); return p;}
+		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); if(DEBUG_MALLOC)printf("+%zd=%d\n", _msize(p), bytesUsed); return p;}
         template<typename T>
-		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); if(DEBUG_MALLOC) printf("-%d=%d\n", _msize(p),bytesUsed);free(p); p=NULL;}
+		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); if(DEBUG_MALLOC) printf("-%zd=%d\n", _msize(p),bytesUsed);free(p); p=NULL;}
         void mDecrease(size_t n){bytesUsed -=n;}
         size_t memMalloced(){return bytesUsed;}
     protected:
@@ -82,24 +82,25 @@ class mMatch:public memBase
         mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent; report=reportDefault;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
         ~mMatch(){ MFree(mPatLen); }
+        enum{SEARCH_CONTINUE=0,SEARCH_STOP=1 };
 interface:
 		//!----------------------------------------------------------------------------
 		// 
 		//!----------------------------------------------------------------------------
-        virtual int search(char* txt, int n) 		{return 0;}
-        virtual int search(char* txt) 			 	{return 0;}
-        virtual int searchGene(char* txt, int n) 	{return 0;}
-        virtual int searchGene(char* txt) 			{return 0;}
-        virtual int searchGene_(char* txt, int n) 	{return 0;}
-        virtual int searchGene_(char* txt) 			{return 0;}
+        virtual int search(char* txt, int n) 		{(void)txt; (void)n; return 0;}
+        virtual int search(char* txt) 			 	{(void)txt; return 0;}
+        virtual int searchGene(char* txt, int n) 	{(void)txt; (void)n; return 0;}
+        virtual int searchGene(char* txt) 			{(void)txt; return 0;}
+        virtual int searchGene_(char* txt, int n) 	{(void)txt; (void)n; return 0;}
+        virtual int searchGene_(char* txt) 			{(void)txt; return 0;}
 
 		//!----------------------------------------------------------------------------
         //! continue searching 
 		//!----------------------------------------------------------------------------
-        virtual int searchC(char* txt, int n) 		{return 0;}
-        virtual int searchC(char* txt) 				{return 0;}
-        virtual int searchGeneC(char* txt, int n) 	{return 0;}
-        virtual int searchGeneC(char* txt) 			{return 0;}
+        virtual int searchC(char* txt, int n) 		{(void)txt; (void)n; return 0;}
+        virtual int searchC(char* txt) 				{(void)txt; return 0;}
+        virtual int searchGeneC(char* txt, int n) 	{(void)txt; (void)n; return 0;}
+        virtual int searchGeneC(char* txt) 			{(void)txt; return 0;}
 
 		//!----------------------------------------------------------------------------
 		// 
@@ -131,8 +132,8 @@ interface:
 		//!----------------------------------------------------------------------------
         virtual size_t memUsed(){ return memMalloced();}
     public:
-        static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx);}
-        static int reportSilent(int patid, int idx){}
+        static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx); return SEARCH_CONTINUE;}
+        static int reportSilent(int patid, int idx){(void)patid; (void)idx;return SEARCH_CONTINUE;}
     protected:
         virtual void compile(){};
         unsigned int charNum(){unsigned int n=0; for(int i=0;i<mPatNum;i++) n += strlen(mPatterns[i]); return n; }
@@ -151,7 +152,7 @@ interface:
             return ret;
         }
         int reportList(int* patIDList, int idx){
-            reportList(patIDList, report, idx);
+            return reportList(patIDList, report, idx);
         }
         unsigned int minPatLen(){unsigned int n=patLen(0); for(int i=1;i<mPatNum;i++) n=(n < patLen(i)? n:patLen(i)); return n; }
     private:

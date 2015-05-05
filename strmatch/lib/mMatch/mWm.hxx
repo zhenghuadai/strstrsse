@@ -99,6 +99,7 @@ mWm_DEFINITION_HEADER(int)::search(char* txt, int n)
             p++;
         }
     }//! end while
+    return 0;
 }
 
 }

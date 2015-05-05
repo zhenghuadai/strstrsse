@@ -30,6 +30,7 @@ class mWm :public mMatch
 {
 	private:
 		enum{SHIFT_WIDTH=WM_BLOCK_WIDTH, SHIFT_TABLE_SIZE=(1<< ((SHIFT_WIDTH * 8)/HashCompressRatio))};
+        enum{UN_SUPPORTED = -1};
 	public:
 		mWm(char** pat, int n) : mMatch(pat, n),matchList(0), matchArray(0),matchArrayMem(0){type=maWM; mWm::compile();}
         ~mWm();
@@ -37,14 +38,14 @@ class mWm :public mMatch
 		virtual void compile();
 		virtual int search(char* txt, int n);
 		virtual int search(char* txt);
-		virtual int searchGene(char* txt, int n){};
-		virtual int searchGene(char* txt){};
-		virtual int searchGene4(char* txt, int n){};
-		virtual int searchGene4(char* txt){};
-		virtual int searchGeneC(char* txt, int n){};
-		virtual int searchGeneC(char* txt){};
-		virtual int searchGene4C(char* txt, int n){};
-		virtual int searchGene4C(char* txt){};
+		virtual int searchGene(char* txt, int n){(void)txt;(void)n; return UN_SUPPORTED; };
+		virtual int searchGene(char* txt){(void)txt;return UN_SUPPORTED; };
+		virtual int searchGene4(char* txt, int n){(void)txt;(void)n; return UN_SUPPORTED; };
+		virtual int searchGene4(char* txt){(void)txt;return UN_SUPPORTED; };
+		virtual int searchGeneC(char* txt, int n){(void)txt;(void)n; return UN_SUPPORTED; };
+		virtual int searchGeneC(char* txt){(void)txt;return UN_SUPPORTED; };
+		virtual int searchGene4C(char* txt, int n){(void)txt;(void)n; return UN_SUPPORTED; };
+		virtual int searchGene4C(char* txt){(void)txt;return UN_SUPPORTED; };
 	private:
 		//Uint hash(Uchar* pc){ return ((U16*)pc)[-1];}
 		int reportwmList(list<int>* patIDList, int idx, char* txt){ 
