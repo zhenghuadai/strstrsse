@@ -226,6 +226,7 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
         nodes[s].mMatchNum= Map2[s] -> mMatchNum;
     }
 
+    delete Map;
     delete Map2;
 }
 
