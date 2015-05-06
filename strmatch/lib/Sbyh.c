@@ -38,22 +38,23 @@ char* SbyhSearch(unsigned char *text,int m,int n,int ch[]){
 	//int yu=2*m; 
 	//int  count[2*m],yu;
 
-	for(j=0;j<2*m;j++) {
+	for(j=0;j<yu;j++) {
 		count[j]=0;
 	}
-	for(j=0;j<m;j++)
+	for(j=0;j<m-1;j++)
 		if((ch[text[j]]!=-1)&&(j-ch[text[j]]>=0) )
 			count[j-ch[text[j]]]++;
-	for(j=m;j<n;j++){
-		if(ch[text[j]]!=-1)	
+	for(j=m-1;j<n;j++){
+		if(ch[text[j]]!=-1){	
 			count[(j-ch[text[j]])%yu]++;
+        }
 
-		if(count[(j-m)%yu]==(m))
+		if(count[(j-m +1)%yu]==(m))
 		{
 			//OUTPUT(j-m);
-			OUTPUT3(text, j-m, ch);
+			OUTPUT3(text, j-m +1, ch);
 		}
-		count[(j-m)%yu]=0;
+		count[(j-m+1)%yu]=0;
 	}	
 	SRET(j-m);
 }
