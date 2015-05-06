@@ -116,7 +116,6 @@ int main(int argc,char *argv[])
 	static int stats_flag=0;
 	char *subjfname=0,*quryfname=0;
 	double elapsed_time;
-	void (* matchalg[5])(char * text,char * pat[],int num);
 	char * matchalgstr[5];
 	int boolmatch[5];
 	FILE *fp;
@@ -160,7 +159,6 @@ int main(int argc,char *argv[])
 	reportInfo(quryfname, subjfname);
 
 	for(i=0;i<5;i++){
-		matchalg[i]=NULL;
 		matchalgstr[i]=NULL;
 	}
 	matchalgstr[0]="ac";
@@ -185,11 +183,11 @@ int main(int argc,char *argv[])
 	printf("\n");
 	//printf("\n%d ok\n",strlen(Text));
 	/* µ÷ÓÃ´®Æ¥Åäº¯Êý */
-	//mAcBase<4> ac(patts, ps, geneAC);
-	Ac<mAcBase<4>> ac(patts, ps, geneACWid);
-	Ac<mAcBase<4>> rac(rcpatts, ps, geneACWid);
-//	Ac<mAcD<4,unsigned int>> acD(ac);
-	//mAcD<4,unsigned short> acD(ac);
+	//AcBase<4> ac(patts, ps, geneAC);
+	Ac<AcBase<4>> ac(patts, ps, geneACWid);
+	Ac<AcBase<4>> rac(rcpatts, ps, geneACWid);
+//	Ac<AcI<4,unsigned int>> acD(ac);
+	//AcI<4,unsigned short> acD(ac);
     //mWm<8,geneHashWm8,4> wm(patts, ps);
 
 	ac.setReportFunc(myreport);

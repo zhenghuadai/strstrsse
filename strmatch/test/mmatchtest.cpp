@@ -116,25 +116,25 @@ void Testmmatch::run()
         int ps = onetest.patterns.size();
         char** Patts = new char*[ps];
         for(int i =0; i<ps; i++) Patts[i] = (char*)onetest.patterns[i].c_str();
-        Ac<mAcBase<256,StoreArray>, UseBadChar> ac(Patts, ps, mACWid);
-        Ac<mAcD<256, U16 >,  UseBadChar> acD(Patts, ps, mACWid);
+        Ac<AcBase<256,StoreArray>, UseBadChar> ac(Patts, ps, mACWid);
+        Ac<AcI<256, U16 >,  UseBadChar> acD(Patts, ps, mACWid);
         mWm<> wm(Patts, ps);
-        //mAcBase<256> ac1(Patts, ps, mACWid);
-        //mAcD<> acD1(ac.getAutomaton());
+        //AcBase<256> ac1(Patts, ps, mACWid);
+        //AcI<> acD1(ac.getAutomaton());
 
         vector<Algorithm> alogrithms = {
-            {&ac, "Ac<mAcBase<256,StoreArray>"}, 
-            {&acD, "Ac<mAcD<256, U16 >,  UseBadChar>"},
+            {&ac, "Ac<AcBase<256,StoreArray>"}, 
+            {&acD, "Ac<AcI<256, U16 >,  UseBadChar>"},
             {&wm, "WM"}
-            //{&ac1, "mAcBase<256> "},
-            //{&acD1, "mAcD<>"}
+            //{&ac1, "AcBase<256> "},
+            //{&acD1, "AcI<>"}
         };
 
         for(auto algorithm : alogrithms){
             passed = run(algorithm, onetest);
             cout<<(passed?"pass ":"failed ") << algorithm.name << endl; 
         }
-        //Ac<mAcD<256, U16, UseBadChar>, 256, UseBadChar> acD2(ac.getAutomaton(), mACWid);
+        //Ac<AcI<256, U16, UseBadChar>, 256, UseBadChar> acD2(ac.getAutomaton(), mACWid);
         delete[] Patts;
     }
 }

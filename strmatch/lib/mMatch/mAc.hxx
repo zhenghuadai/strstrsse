@@ -27,24 +27,24 @@
 #include "mMatch.h"
 namespace dmMatch{
 
-#define mAcBase_DEFINITION_HEADER( type ) template<int CHAR_SET, StoreType ST> type mAcBase<CHAR_SET, ST>
+#define AcBase_DEFINITION_HEADER( type ) template<int CHAR_SET, StoreType ST> type AcBase<CHAR_SET, ST>
 
-mAcBase_DEFINITION_HEADER():: mAcBase(char** pat, int n) //: mMatch(pat, n)
+AcBase_DEFINITION_HEADER():: AcBase(char** pat, int n) //: mMatch(pat, n)
 {
     initAc(pat,n);
 }
 
-mAcBase_DEFINITION_HEADER(void ):: initAc(char** pat, int n)
+AcBase_DEFINITION_HEADER(void ):: initAc(char** pat, int n)
 {
     initAc(pat, n , (mAlgtype) 0);
 }
 
-mAcBase_DEFINITION_HEADER()::mAcBase(char** pat, int n, mAlgtype t) //: mMatch(pat, n)
+AcBase_DEFINITION_HEADER()::AcBase(char** pat, int n, mAlgtype t) //: mMatch(pat, n)
 {
     initAc(pat, n, t);
 }
 
-mAcBase_DEFINITION_HEADER(void)::initAc(char** pat, int n, mAlgtype t) 
+AcBase_DEFINITION_HEADER(void)::initAc(char** pat, int n, mAlgtype t) 
 {
     setPatterns(pat, n);
     type = t;
@@ -68,19 +68,19 @@ mAcBase_DEFINITION_HEADER(void)::initAc(char** pat, int n, mAlgtype t)
     //printf("#states num: %d\n", mStateNum);
 }
 
-mAcBase_DEFINITION_HEADER(void)::compile()
+AcBase_DEFINITION_HEADER(void)::compile()
 {
     buildNFA();
     convert2DFA();
 }
 
-mAcBase_DEFINITION_HEADER(void)::buildNFA()
+AcBase_DEFINITION_HEADER(void)::buildNFA()
 {
     buildTrie();
     buildFailure();
 }
 
-mAcBase_DEFINITION_HEADER(void)::buildTrie()
+AcBase_DEFINITION_HEADER(void)::buildTrie()
 {
     pRoot()= makeNode();	
     for(int i=0;i<mPatNum; i++){
@@ -97,7 +97,7 @@ mAcBase_DEFINITION_HEADER(void)::buildTrie()
 
 }
 
-mAcBase_DEFINITION_HEADER(void)::buildGeneTrie()
+AcBase_DEFINITION_HEADER(void)::buildGeneTrie()
 {
     pRoot()= makeNode();	
     for(int i=0;i<mPatNum; i++){
@@ -117,7 +117,7 @@ mAcBase_DEFINITION_HEADER(void)::buildGeneTrie()
 }
 
 
-mAcBase_DEFINITION_HEADER(void)::buildFailure()
+AcBase_DEFINITION_HEADER(void)::buildFailure()
 {
     queue<acNodeP> Queue;
     //! the first level
@@ -151,7 +151,7 @@ mAcBase_DEFINITION_HEADER(void)::buildFailure()
     }
 }
 
-mAcBase_DEFINITION_HEADER(void)::convert2DFA()
+AcBase_DEFINITION_HEADER(void)::convert2DFA()
 {
     if(pRoot() == NULL) return;
     queue<acNodeP> Queue;
@@ -184,7 +184,7 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
 {
     int curState=0;
     int mStateNum = ac.mStateNum;
-    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
+    typename AcBase<CHAR_SET>::acNodeP* Map2= new typename AcBase<CHAR_SET>::acNodeP [mStateNum];
     travalT Queue;
     (void)patIDList;
     (void)patMatchList;
@@ -204,8 +204,8 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
     curState++;
 
     while(!Queue.empty()){
-        //typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.top();
-        typename mAcBase<CHAR_SET>::acNodeP curNode= top(Queue);
+        //typename AcBase<CHAR_SET>::acNodeP curNode= Queue.top();
+        typename AcBase<CHAR_SET>::acNodeP curNode= top(Queue);
         MapIndex(curNode)= curState;
         Map2[curState]=curNode;
         curState ++;
@@ -234,19 +234,19 @@ void reoderacNode(AcNodeStore<CHAR_SET, StoreArray>& ac, acNode<CHAR_SET>* nodes
 void AcNodeStore<CHAR_SET, StoreArray>::trans2WidthFirst()
 {
     acNodeP tmpNodeList = (acNodeP)MMalloc(mStateNum* sizeof(acNodeT)); 
-    reoderacNode <CHAR_SET, Uint, queue<typename mAcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
+    reoderacNode <CHAR_SET, Uint, queue<typename AcBase<CHAR_SET>::acNodeP> >(*this, tmpNodeList ,NULL , NULL);
     clean(nodeList);
     nodeList = tmpNodeList;
     pRoot()= nodeList;
 }
 
     template<int CHAR_SET, typename idxT,  class travalT>
-void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, int** patIDList, int* patMatchList)
+void transNode2Short(AcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, int** patIDList, int* patMatchList)
 {
     int curState=0;
     int mStateNum = ac.mStateNum();
-    typename mAcBase<CHAR_SET>::acNodeP* Map2= new typename mAcBase<CHAR_SET>::acNodeP [mStateNum];
-    //queue<typename mAcBase<CHAR_SET>::acNodeP> Queue;
+    typename AcBase<CHAR_SET>::acNodeP* Map2= new typename AcBase<CHAR_SET>::acNodeP [mStateNum];
+    //queue<typename AcBase<CHAR_SET>::acNodeP> Queue;
     travalT Queue;
 #if 0
     map<unsigned long long, U16> Map;
@@ -264,8 +264,8 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
     curState++;
 
     while(!Queue.empty()){
-        //typename mAcBase<CHAR_SET>::acNodeP curNode= Queue.top();
-        typename mAcBase<CHAR_SET>::acNodeP curNode= top(Queue);
+        //typename AcBase<CHAR_SET>::acNodeP curNode= Queue.top();
+        typename AcBase<CHAR_SET>::acNodeP curNode= top(Queue);
         MapIndex(curNode)= curState;
         Map2[curState]=curNode;
         curState ++;
@@ -290,22 +290,22 @@ void transNode2Short(mAcBase<CHAR_SET>& ac, acNodeShort<CHAR_SET,idxT>* nodes, i
 }
 
 
-#define mAcD_DEFINITION_HEADER( type ) template<int CHAR_SET, typename idxT> type mAcD<CHAR_SET, idxT >
-mAcD_DEFINITION_HEADER(void)::transWidthFrom(mAcBase<CHAR_SET>& ac)
+#define AcI_DEFINITION_HEADER( type ) template<int CHAR_SET, typename idxT> type AcI<CHAR_SET, idxT >
+AcI_DEFINITION_HEADER(void)::transWidthFrom(AcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
     patMatchList = (int*) MMalloc( ac. patMatchListLen()* sizeof(int));
-    transNode2Short<CHAR_SET, idxT, queue<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
+    transNode2Short<CHAR_SET, idxT, queue<typename AcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
     pRoot() = 0;
 }
 
-mAcD_DEFINITION_HEADER(void)::transDepthFrom(mAcBase<CHAR_SET>& ac)
+AcI_DEFINITION_HEADER(void)::transDepthFrom(AcBase<CHAR_SET>& ac)
 {
     mStateNum = ac.mStateNum();
     mallocMem(mStateNum);
     patMatchList = (int*) MMalloc( ac. patMatchListLen()* sizeof(int));
-    transNode2Short<CHAR_SET,idxT, stack<typename mAcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
+    transNode2Short<CHAR_SET,idxT, stack<typename AcBase<CHAR_SET>::acNodeP> >(ac, nodes, patIDList, patMatchList);
     pRoot() = 0;
 }
 

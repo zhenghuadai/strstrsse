@@ -269,12 +269,12 @@ typedef enum {
 
 /*
  * =====================================================================================
- *        Class:  mAcBase
+ *        Class:  AcBase
  *  Description:  Pointer-based automaton 
  * =====================================================================================
  */
 template<int CHAR_SET=256, StoreType ST=StoreArray>
-class mAcBase:PatternsBase
+class AcBase:PatternsBase
 {
 public:
 	typedef acNode<CHAR_SET>* acNodeP;
@@ -282,16 +282,16 @@ public:
 	enum{char_set = CHAR_SET};
 
 	template<int m, typename T>
-		friend class mAcD;
+		friend class AcI;
 public:
-	mAcBase(){};
-	mAcBase(char** pat, int n);
-	mAcBase(char** pat, int n, mAlgtype t);
-    ~mAcBase(){}
+	AcBase(){};
+	AcBase(char** pat, int n);
+	AcBase(char** pat, int n, mAlgtype t);
+    ~AcBase(){}
 interface:
     void initAc(char** pat, int n);
 	void initAc(char** pat, int n, mAlgtype t);
-    void initAc(mAcBase& o, mAlgtype t){}
+    void initAc(AcBase& o, mAlgtype t){}
     
     virtual size_t memUsed(){ return memMalloced() + acNodesPool.memMalloced();}
 public:
@@ -334,33 +334,33 @@ class acNodeShort
 
 /*
  * =====================================================================================
- *        Class:  mAcD
+ *        Class:  AcI
  *  Description: index-based automaton 
  * =====================================================================================
  */
 template<int CHAR_SET=256, typename idxT=U16>
-class mAcD:public PatternsBase 
+class AcI:public PatternsBase 
 {
     public:
         typedef idxT acNodeP;
         typedef acNodeShort<CHAR_SET,idxT> acNodeT;
         enum{char_set = CHAR_SET};
 constructor:
-        mAcD(){}
-        ~mAcD(){freeMem();}
-        mAcD(mAcBase<CHAR_SET>& ac,mAlgtype st= mACWid){if(st== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
+        AcI(){}
+        ~AcI(){freeMem();}
+        AcI(AcBase<CHAR_SET>& ac,mAlgtype st= mACWid){if(st== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
 interface:
         void initAc(char** pat, int n){initAc(pat,n,mACWid);};
         void initAc(char** pat, int n, mAlgtype t){ 
-            mAcBase<CHAR_SET, StoreArray> ac(pat, n, t); 
+            AcBase<CHAR_SET, StoreArray> ac(pat, n, t); 
             if(t== mACWid) transWidthFrom(ac);else transDepthFrom(ac);
         };
         template<StoreType ST>
-        void initAc(mAcBase<CHAR_SET,ST >& ac, mAlgtype t){if(t== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
+        void initAc(AcBase<CHAR_SET,ST >& ac, mAlgtype t){if(t== mACWid) transWidthFrom(ac);else transDepthFrom(ac);}
     private:
-        //! for building DFA (transfer from mAcBase)
-        void transDepthFrom(mAcBase<CHAR_SET>& ac);
-        void transWidthFrom(mAcBase<CHAR_SET>& ac);
+        //! for building DFA (transfer from AcBase)
+        void transDepthFrom(AcBase<CHAR_SET>& ac);
+        void transWidthFrom(AcBase<CHAR_SET>& ac);
         void mallocMem(int n){ 
             nodes= (acNodeT*)MMalloc(n * sizeof(acNodeT));
             patIDList = (int**)MMalloc( n* sizeof(int*));
@@ -386,7 +386,7 @@ interface:
  * @tparam Acautomaton
  * @tparam USE_BAD_CHAR
  */
-template<class Acautomaton = mAcBase<>, UseBadChar_T USE_BAD_CHAR= UseBadChar>
+template<class Acautomaton = AcBase<>, UseBadChar_T USE_BAD_CHAR= UseBadChar>
 class Ac:public mMatch
 {
     public:
@@ -400,7 +400,7 @@ constructor:
         Ac(char** pat, int n){acAutom.initAc(pat,n);}
         Ac(char** pat, int n, mAlgtype t){acAutom.initAc(pat, n, t);}
         template<StoreType ST>
-        Ac(mAcBase<Acautomaton::char_set, ST>& o, mAlgtype t) {acAutom.initAc(o,t);}
+        Ac(AcBase<Acautomaton::char_set, ST>& o, mAlgtype t) {acAutom.initAc(o,t);}
         ~Ac(){}
 interface:
         virtual int search(char* txt, int n);
