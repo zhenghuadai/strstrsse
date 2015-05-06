@@ -1,0 +1,96 @@
+[
+    {
+        "Result": [
+            {
+                "pat": 3,
+                "pos": 49
+            },
+            {
+                "pat": 4,
+                "pos": 118
+            }
+        ],
+        "patterns": [
+            "Natasha",
+            "ocean",
+            "romantic",
+            "still",
+            "shape"
+        ],
+        "text": "Till today, the lantern ncichpc  festival is still held each year ncichpc around the country. Lanterns of various shapes and sizes ncichpc are hung in the streets, attracting countless visitors. Children will hold self-made or bought lanterns to stroll with on the streets, extremely excite"
+    },
+   {
+        "Result": [
+            {
+                "pat": 0,
+                "pos": 11
+            },
+            {
+                "pat": 1,
+                "pos": 45
+            },
+            {
+                "pat": 2,
+                "pos": 31
+            }
+        ],
+        "patterns": [
+            "earliest",
+            "is",
+            "of"
+        ],
+        "text": "The earliest known appearance of the phrase is from The Michigan School Moderator, a journal that provided many teachers with education-related news and suggestions for lessons."
+    },
+    {
+        "Result": [
+            {
+                "pat": 0,
+                "pos": 2
+            },
+            {
+                "pat": 1,
+                "pos": 8
+            },
+            {
+                "pat": 2,
+                "pos": 14
+            },
+            {
+                "pat": 3,
+                "pos": 18
+            },
+            {
+                "pat": 4,
+                "pos": 24
+            },
+            {
+                "pat": 5,
+                "pos": 29
+            },
+            {
+                "pat": 6,
+                "pos": 33
+            },
+            {
+                "pat": 7,
+                "pos": 38
+            },
+            {
+                "pat": 8,
+                "pos": 42
+            }
+        ],
+        "patterns": [
+            "The",
+            "quick",
+            "brown",
+            "fox",
+            "jumps",
+            "over",
+            "the",
+            "lazy",
+            "dog"
+        ],
+        "text": "The quick brown fox jumps over the lazy dog"
+    }
+]
