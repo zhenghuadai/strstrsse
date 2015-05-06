@@ -386,7 +386,7 @@ interface:
  * @tparam Acautomaton
  * @tparam USE_BAD_CHAR
  */
-template<class Acautomaton, UseBadChar_T USE_BAD_CHAR= UseBadChar>
+template<class Acautomaton = mAcBase<>, UseBadChar_T USE_BAD_CHAR= UseBadChar>
 class Ac:public mMatch
 {
     public:
