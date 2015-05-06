@@ -25,6 +25,7 @@ void preKmp(char *pat,int m,int kmpNext[])
 char* Skmp2(char *text,char *pat, int n, int m) //KMPÀ„∑®
 {
    int i,j,kmpNext[XSIZE];
+   if(*pat == '\0') { OUTPUT(0);return text;}; 
    
    
    /* preprocessing */
@@ -50,6 +51,7 @@ char* Skmp(char *text,char *pat) //KMPÀ„∑®
 {
 
    int m,n;
+   if(*pat == '\0') { OUTPUT(0);return text;}; 
    m=strlen(pat);
    n=strlen(text);
    return Skmp2(text, pat, n, m);

@@ -202,6 +202,7 @@ char* Sbdm2(char * text,char *pat, int n, int m) //Forward Dawg Matching algorit
 {
    int j,init,ell,state;
    Graph aut;
+   if(*pat == '\0') { OUTPUT(0);return text;}; 
 
 
    /* preprocessing */

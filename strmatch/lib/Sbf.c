@@ -79,6 +79,7 @@ bfstr(text, pattern)
 
 	pj = (const unsigned char *) text;
 	pstart=pj;
+    if(*pattern == '\0') { OUTPUT3(text, 0, pattern);return (char*)text;}; // Sorry, I made it prolixity 
 again:
 	if ((b = *(needle = (const unsigned char *) pattern)))
 	{

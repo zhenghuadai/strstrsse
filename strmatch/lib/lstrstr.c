@@ -64,11 +64,8 @@ char* lstrstr(const char* text, const char* pattern)
 	register int byte4b;
 	char* bytePtr = (char*) &byte4a0;
 	if(text==NULL) return NULL;
-	if(text[0] == 0) {
-		return pattern[0]?NULL: (char*)text;
-	}
 	if(pattern ==NULL) return NULL;
-	if(pattern[0] == 0) return (char*)text;
+	if(pattern[0] == 0) { REPORT(text); return (char*)text;}
 	if(pattern[1] == 0) return lstrchr(text,pattern[0]); 
 	bytePtr[0]=bytePtr[1]=bytePtr[2]=bytePtr[3]=pattern[0];
 	bytePtr = (char*) &byte4b0;
@@ -255,6 +252,11 @@ char* lstrchr(const char *text,char c)
 		longword_ptr++;
 		longword = *longword_ptr;
 	}
+    p = longword_ptr;
+    while(*p != '\0') { 
+        if(*p == c) REPORT(p);
+        p ++;
+    }
 	return NULL;
 }
 #if 0

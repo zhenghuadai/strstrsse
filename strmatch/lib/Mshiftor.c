@@ -52,6 +52,7 @@ void Mshiftor(char *T,char *Ps[],int ss)
 	if (length > WORD_SIZE) 
 		error("MO: Use pattern size <= word size"); 
 	lim=preMo(Ps,ss,length,S,maxsingle);
+    (void)lim;
 
 
 	for(i=(maxsingle-1)*ss;i<maxsingle*ss;i++)

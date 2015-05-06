@@ -20,6 +20,7 @@ char* Sbmhs2(char * textt,char *patt,int n, int m)//SUNDAYÀ„∑®£¨”÷≥∆ quich searc
 	unsigned char *text,*pat;
 	text = (unsigned char*)textt;
 	pat = (unsigned char*)patt;
+    if(*pat == '\0') { OUTPUT(0);return textt;}; 
 
 	/* preprocessing */
 	preQsBc((char*)pat,m,qsBc);

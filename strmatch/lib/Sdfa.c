@@ -147,6 +147,7 @@ char* Sdfa2(char *text,char *pat,int n, int m) //基本的自动机算法
 {
 	int j,state;
 	Graph aut;
+    if(*pat == '\0') { OUTPUT(0);return text;}; 
 
 
 	/* preprocessing */

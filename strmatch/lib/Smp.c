@@ -21,7 +21,7 @@ void  preMp(char *pat,int m,int mpNext[])
 char* Smp2(char * text,char *pat, int n, int m)//MPÀ„∑®
 {
    int i,j,mpNext[XSIZE];
-
+   if(*pat == '\0') { OUTPUT(0);return text;}; 
   
    /* preprocessing */
    preMp(pat,m,mpNext);
@@ -44,6 +44,7 @@ char* Smp2(char * text,char *pat, int n, int m)//MPÀ„∑®
 char* Smp(char * text,char *pat)//MPÀ„∑®
 {
    int m,n;
+   if(*pat == '\0') { OUTPUT(0);return text;}; 
    m=strlen(pat);
    n=strlen(text);
    return Smp2(text, pat, n, m);

@@ -11,6 +11,7 @@ char*  Sbndm2(char * text,char *pat,int n, int m) //Backward Nondeterministic Da
 	u32 B[ASIZE];
 	u32 s, d, last;
 	int i, j; 
+    if(*pat == '\0') { OUTPUT(0);return text;}; 
 	if (m > WORD_SIZE)
 		error("BNDM");
 

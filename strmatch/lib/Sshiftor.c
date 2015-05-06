@@ -21,6 +21,7 @@ char* Sshiftor2(char *text0, char *pat, int n, int m) {
 	Uword S[ASIZE];
 	int j;
     unsigned char* text = (unsigned char*)text0;
+    if(*pat == '\0') { OUTPUT(0);return text0;}; 
 	if (m > WORD_SIZE) 
 		error("SO: Use pattern size <= word size"); 
 

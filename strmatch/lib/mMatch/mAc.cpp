@@ -21,4 +21,25 @@
 
 #include "mAc.h"
 namespace dmMatch{
+#if defined(__GNUC__)
+# 	define nasm0(op) __asm__( #op)
+#else      /* -----  not  defined(__GNUC__)----- */
+# 	define nasm0(op) __asm op 
+#endif     /* -----  not  defined(__GNUC__)----- */
+
+    static inline unsigned long long getrdtsc(){
+        nasm0(rdtsc);
+    }
+    unsigned long long mMatch::startTime()
+    {
+        unsigned long long  tTimeStart = getrdtsc(); 
+        mTimeStart = tTimeStart;
+        return tTimeStart;
+    };
+    unsigned long long mMatch::endTime()
+    {
+        unsigned long long  tTimeEnd = getrdtsc();
+        mTimeEnd = tTimeEnd;
+        return tTimeEnd;
+    };
 }

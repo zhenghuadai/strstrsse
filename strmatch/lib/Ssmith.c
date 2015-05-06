@@ -13,6 +13,7 @@ char*  Ssmith2(char * textt,char *patt,int n, int m)//smith Ëã·¨
 	unsigned char * text,*pat;
 	text = (unsigned char*)textt;
 	pat = (unsigned char*)patt;
+    if(*pat == '\0') { OUTPUT(0);return textt;}; 
 
 
 	/* preprocessing */

@@ -4,7 +4,7 @@
 #include <stdio.h>
 //¼ÆÊıËã·¨
 #include"match.h"
-char* SbyhSearch(unsigned char *text,int m,int n,int  ch[]); 
+static char* SbyhSearch(unsigned char *text,int m,int n,int  ch[]); 
 char* Sbyh2(char *textt,char *patt,int n ,int m)
 {
 	int i;
@@ -12,6 +12,7 @@ char* Sbyh2(char *textt,char *patt,int n ,int m)
 	text = (unsigned char*) textt;
 	pat = (unsigned char*)patt;
 	int ch[ASIZE];
+    if(*pat == '\0') { OUTPUT(0);return textt;}; 
 	for(i=0;i<ASIZE;i++)
 		ch[i]=-1;
 	for(i=0;i<m;i++)

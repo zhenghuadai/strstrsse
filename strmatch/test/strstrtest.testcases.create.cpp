@@ -31,8 +31,8 @@ int main(int argc, char** argv)
 {
     char* fin, *fout;
     if(argc == 1){
-        fin = "strstrtest.testcases.raw";
-        fout = "strstrtest.testcases";
+        fin = (char*)"strstrtest.testcases.raw";
+        fout = (char*)"strstrtest.testcases";
     }else{
         fin = argv[1];
         fout = argv[2];
@@ -48,10 +48,11 @@ int main(int argc, char** argv)
             continue;
         }
 
-        pSep[0] = NULL;
+        pSep[0] = '\0';
         char* text = buf;
         char* pat = (pSep + 4); 
-        pat[strlen(pat)-1] = NULL;
+        if(pat[strlen(pat)-1] == '\n')
+            pat[strlen(pat)-1] = '\0';
         fprintf(out, "{\"%s\", \"%s\", {", text, pat);
         char* p = strstr(text, pat);
         while( p != NULL){

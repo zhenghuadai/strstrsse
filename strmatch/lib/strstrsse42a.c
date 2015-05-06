@@ -103,11 +103,8 @@ char* STRSTRSSE42A(const char* text, const char* pattern)
     __m128i sseiPattern2;
     __m128i shf_indexV;
     if(text==NULL) return NULL;
-    if(text[0] == 0) {
-        return pattern[0]?NULL:(char*)text;
-    }
     if(pattern ==NULL) return NULL;
-    if(pattern[0] == 0) return (char*)text;
+	if(pattern[0] == 0) { REPORT(text);return  (char*)text;}
 	if(pattern[1] == 0) return STRCHR(text,pattern[0]); 
     if(plen > 16) return __STRSTRSSE42A_gt16(text, pattern); 
 

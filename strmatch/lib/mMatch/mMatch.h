@@ -31,17 +31,12 @@
 #define __static static 
 
 #if defined(__GNUC__)
-# 	define nasm0(op) __asm__( #op)
 inline size_t _msize(void* p){
     return p?((size_t*)p)[-1]:0;
 }
 #else      /* -----  not  defined(__GNUC__)----- */
-# 	define nasm0(op) __asm op 
 #endif     /* -----  not  defined(__GNUC__)----- */
 
-static inline unsigned long long getrdtsc(){
-	nasm0(rdtsc);
-}
 //#define ASSERT(a, ...) {if(! (a)){ err(__VA_ARGS__##__LINE__);}}
 #define ASSERT(a, ...) {assert(a);}
 
@@ -66,9 +61,21 @@ class memBase
     public:
         memBase(){bytesUsed =0;}
         ~memBase(){  /*printf("destroy :%d bytes left\n", bytesUsed);*/ ASSERT( bytesUsed <=10);}
-		void* mMalloc(size_t n){ void*p;  p = (void*) malloc(n); bytesUsed += _msize(p); if(DEBUG_MALLOC)printf("+%zd=%d\n", _msize(p), bytesUsed); return p;}
+		void* mMalloc(size_t n){ 
+            void *p;
+            p = (void*) malloc(n);
+            bytesUsed += _msize(p);
+            if(DEBUG_MALLOC)printf("+%zd=%d\n", _msize(p), bytesUsed);
+            return p;
+        }
         template<typename T>
-		void mFree(T*& p) {if(p==NULL)return; bytesUsed -= _msize(p); if(DEBUG_MALLOC) printf("-%zd=%d\n", _msize(p),bytesUsed);free(p); p=NULL;}
+		void mFree(T*& p) {
+            if(p==NULL)return; 
+            bytesUsed -= _msize(p); 
+            if(DEBUG_MALLOC) printf("-%zd=%d\n", _msize(p),bytesUsed);
+            free(p);
+            p=NULL;
+        }
         void mDecrease(size_t n){bytesUsed -=n;}
         size_t memMalloced(){return bytesUsed;}
     protected:
@@ -157,8 +164,8 @@ interface:
         unsigned int minPatLen(){unsigned int n=patLen(0); for(int i=1;i<mPatNum;i++) n=(n < patLen(i)? n:patLen(i)); return n; }
     private:
         void clean();
-        void startTime(){ mTimeStart = getrdtsc();};
-        void endTime()  { mTimeEnd = getrdtsc();};
+        unsigned long long startTime();
+        unsigned long long endTime(); 
 		unsigned int patLen(unsigned idx) { return strlen( mPatterns[idx]);}
 	protected:
 		int type; 		  //! algorithm type

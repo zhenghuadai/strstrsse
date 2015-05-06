@@ -175,6 +175,6 @@ void Teststrstr::readTestcases( char* fn)
 int main()
 {
     Teststrstr t;
-    t.readTestcases("strstrtest.testcases");
+    t.readTestcases((char*)"strstrtest.testcases");
     t.run();
 }

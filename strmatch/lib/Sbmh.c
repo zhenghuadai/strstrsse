@@ -11,25 +11,26 @@ char*  Sbmh2(char * textt,char *patt,int n, int m) // HorspoolËã·¨
 	unsigned char c;
 	unsigned char * text,*pat;
 	text = (unsigned char*)textt;
-	pat = (unsigned char*)patt;
+    pat = (unsigned char*)patt;
+    if(*pat == '\0') { OUTPUT(0);return textt;}; 
 
-	/* preprocessing */
-	preBmBc((char*)pat,m,bmBc);
-	/* searching */
-	j=0;
-	while (j<=n-m)
-	{
-		c=text[j+m-1];
-		if (pat[m-1]==c && memcmp(pat,text+j,m-1)==0)
-			OUTPUT(j);
-		j+=bmBc[c];
-	}
-	SRET(j);
+    /* preprocessing */
+    preBmBc((char*)pat,m,bmBc);
+    /* searching */
+    j=0;
+    while (j<=n-m)
+    {
+        c=text[j+m-1];
+        if (pat[m-1]==c && memcmp(pat,text+j,m-1)==0)
+            OUTPUT(j);
+        j+=bmBc[c];
+    }
+    SRET(j);
 }
 char*  Sbmh(char * textt,char *patt) // HorspoolËã·¨ 
 {
-	int m,n;
-	m=strlen(patt);
-	n=strlen(textt);
-	return	Sbmh2(textt, patt, n, m);
+    int m,n;
+    m=strlen(patt);
+    n=strlen(textt);
+    return	Sbmh2(textt, patt, n, m);
 }

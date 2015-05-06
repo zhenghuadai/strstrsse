@@ -53,6 +53,7 @@ char* Skmpskip2(char *textt,char *patt,int n, int m) {
 	pat = (unsigned char *)patt;
 	int kmpNext[m], list[m], mpNext[m],
 		z[ASIZE];
+    if(*pat == '\0') { OUTPUT(0);return textt;}; 
 
 	/* Preprocessing */
 	preMp((char*)pat, m, mpNext);

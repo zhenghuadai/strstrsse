@@ -70,6 +70,7 @@ char* Sbom2(char *text,char *pat,int n, int m)
 	char T[strlen(pat) + 1];
 	List L[strlen(pat) + 1];
 	int i, j, p, period = 0, q, shift;
+    if(*pat == '\0') { OUTPUT(0);return text;}; 
 	/* Preprocessing */
 	memset(L, 0, (m + 1)*sizeof(List));
 	memset(T, FALSE, (m + 1)*sizeof(char));

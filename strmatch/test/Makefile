@@ -75,6 +75,9 @@ strstrtest${EXT}:$(OBJ_DIR)/strstrtest.o
 mmatchtest${EXT}:$(OBJ_DIR)/mmatchtest.o ${utilobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
+mmatchtest.testcases.create:mmatchtest.testcases.create.cpp
+	g++ -o $@ $< -std=c++11
+
 $(OBJ_DIR)/%.o:%.c
 	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC} 
 $(OBJ_DIR)/%.o:%.cpp
@@ -108,7 +111,10 @@ $(OBJ_DIR)/genematch.o: genematch.cpp ../lib/mMatch/mAc.h  ../lib/mMatch/mMatch.
 ifeq ($(debug), yes)
 $(OBJ_DIR)/match.o:match.c ../lib/match.h ../lib/libstrmatchd.a 
 $(OBJ_DIR)/mmatch.o:mmatch.cpp ../lib/match.h ../lib/mMatch/libmmatchd.a 
+$(OBJ_DIR)/mmatchtest.o:mmatchtest.cpp ../lib/match.h ../lib/mMatch/libmmatchd.a 
 else
 $(OBJ_DIR)/match.o:match.c ../lib/match.h ../lib/libstrmatch.a 
 $(OBJ_DIR)/mmatch.o:mmatch.cpp ../lib/match.h ../lib/mMatch/libmmatch.a 
+$(OBJ_DIR)/mmatchtest.o:mmatchtest.cpp ../lib/match.h ../lib/mMatch/libmmatch.a 
+
 endif

@@ -67,11 +67,8 @@ char* strstrsse(const char* text, const char* pattern)
 	register __m128i byte16c;
 	char* bytePtr = (char*)text;
 	if(text==NULL) return NULL;
-	if(text[0] == 0) {
-		return pattern[0]?NULL:(char*)text;
-	}
 	if(pattern ==NULL) return NULL;
-	if(pattern[0] == 0) return (char*)text;
+	if(pattern[0] == 0) { REPORT(text);return  (char*)text;}
 	if(pattern[1] == 0) return strchrsse(text,pattern[0]); 
 	if(pattern[2] == 0) return strstrabsse(text,pattern); 
 	chara = pattern[0];
