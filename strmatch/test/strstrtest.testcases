@@ -53,5 +53,25 @@
         ],
         "pattern": "misery",
         "textfile": "MMitchell.Gonewiththewind.txt"
+    },
+    {
+        "Result": [
+            1688,
+            4303,
+            14438,
+            35739,
+            50275,
+            83761,
+            85083,
+            95542,
+            103097,
+            109659,
+            121982,
+            122654,
+            130792,
+            135066
+        ],
+        "pattern": "understand",
+        "textfile": "theBridgesOfMadisonCountry.txt"
     }
 ]

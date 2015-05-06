@@ -119,7 +119,7 @@ void Teststrstr::run()
             if(passed){
                 printf(".");
             }else{
-                printf("\n%s:%s:%s ", func.name.c_str(), onetest.text.c_str(), onetest.pattern.c_str());
+                printf("\n%s:%s:%s ", func.name.c_str(), onetest.text.size() <= 32? onetest.text.c_str():onetest.text.substr(0,32).c_str(), onetest.pattern.c_str());
                 printf("["); for(size_t i = 0; i<tmpResult.size(); i++){printf("%d ", tmpResult[i]);} printf("] ");
                 printf(" expect["); for(size_t i = 0; i<onetest.matched.size(); i++){printf("%d ", onetest.matched[i]);} printf("]");
                 break;
