@@ -252,7 +252,7 @@ char* lstrchr(const char *text,char c)
 		longword_ptr++;
 		longword = *longword_ptr;
 	}
-    p = longword_ptr;
+    p = (char*)longword_ptr;
     while(*p != '\0') { 
         if(*p == c) REPORT(p);
         p ++;
