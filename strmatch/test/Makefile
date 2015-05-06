@@ -77,6 +77,8 @@ mmatchtest${EXT}:$(OBJ_DIR)/mmatchtest.o ${utilobj}
 
 mmatchtest.testcases.create:mmatchtest.testcases.create.cpp
 	g++ -o $@ $< -std=c++11
+strstrtest.testcases.create:strstrtest.testcases.create.cpp
+	g++ -o $@ $< -std=c++11
 
 $(OBJ_DIR)/%.o:%.c
 	${Compiler} ${Gflag} ${INC_PATH} -c $< -o $@ -I${THREAD_INC} 

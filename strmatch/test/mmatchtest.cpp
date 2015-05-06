@@ -143,10 +143,19 @@ void Testmmatch::readTestcases( char* fn)
 {
     ifstream in(fn);
     json tests = json::parse(in); 
+    in.close();
     for (auto test: tests) {
         Testcase t;
-        std::string str = (test["text"]);
-        t.text = str;
+        if(test.find("text") != test.end()){
+            t.text = test["text"].get<string>(); 
+        }else if(test.find("textfile") != test.end()){
+            std::string textfilename = test["textfile"];
+            ifstream textfile(textfilename);
+            istreambuf_iterator<char> beg(textfile), end;
+            t.text.assign(beg, end);
+            textfile.close();
+        }
+
         for(std::string pat: test["patterns"]){
             t.patterns.push_back(pat);
         }

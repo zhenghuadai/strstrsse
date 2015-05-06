@@ -52,11 +52,22 @@ int main(int argc, char** argv)
             in2.seekg(0, ios_base::beg);
             oTests = json::parse(in2);
         }
+        in2.close();
     }
     ofstream out(fout);
     json tests = json::parse(in); 
+    in.close();
     for (auto test: tests) {
-        std::string text = test["text"]; 
+        std::string text ;
+        if(test.find("text") != test.end()){
+            text = test["text"].get<string>(); 
+        }else if(test.find("textfile") != test.end()){
+            std::string textfilename = test["textfile"];
+            ifstream textfile(textfilename);
+            istreambuf_iterator<char> beg(textfile), end;
+            text.assign(beg, end);
+            textfile.close();
+        }
          u64 patId = 0;
          vector<map<string, int>> R;
          for(std::string pat: test["patterns"]){
@@ -78,5 +89,6 @@ int main(int argc, char** argv)
     }
 
     out<<oTests.dump(4);
+    out.close();
 
 }

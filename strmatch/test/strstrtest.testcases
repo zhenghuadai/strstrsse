@@ -1,14 +1,57 @@
-
-{"", "", {0}},
-{"a", "", {0}},
-{"", "a", {}},
-{"abcabcabcdabcd", "abcde", {}},
-{"abcabcabcdabcd", "abc", {0 3 6 10 }},
-{"abcabcdabcabcd", "abcd", {3, 10}},
-{"aaaaaaaaaaaaaa", "aaa", {0 1 2 3 4 5 6 7 8 9 10 11 }},
-{"ababababababababcababab", "ab", {0 2 4 6 8 10 12 14 17 19 21 }},
-{"ababababababababcababab", "b", {1 3 5 7 9 11 13 15 18 20 22 }},
-{"ababababababababcababab", "a", {0 2 4 6 8 10 12 14 17 19 21 }},
-{"ababababababababcababab", "ab", {0 2 4 6 8 10 12 14 17 19 21 }},
-{"aaaaaaaaaaaaaaaaaababababababababcabababc", "abc", {31 38 }},
-{"aaaaaaaaaaaaaaaaaababababababababcabababcd", "abcd", {38 }},
+[
+    {
+        "Result": [
+            31,
+            38
+        ],
+        "pattern": "abc",
+        "text": "aaaaaaaaaaaaaaaaaababababababababcabababc"
+    },
+    {
+        "Result": [
+            38
+        ],
+        "pattern": "abcd",
+        "text": "aaaaaaaaaaaaaaaaaababababababababcabababcd"
+    },
+    {
+        "Result": [
+            55606,
+            73032,
+            89762,
+            90134,
+            90242,
+            95821,
+            135659,
+            135883
+        ],
+        "pattern": "gently",
+        "textfile": "theBridgesOfMadisonCountry.txt"
+    },
+    {
+        "Result": [
+            44338,
+            160845,
+            249335,
+            265889,
+            270687,
+            476047,
+            527921,
+            591386,
+            720390,
+            738141,
+            1427166,
+            1472639,
+            1479504,
+            1527268,
+            1627757,
+            1992423,
+            2206279,
+            2235601,
+            2256118,
+            2334562
+        ],
+        "pattern": "misery",
+        "textfile": "MMitchell.Gonewiththewind.txt"
+    }
+]

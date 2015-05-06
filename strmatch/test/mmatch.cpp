@@ -45,6 +45,9 @@ int main(int argc,char *argv[])
     Patts[2]="romantic";
     Patts[3]="shape";
     Patts[4]="still";
+    {
+
+    }
     ps=5;
     Text="Till today, the lantern ncichpc  festival is still held each year ncichpc around the country. Lanterns of various shapes and sizes ncichpc are hung in the streets, attracting countless visitors. Children will hold self-made or bought lanterns to stroll with on the streets, extremely excite";
     if(argc==1)

@@ -19,7 +19,7 @@
         ],
         "text": "Till today, the lantern ncichpc  festival is still held each year ncichpc around the country. Lanterns of various shapes and sizes ncichpc are hung in the streets, attracting countless visitors. Children will hold self-made or bought lanterns to stroll with on the streets, extremely excite"
     },
-   {
+    {
         "Result": [
             {
                 "pat": 0,
@@ -92,5 +92,267 @@
             "dog"
         ],
         "text": "The quick brown fox jumps over the lazy dog"
+    },
+    {
+        "Result": [
+            {
+                "pat": 1,
+                "pos": 946
+            },
+            {
+                "pat": 1,
+                "pos": 1678
+            },
+            {
+                "pat": 1,
+                "pos": 3410
+            },
+            {
+                "pat": 1,
+                "pos": 3520
+            },
+            {
+                "pat": 1,
+                "pos": 3784
+            },
+            {
+                "pat": 1,
+                "pos": 6114
+            },
+            {
+                "pat": 1,
+                "pos": 6460
+            },
+            {
+                "pat": 1,
+                "pos": 6539
+            },
+            {
+                "pat": 1,
+                "pos": 6813
+            },
+            {
+                "pat": 1,
+                "pos": 7985
+            },
+            {
+                "pat": 1,
+                "pos": 8017
+            },
+            {
+                "pat": 1,
+                "pos": 8082
+            },
+            {
+                "pat": 1,
+                "pos": 8162
+            },
+            {
+                "pat": 1,
+                "pos": 9238
+            },
+            {
+                "pat": 1,
+                "pos": 9284
+            },
+            {
+                "pat": 1,
+                "pos": 10450
+            },
+            {
+                "pat": 1,
+                "pos": 10699
+            },
+            {
+                "pat": 1,
+                "pos": 10901
+            },
+            {
+                "pat": 1,
+                "pos": 11584
+            },
+            {
+                "pat": 1,
+                "pos": 13410
+            },
+            {
+                "pat": 1,
+                "pos": 13884
+            },
+            {
+                "pat": 1,
+                "pos": 14169
+            },
+            {
+                "pat": 1,
+                "pos": 14359
+            },
+            {
+                "pat": 1,
+                "pos": 14525
+            },
+            {
+                "pat": 1,
+                "pos": 15772
+            },
+            {
+                "pat": 1,
+                "pos": 17314
+            },
+            {
+                "pat": 1,
+                "pos": 17484
+            },
+            {
+                "pat": 1,
+                "pos": 17602
+            },
+            {
+                "pat": 1,
+                "pos": 24582
+            },
+            {
+                "pat": 1,
+                "pos": 24739
+            },
+            {
+                "pat": 1,
+                "pos": 24835
+            },
+            {
+                "pat": 1,
+                "pos": 24906
+            },
+            {
+                "pat": 1,
+                "pos": 25183
+            },
+            {
+                "pat": 1,
+                "pos": 26895
+            },
+            {
+                "pat": 1,
+                "pos": 27368
+            },
+            {
+                "pat": 1,
+                "pos": 48102
+            },
+            {
+                "pat": 1,
+                "pos": 65839
+            },
+            {
+                "pat": 1,
+                "pos": 66432
+            },
+            {
+                "pat": 1,
+                "pos": 66809
+            },
+            {
+                "pat": 1,
+                "pos": 67020
+            },
+            {
+                "pat": 1,
+                "pos": 67108
+            },
+            {
+                "pat": 1,
+                "pos": 72214
+            },
+            {
+                "pat": 1,
+                "pos": 90816
+            },
+            {
+                "pat": 1,
+                "pos": 90914
+            },
+            {
+                "pat": 1,
+                "pos": 90966
+            },
+            {
+                "pat": 1,
+                "pos": 91063
+            },
+            {
+                "pat": 1,
+                "pos": 96160
+            },
+            {
+                "pat": 1,
+                "pos": 97107
+            },
+            {
+                "pat": 1,
+                "pos": 99342
+            },
+            {
+                "pat": 1,
+                "pos": 99513
+            },
+            {
+                "pat": 1,
+                "pos": 99598
+            },
+            {
+                "pat": 1,
+                "pos": 99664
+            },
+            {
+                "pat": 1,
+                "pos": 118775
+            },
+            {
+                "pat": 1,
+                "pos": 125283
+            },
+            {
+                "pat": 1,
+                "pos": 129911
+            },
+            {
+                "pat": 1,
+                "pos": 134061
+            },
+            {
+                "pat": 1,
+                "pos": 134953
+            },
+            {
+                "pat": 1,
+                "pos": 135240
+            },
+            {
+                "pat": 1,
+                "pos": 135635
+            },
+            {
+                "pat": 1,
+                "pos": 136509
+            },
+            {
+                "pat": 1,
+                "pos": 136790
+            },
+            {
+                "pat": 1,
+                "pos": 136930
+            },
+            {
+                "pat": 2,
+                "pos": 3999
+            }
+        ],
+        "patterns": [
+            "earliest",
+            "Michael",
+            "arrangements"
+        ],
+        "textfile": "theBridgesOfMadisonCountry.txt"
     }
 ]

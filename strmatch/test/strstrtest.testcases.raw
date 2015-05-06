@@ -1,3 +1,5 @@
-aaaaaaaaaaaaaaaaaababababababababcabababc"^^"abc
-aaaaaaaaaaaaaaaaaababababababababcabababcd"^^"abcd
+[
+{ "textfile":"theBridgesOfMadisonCountry.txt", "pattern":"gently"},
+{ "textfile":"MMitchell.Gonewiththewind.txt", "pattern":"misery"}
+]
 

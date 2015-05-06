@@ -26,13 +26,14 @@
 #include "match.h"
 #include "report.h"
 #include <string.h>
-
+#include "json.hpp"
+using json = nlohmann::json;
 using namespace std;
 
 class Testcase{
     public:
     string text;
-    string patten;
+    string pattern;
     vector<int> matched;
 };
 
@@ -102,7 +103,7 @@ void Teststrstr::run()
         bool passed = true;
         for(auto onetest :testcases){
             tmpResult.clear();
-            func.strstr((char*)onetest.text.c_str(), (char*)onetest.patten.c_str());
+            func.strstr((char*)onetest.text.c_str(), (char*)onetest.pattern.c_str());
 
             passed = true;
             if(tmpResult.size() != onetest.matched.size()){
@@ -118,7 +119,7 @@ void Teststrstr::run()
             if(passed){
                 printf(".");
             }else{
-                printf("\n%s:%s:%s ", func.name.c_str(), onetest.text.c_str(), onetest.patten.c_str());
+                printf("\n%s:%s:%s ", func.name.c_str(), onetest.text.c_str(), onetest.pattern.c_str());
                 printf("["); for(size_t i = 0; i<tmpResult.size(); i++){printf("%d ", tmpResult[i]);} printf("] ");
                 printf(" expect["); for(size_t i = 0; i<onetest.matched.size(); i++){printf("%d ", onetest.matched[i]);} printf("]");
                 break;
@@ -130,46 +131,26 @@ void Teststrstr::run()
 
 void Teststrstr::readTestcases( char* fn)
 {
-    char* buf = new char[1024 * 10];
     ifstream in(fn);
-    while(!in.eof()){
-        in.getline(buf, 1024*10);
-        char* pSep0 = strstr(buf, "{\"");
-        if(pSep0 == NULL ){
-            continue;
+    json tests = json::parse(in); 
+    in.close();
+    for (auto test: tests) {
+        std::string text ;
+        Testcase t;
+        if(test.find("text") != test.end()){
+            t.text = test["text"].get<string>(); 
+        }else if(test.find("textfile") != test.end()){
+            std::string textfilename = test["textfile"];
+            ifstream textfile(textfilename);
+            istreambuf_iterator<char> beg(textfile), end;
+            t.text.assign(beg, end);
+            textfile.close();
         }
-        char* pSep1 = strstr(pSep0 + 1, "\", \"");
-        if(pSep1 == NULL ){
-            continue;
-        }
-        char* pSep2 = strstr(pSep1 + 1, "\", {");
-        if( pSep2 == NULL){
-            continue;
-        }
-
-        pSep0 += 2;
-        pSep1[0] = 0;
-        pSep2[0] = 0;
-        char* text = pSep0;
-        char* pat = (pSep1 + 4); 
-        char* p = pSep2 + 4; 
-        Testcase t = {string(text), string(pat), {}};
-
-        while( *p != 0){
-            if( (*p) >= '0' && (*p) <='9') {
-                int idx = atoi(p);
-                t.matched.push_back(idx);
-                p = strstr(p, " ");
-                if(p == NULL) break;
-                p ++;
-            }else{
-                p ++;
-            }
-        }
-
+        t.pattern =  test["pattern"].get<string>();
+        t.matched= test["Result"].get<vector<int>>();
         testcases.push_back(t);
     }
-    delete[] buf;
+   
 }
 
 int main()
