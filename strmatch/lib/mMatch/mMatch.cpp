@@ -25,7 +25,7 @@
 #include "mMatch.h"
 namespace dmMatch{
 
-void mMatch::setPatterns(char** pat, int n)
+void PatternsBase::setPatterns(char** pat, int n)
 {
     this->mPatterns = pat;
     this->mPatNum = n;

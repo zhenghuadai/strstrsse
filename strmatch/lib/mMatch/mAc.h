@@ -248,12 +248,15 @@ public:
 		patMatchListLen = pcur - patMatchList;
 	}
 	void reLocate(){
-		acNodeP tmpNodeList = (acNodeP)MMalloc(mStateNum* sizeof(acNodeT)); 
-		memcpy(tmpNodeList, nodeList, mStateNum*sizeof(acNodeT)); 
-		for(int i=0;i< mStateNum;i++){ tmpNodeList[i].adjust((SSize)tmpNodeList - (SSize)nodeList);}
-		MFree(nodeList); 
-		nodeList = tmpNodeList;
-		pRoot()=nodeList;
+        // the size of memory can be reduced.
+        if(mMaxStateNum > mStateNum + 100){
+            acNodeP tmpNodeList = (acNodeP)MMalloc(mStateNum* sizeof(acNodeT)); 
+            memcpy(tmpNodeList, nodeList, mStateNum*sizeof(acNodeT)); 
+            for(int i=0;i< mStateNum;i++){ tmpNodeList[i].adjust((SSize)tmpNodeList - (SSize)nodeList);}
+            MFree(nodeList); 
+            nodeList = tmpNodeList;
+            pRoot()=nodeList;
+        }
 		if((mType == mACWid) ||(mType == geneACWid))
 			trans2WidthFirst();
 	}
@@ -271,7 +274,7 @@ typedef enum {
  * =====================================================================================
  */
 template<int CHAR_SET=256, StoreType ST=StoreArray>
-class mAcBase:public mMatch
+class mAcBase:PatternsBase
 {
 public:
 	typedef acNode<CHAR_SET>* acNodeP;
@@ -315,7 +318,6 @@ private:
     void reLocate(){ acNodesPool.reLocate(); acNodesPool.transPatList2Array();}
 private:
     AcNodeStore<CHAR_SET, ST> acNodesPool;
-
 };
 
 template<int CHAR_SET=256, typename idxT=U16>
@@ -337,7 +339,7 @@ class acNodeShort
  * =====================================================================================
  */
 template<int CHAR_SET=256, typename idxT=U16>
-class mAcD:public mMatch
+class mAcD:public PatternsBase 
 {
     public:
         typedef idxT acNodeP;

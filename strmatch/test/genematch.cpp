@@ -164,13 +164,6 @@ int main(int argc,char *argv[])
 		matchalgstr[i]=NULL;
 	}
 	matchalgstr[0]="ac";
-	Patts[0]="Natasha";
-	Patts[1]="ocean";
-	Patts[2]="romantic";
-	Patts[3]="shape";
-	Patts[4]="still";
-	ps=5;
-	Text="Till today, the lantern ncichpc  festival is still held each year ncichpc around the country. Lanterns of various shapes and sizes ncichpc are hung in the streets, attracting countless visitors. Children will hold self-made or bought lanterns to stroll with on the streets, extremely excite";
 	printf("reading pattern %s...\n",quryfname);
 	list<Pattern_fasta>* pattsList= new list<Pattern_fasta>;
 	ps=loadGenePatternFasta(quryfname,  pattsList);
@@ -193,9 +186,9 @@ int main(int argc,char *argv[])
 	//printf("\n%d ok\n",strlen(Text));
 	/* µ÷ÓÃ´®Æ¥Åäº¯Êý */
 	//mAcBase<4> ac(patts, ps, geneAC);
-	mAcBase<4> ac(patts, ps, geneACWid);
-	mAcBase<4> rac(rcpatts, ps, geneACWid);
-	mAcD<4,unsigned int> acD(ac);
+	Ac<mAcBase<4>> ac(patts, ps, geneACWid);
+	Ac<mAcBase<4>> rac(rcpatts, ps, geneACWid);
+//	Ac<mAcD<4,unsigned int>> acD(ac);
 	//mAcD<4,unsigned short> acD(ac);
     //mWm<8,geneHashWm8,4> wm(patts, ps);
 

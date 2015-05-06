@@ -22,6 +22,7 @@
 #include <queue>
 #include <stack>
 #include <map>
+#include <iostream>
 
 #include "mMatch.h"
 namespace dmMatch{
@@ -48,7 +49,7 @@ mAcBase_DEFINITION_HEADER(void)::initAc(char** pat, int n, mAlgtype t)
     setPatterns(pat, n);
     type = t;
 	acNodesPool.type()=t;
-    acNodesPool.setMaxStateNum(charNum());
+    acNodesPool.setMaxStateNum(charNum() + 1); // the root takes 1
     if((type==geneAC)||(type==geneACWid) ||(type==geneACDep)){
         debprintf("build Trie...\n");
         buildGeneTrie();

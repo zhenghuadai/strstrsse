@@ -29,7 +29,7 @@ mWm_DEFINITION_HEADER(void)::compile()
 		}
 	}//end for i
     transList(matchList, matchArray, matchArrayMem, SHIFT_TABLE_SIZE);
-	printf("build Wm complete WM_BLOCK_WIDTH:%d, SHIFT_TABLE_SIZE:%d\n", WM_BLOCK_WIDTH,SHIFT_TABLE_SIZE);
+	//printf("build Wm complete WM_BLOCK_WIDTH:%d, SHIFT_TABLE_SIZE:%d\n", WM_BLOCK_WIDTH,SHIFT_TABLE_SIZE);
 }
 
 mWm_DEFINITION_HEADER()::~mWm()
@@ -87,9 +87,9 @@ mWm_DEFINITION_HEADER(int)::search(char* txt, int n)
     unsigned char* p = (Uchar*) txt + mMinPatLen;	
     unsigned char* pEnd = (Uchar*) txt + n;	
     int tHash;
-    while(p < pEnd){
+    while(p <= pEnd){
         tHash= (int)hash(p);
-		if(tHash <0) { p+= (mMinPatLen-WM_BLOCK_WIDTH +1); continue;}
+		if(mShift[tHash] <0) { p+= (mMinPatLen-WM_BLOCK_WIDTH +1); continue;}
         if(mShift[tHash] > 0){
             p += mShift[tHash];
 		}else{

@@ -14,8 +14,6 @@ using namespace dmMatch;
 using namespace std;
 using json = nlohmann::json;
 
-static char** gPatList=0;
-static char* curText = 0;
 class int2{
     public:
         union{
@@ -114,18 +112,19 @@ void Testmmatch::run()
 {
     bool passed = true;
     for(auto onetest :testcases){
+        cout<<"############################"<<endl;
         int ps = onetest.patterns.size();
         char** Patts = new char*[ps];
         for(int i =0; i<ps; i++) Patts[i] = (char*)onetest.patterns[i].c_str();
         Ac<mAcBase<256,StoreArray>, UseBadChar> ac(Patts, ps, mACWid);
-        //Ac<mAcD<256, U16 >,  UseBadChar> acD(Patts, ps, mACWid);
+        Ac<mAcD<256, U16 >,  UseBadChar> acD(Patts, ps, mACWid);
         mWm<> wm(Patts, ps);
         //mAcBase<256> ac1(Patts, ps, mACWid);
         //mAcD<> acD1(ac.getAutomaton());
 
         vector<Algorithm> alogrithms = {
             {&ac, "Ac<mAcBase<256,StoreArray>"}, 
-            //{&acD, "Ac<mAcD<256, U16 >,  UseBadChar>"},
+            {&acD, "Ac<mAcD<256, U16 >,  UseBadChar>"},
             {&wm, "WM"}
             //{&ac1, "mAcBase<256> "},
             //{&acD1, "mAcD<>"}
@@ -165,7 +164,9 @@ void Testmmatch::readTestcases( char* fn)
 int main(int argc,char *argv[])
 {
     Testmmatch t;
-    t.readTestcases("mmatchtest.testcases");
+    t.readTestcases((char*)"mmatchtest.testcases");
     t.run();
+    (void)argc;
+    (void)argv;
     return 0;
 }

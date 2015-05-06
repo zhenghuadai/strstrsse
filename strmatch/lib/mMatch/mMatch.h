@@ -60,7 +60,7 @@ class memBase
 {
     public:
         memBase(){bytesUsed =0;}
-        ~memBase(){  /*printf("destroy :%d bytes left\n", bytesUsed);*/ ASSERT( bytesUsed <=10);}
+        ~memBase(){  /*printf("destroy :%d bytes left\n", bytesUsed); ASSERT( bytesUsed <=10);*/}
 		void* mMalloc(size_t n){ 
             void *p;
             p = (void*) malloc(n);
@@ -82,11 +82,34 @@ class memBase
 		int bytesUsed;
 };
 
+class PatternsBase:public memBase
+{
 
-class mMatch:public memBase
+    protected:
+        PatternsBase():mPatterns(NULL),mPatLen(NULL),mPatNum(0){}
+interface:
+		//!----------------------------------------------------------------------------
+		//  
+		//!----------------------------------------------------------------------------
+        void setPatterns(char** pats,int n);
+		//!----------------------------------------------------------------------------
+		//return the memory that has been used  
+		//!----------------------------------------------------------------------------
+        virtual size_t memUsed(){ return memMalloced();}
+    protected:
+        unsigned int charNum(){unsigned int n=0; for(int i=0;i<mPatNum;i++) n += strlen(mPatterns[i]); return n; }
+    protected:
+		int type; 		  //! algorithm type
+		char** mPatterns; //! array of patterns' pointer
+		int* mPatLen;     //! array of patterns' length
+		int mPatNum;      //! number of patterns
+		list<Pattern_t>* pPatList; //! list of patterns
+};
+
+class mMatch:public PatternsBase
 {
     public:
-        mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent; report=reportDefault;};
+        mMatch(char** pat, int patNum){memset(this, 0, sizeof(mMatch) ); setPatterns(pat, patNum); report=reportSilent;};
         mMatch(){memset(this, 0, sizeof(mMatch)); report=reportDefault;};
         ~mMatch(){ MFree(mPatLen); }
         enum{SEARCH_CONTINUE=0,SEARCH_STOP=1 };
@@ -124,26 +147,17 @@ interface:
 		//!----------------------------------------------------------------------------
         void setReportFunc(reportFunc f){report = f;}
 
-		//!----------------------------------------------------------------------------
-		//  
-		//!----------------------------------------------------------------------------
-        void setPatterns(char** pats,int n);
 
 		//!----------------------------------------------------------------------------
 		//  
 		//!----------------------------------------------------------------------------
         double getTime(){return (double)(mTimeEnd - mTimeStart);}
 
-		//!----------------------------------------------------------------------------
-		//return the memory that has been used  
-		//!----------------------------------------------------------------------------
-        virtual size_t memUsed(){ return memMalloced();}
     public:
         static int reportDefault(int patid, int idx){ printf("(%d,%d) ", patid, idx); return SEARCH_CONTINUE;}
         static int reportSilent(int patid, int idx){(void)patid; (void)idx;return SEARCH_CONTINUE;}
     protected:
         virtual void compile(){};
-        unsigned int charNum(){unsigned int n=0; for(int i=0;i<mPatNum;i++) n += strlen(mPatterns[i]); return n; }
         int reportList(int patID, int idx){ return report(patID, idx);}
         int reportList(list<int>* patIDList, int idx){
             int ret;
@@ -168,12 +182,7 @@ interface:
         unsigned long long endTime(); 
 		unsigned int patLen(unsigned idx) { return strlen( mPatterns[idx]);}
 	protected:
-		int type; 		  //! algorithm type
-		char** mPatterns; //! array of patterns' pointer
-		int* mPatLen;     //! array of patterns' length
-		int mPatNum;      //! number of patterns
 		reportFunc report;//! report call back function
-		list<Pattern_t>* pPatList; //! list of patterns
 		//! the following is member for performance tuning
 		unsigned long long mTimeStart;
 		unsigned long long mTimeEnd;
