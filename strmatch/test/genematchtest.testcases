@@ -1,0 +1,20 @@
+[
+    {
+        "Result": [
+            {
+                "pat": 0,
+                "pos": 42
+            },
+            {
+                "pat": 1,
+                "pos": 2255
+            }
+        ],
+        "fastafile": "chrM.fa",
+        "patterns": [
+            "CTATTAACCACTCACGGGAGCTCTC",
+            "AAATCCCAAACATATAACTGAACTC",
+            "AAATCCCAAACATATAACTGAACTCA"
+        ]
+    }
+]

@@ -25,6 +25,8 @@
 #include <fstream>
 #include <string.h>
 #include "json.hpp"
+#include "dmutil.h"
+#include "io.h"
 
 using namespace std;
 using json = nlohmann::json;
@@ -67,10 +69,34 @@ int main(int argc, char** argv)
             istreambuf_iterator<char> beg(textfile), end;
             text.assign(beg, end);
             textfile.close();
+        }else if(test.find("fastafile") != test.end()){
+            std::string textfilename = test["fastafile"];
+            Pattern_fasta* genome = loadGeneFastaU((char*)textfilename.c_str());
+            text.assign(genome->str);
+            free(genome->str);
+            if(genome->name) free(genome->name);
+            free(genome);
         }
+
          u64 patId = 0;
          vector<map<string, int>> R;
-         for(std::string pat: test["patterns"]){
+
+         vector<string> patterns;
+        if(test.find("patterns") != test.end()){
+            patterns = test["patterns"].get<vector<string>>();
+        }else if (test.find("fasta_patterns_file") != test.end()){
+            std::string patfilename = test["patternsfile"];
+            list<Pattern_fasta>* pattsList= new list<Pattern_fasta>;
+            int ps=loadGenePatternFastaU((char*)patfilename.c_str(),  pattsList);
+            for(list<Pattern_fasta>::iterator it=pattsList->begin(); it!=pattsList->end(); it++){
+                patterns.push_back(string(it->str));
+                if(it->name != nullptr) free(it->name);
+                if(it->str != nullptr) free(it->str);
+            }
+            delete pattsList;
+        }
+        
+         for(std::string pat: patterns){
              const char* p = strstr(text.c_str(), pat.c_str());
              while( p != NULL){
                  u64 idx = p - text.c_str();

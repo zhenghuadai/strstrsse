@@ -74,9 +74,11 @@ strstrtest${EXT}:$(OBJ_DIR)/strstrtest.o
 	${CXX} ${Gflag} ${INC_PATH} -static  -o $@ $<  ${LIB} ${LIBPATH} 
 mmatchtest${EXT}:$(OBJ_DIR)/mmatchtest.o ${utilobj}
 	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
+genematchtest${EXT}:$(OBJ_DIR)/genematchtest.o ${utilobj} $(OBJ_DIR)/io.o 
+	${CXX} ${Gflag}  ${INC_PATH} -static -o $@ $^  -lmmatch  ${LIBPATH}
 
-mmatchtest.testcases.create:mmatchtest.testcases.create.cpp
-	g++ -o $@ $< -std=c++11
+mmatchtest.testcases.create:mmatchtest.testcases.create.cpp ${utilobj} $(OBJ_DIR)/io.o 
+	g++ -o $@ $^ -std=c++11  ${INC_PATH}
 strstrtest.testcases.create:strstrtest.testcases.create.cpp
 	g++ -o $@ $< -std=c++11
 

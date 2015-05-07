@@ -143,7 +143,7 @@ int   loadGenePattern_Fasta(char *pfname, list<Pattern_fasta>* patts)
         patno ++;
         name = 0;
         str = 0;
-        temp2=fgetc(pf);
+        psubstep = 0;
     }
     return patno;
 

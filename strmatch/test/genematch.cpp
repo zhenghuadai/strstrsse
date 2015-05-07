@@ -15,7 +15,7 @@ const int maxLoopLen = 150;
 static char** gPatList=0;
 static char* curText = 0;
 static int   curTextLen = 0;
-FILE* fpout;
+FILE* fpout = stdout;
 
 void reverse(char* dst, char* src, int m)
 {
@@ -118,10 +118,8 @@ int main(int argc,char *argv[])
 	double elapsed_time;
 	char * matchalgstr[5];
 	int boolmatch[5];
-	FILE *fp;
 	char* fnout;
 
-	_U64 startrdt,endrdt;
 	fpout = stdout;
 	if(argc==1)
 	{
@@ -164,7 +162,7 @@ int main(int argc,char *argv[])
 	matchalgstr[0]="ac";
 	printf("reading pattern %s...\n",quryfname);
 	list<Pattern_fasta>* pattsList= new list<Pattern_fasta>;
-	ps=loadGenePatternFasta(quryfname,  pattsList);
+	ps=loadGenePatternFastaU(quryfname,  pattsList);
 	char** patts = transList1(pattsList);
 	char** rcpatts = rctransList1(pattsList);
 	//ps=GetGenepatternfromfile(quryfname,Patts);
@@ -177,7 +175,6 @@ int main(int argc,char *argv[])
 	Text = genome->str;
 	curTextLen=genome->len;
 
-	//printf("%s\n",Pat);
 	occurnum=0;
 	//printf("%s,",Text);
 	printf("\n");
@@ -186,6 +183,10 @@ int main(int argc,char *argv[])
 	//AcBase<4> ac(patts, ps, geneAC);
 	Ac<AcBase<4>> ac(patts, ps, geneACWid);
 	Ac<AcBase<4>> rac(rcpatts, ps, geneACWid);
+    for(int j = 0; j< pattsList -> size(); j++){
+        free(rcpatts[j]);
+    }
+    free(rcpatts);
 //	Ac<AcI<4,unsigned int>> acD(ac);
 	//AcI<4,unsigned short> acD(ac);
     //mWm<8,geneHashWm8,4> wm(patts, ps);
@@ -226,4 +227,9 @@ int main(int argc,char *argv[])
 		printf("%d,",occurrenceint[i]);
 
 	closeReport();
+    for(list<Pattern_fasta>::iterator it=pattsList->begin(); it!=pattsList->end(); it++){
+        if(it->name != nullptr) free(it->name);
+        if(it->str != nullptr) free(it->str);
+    }
+
 }
