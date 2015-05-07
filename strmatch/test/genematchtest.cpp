@@ -85,7 +85,13 @@ bool Testmmatch::run(Algorithm& func, Testcase& onetest)
     bool passed = true;
     func.mmatch->setReportFunc(myreport);
     tmpResult.clear();
+
+    _U64 startrdt,endrdt;
+    double elapsed_time;
+    Mtime( &startrdt );
     func.mmatch->searchGene((char*)onetest.text.c_str());
+    Mtime( &endrdt );
+    elapsed_time= Mdifftime( startrdt, endrdt );
 
     passed = true;
     if(tmpResult.size() != onetest.matched.size()){
@@ -102,7 +108,7 @@ bool Testmmatch::run(Algorithm& func, Testcase& onetest)
         }
     }
     if(passed){
-        printf(".");
+        printf(".[chars:%zd clock:%10.0f]", onetest.text.size(), elapsed_time);
     }else{
         printf("\n%s:%s:", func.name.c_str(), onetest.text.size()<32? onetest.text.c_str():onetest.text.substr(0,32).c_str());
         printf("["); for(size_t i = 0; i<tmpResult.size(); i++){printf("(%d %d)", tmpResult[i].v0, tmpResult[i].v1);} printf("] ");
@@ -123,11 +129,13 @@ void Testmmatch::run()
         }
         //Ac<AcBase<4,StoreArray>, UseBadChar> ac(Patts, ps, geneACWid);
         Ac<AcBase<4>> ac(Patts, ps, geneACWid);
+        Ac<AcBase<4>> ac1(Patts, ps, geneACDep);
         Ac<AcI<4, U16 >,  UseBadChar> acD(Patts, ps, geneACWid);
         //mWm<> wm(Patts, ps);
 
         vector<Algorithm> alogrithms = {
-            {&ac, "Ac<AcBase<256,StoreArray>"} ,
+            {&ac, "Ac<AcBase<256,StoreArray>width"} ,
+            {&ac1, "Ac<AcBase<256,StoreArray>depth"} ,
             {&acD, "Ac<AcI<256, U16 >,  UseBadChar>"}
             //{&wm, "WM"}
             //{&ac1, "AcBase<256> "},
