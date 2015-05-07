@@ -134,9 +134,9 @@ void Testmmatch::run()
         //mWm<> wm(Patts, ps);
 
         vector<Algorithm> alogrithms = {
-            {&ac, "Ac<AcBase<256,StoreArray>width"} ,
-            {&ac1, "Ac<AcBase<256,StoreArray>depth"} ,
-            {&acD, "Ac<AcI<256, U16 >,  UseBadChar>"}
+            {&ac, "Ac<AcBase<4,StoreArray>width"} ,
+            {&ac1, "Ac<AcBase<4,StoreArray>depth"} ,
+            {&acD, "Ac<AcI<4, U16 >,  UseBadChar>"}
             //{&wm, "WM"}
             //{&ac1, "AcBase<256> "},
             //{&acD1, "AcI<>"}
