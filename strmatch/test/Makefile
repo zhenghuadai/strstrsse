@@ -45,7 +45,7 @@ LIBPATH= -L../lib -L../lib/mMatch
 #Gflag= -O0 -g
 #algobj:= Sbf.o Sbom.o Smp.o Skmp.o Sbm.o Sbmh.o Sbmhs.o Ssmith.o Sdfa.o Sbdm.o Sbndm.o Sshiftor.o Sshiftand.o Skr.o Sbyh.o Sskip.o Skmpskip.o 
 utilobj:= $(OBJ_DIR)/Mtime.o $(OBJ_DIR)/extract.o #utilobj=$(foreach i, $(utilobj), $(OBJ_DIR)/${i}.o)
-matchobj:=$(OBJ_DIR)/match.o    ${utilobj} ../lib/strstrsse2.o $(OBJ_DIR)/io.o  # ${algobj} 
+matchobj:=$(OBJ_DIR)/match.o    ${utilobj} ../lib/strstrsse2.o $(OBJ_DIR)/io.o strstr-sse2-unaligned.o   # ${algobj} 
 matchthreadobj:=$(OBJ_DIR)/matchthread.o    ${utilobj} ../lib/strstrsse2.o  # ${algobj} 
 matchgeneobj:=$(OBJ_DIR)/match.o ${utilobj} ${algobj} 
 matchmulobj:=$(OBJ_DIR)/matchmul.o $(utilobj)  $(OBJ_DIR)/others/acsmx.o $(OBJ_DIR)/others/snortmwm.o

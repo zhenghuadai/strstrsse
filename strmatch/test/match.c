@@ -24,6 +24,7 @@
 #include "strstrsse.h"
 #include "rdtsc.h"
 char* lstrstrsseLong(const char* text, const char* pat);// gcc 
+char* __strstr_sse2_unaligned(const char* text, const char* pat);
 char * GetgenefromfileU(char *pfname);
 int isFastaFile(char* fn);
 typedef struct matchtest_
@@ -167,6 +168,9 @@ int main(int argc,char *argv[])
     match[22].matchalg2        =0;
     match[22].matchalgstr    ="strstrsse42a";
 #endif
+    match[23].matchalg        = __strstr_sse2_unaligned;
+    match[23].matchalg2        =0;
+    match[23].matchalgstr    ="__strstr_sse2_unaligned (from glibc)";
     for(i=0;i<ALLALG;i++)
     {
         match[i].boolmatch=1;
